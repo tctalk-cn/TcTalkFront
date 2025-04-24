@@ -26,8 +26,6 @@ const emitCloseTipClick = () => {
 
 
 <style lang="scss" scoped>
-@import '@/assets/mixin';
-
 @keyframes tipMove {
   0% {
     transform: scale(1)

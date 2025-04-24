@@ -93,8 +93,8 @@ const captchaUuidRef = ref();
 
 const router = useRouter();
 
-// 设置token值
-const {setToken} = useProfileStore();
+// // 设置token值
+// const {setToken} = useProfileStore();
 
 // 关闭提示
 const handleCloseTip = () => {
@@ -160,7 +160,7 @@ const mobileLogin = async () => {
         title: '结果',
         message: '登入成功跳转到首页',
       }).then(() => {
-        setToken(loginResult.data.token);
+        // setToken(loginResult.data.token);
         router.push({name: Pages.recommend, replace: true,});
       });
     } else {
@@ -182,7 +182,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/mixin';
 
 .login-container {
   padding-top: 1.95rem;

@@ -12,6 +12,16 @@ export default defineConfig({
             '@': fileURLToPath(new URL('./src', import.meta.url)),
         }
     },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                // 这里只能写合法的 SCSS 语法
+                additionalData: `
+                                     @use "@/assets/scss/theme.scss" as *;
+                                `
+            }
+        }
+    },
     server: {
         port: 3005,
     },

@@ -1,3 +1,480 @@
+// font-size
+$font-size: 14px;
+$font-size-xs: 10px;
+$font-size-sm: 12px;
+$font-size-md: 14px;
+$font-size-mx: 16px;
+$font-size-lg: 18px;
+$font-size-lx: 24px;
+
+// border-radius
+$border-radius: 4px;
+$border-radius-sm: 2px;
+$border-radius-md: 4px;
+$border-radius-mx: 8px;
+$border-radius-lg: 16px;
+
+$gap: 10px;
+$gap-xs: $gap * 0.3;
+$gap-sm: $gap * 0.5;
+$gap-md: $gap * 1;
+$gap-mx: $gap * 1.2;
+$gap-lg: $gap * 1.5;
+$gap-lx: $gap * 2;
+
+// padding
+$padding: 10px;
+$padding-xs: $padding * 0.3;
+$padding-sm: $padding * 0.5;
+$padding-md: $padding * 1;
+$padding-mx: $padding * 1.2;
+$padding-lg: $padding * 1.5;
+$padding-lx: $padding * 2;
+
+// header-footer -height
+$header-height: 48px;
+$footer-height: 48px;
+
+// transtion time
+$transition-time-fast: 0.1s;
+$transition-time-normal: 0.25s;
+$transition-time-slow: 0.4s;
+
+//z-index
+$player-index: 10;
+$title-bar-index: 10;
+$fullscreen-player-index: 11;
+$siderbar-index: 12;
+$bottom-panel-index: 20;
+$login-box-index: 30;
+$modal-index: 1000;
+// 动态主题配色
+$gary: #afafaf;
+
+$body-bg: var(--body-bg);
+$text: var(--text);
+$text-reversal: var(--text-reversal);
+$text-nav: var(--text-nav);
+$text-secondary: var(--text-secondary);
+$primary: var(--primary);
+$header-bg: var(--header-bg);
+$link-bg: var(--link-bg);
+$module-bg: var(--module-bg);
+$bg-reversal-opacity-9: var(--bg-reversal-opacity-9);
+$border: var(--border);
+$text-link: #0c73c2;
+
+$modal-bg: rgba(0, 0, 0, 0.2);
+$transition: all 0.4s ease-in-out;
+$player-height: 60px;
+
+// 全局基础样式
+* {
+  padding: 0;
+  margin: 0;
+  -webkit-touch-callout: none;
+  -moz-touch-callout: none;
+  -ms-touch-callout: none;
+  touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+body {
+  background-color: #fff;
+  color: #333;
+}
+
+a {
+  color: $text;
+  text-decoration: none;
+}
+
+// 禁止长按图片保存
+img {
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  pointer-events: none; // 像微信浏览器还是无法禁止，加上这行样式即可
+}
+body,
+button,
+input,
+keygen,
+legend,
+select,
+textarea {
+  font: $font-size Helvetica, sans-serif, STHeiTi;
+  color: $text;
+  outline: 0;
+  line-height: 1.5;
+}
+input {
+  border: none;
+  background-color: transparent;
+  border: none;
+  display: block;
+  line-height: 1.5;
+  min-width: 0%;
+  outline: none;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  &.text {
+    text-indent: 20px;
+    border-radius: 20px;
+    font-size: 16px;
+    height: 40px;
+    line-height: 40px;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+input::placeholder {
+  color: #ccc;
+}
+button {
+  text-align: center;
+  box-sizing: border-box;
+  line-height: 1;
+  border: none;
+  outline: none;
+  background: none;
+  &:disabled {
+    opacity: 0.4;
+  }
+}
+
+textarea {
+  width: 100%;
+  min-height: 5rem;
+  resize: none;
+  outline: none;
+  border: none;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+/*滚动槽*/
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.15);
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.4s ease-in-out;
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+  transform: translate3d(0, 100%, 0);
+}
+
+.tag-item {
+  border-radius: 15px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  background: $link-bg;
+}
+
+.module-container {
+  background-color: $module-bg;
+  border-radius: $border-radius-mx;
+  margin: $gap-lg;
+
+  .module-header {
+    display: flex;
+    align-items: center;
+    padding: $padding $padding-lg;
+  }
+}
+
+
+
+.scroller-container {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.sub-text {
+  font-size: $font-size-sm;
+  color: $gary;
+}
+
+.loading {
+  padding: $padding-lg;
+  text-align: center;
+  color: $text-secondary;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+
+  .nav-list {
+    flex: 1;
+    display: flex;
+    white-space: nowrap;
+    overflow-x: auto;
+
+    .nav-item {
+      padding: $padding $padding-lx;
+      position: relative;
+
+      &.active {
+        color: $primary;
+        font-weight: 600;
+
+        &::after {
+          display: block;
+          content: '';
+          height: 2px;
+          background: $primary;
+          position: absolute;
+          width: 30px;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          border-radius: 2px;
+        }
+      }
+    }
+  }
+
+  .more-btn {
+    padding: $padding;
+  }
+}
+
+@mixin text-overflow($width: 100%, $display: block) {
+  width: $width;
+  display: $display;
+  white-space: nowrap;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+@mixin mutil-text-overflow($line: 2, $width: 100%) {
+  width: $width;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $line;
+  overflow: hidden;
+}
+
+
+@mixin borderY1px($color, $dir: top) {
+  position: relative;
+  &:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    @if $dir == "bottom" {
+      bottom: 0;
+    } @else {
+      top: 0;
+    }
+    height: 1px;
+    width: 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    background-color: $color;
+    @media (-webkit-min-device-pixel-ratio: 2.5),
+    (min-device-aspect-ratio: 2.5) {
+      -webkit-transform: scaleY(0.4);
+      transform: scaleY(0.4);
+    }
+    @media (-webkit-min-device-pixel-ratio: 3), (min-device-aspect-ratio: 3) {
+      -webkit-transform: scaleY(0.33333);
+      transform: scaleY(0.33333);
+    }
+    @media (-webkit-min-device-pixel-ratio: 3.5),
+    (min-device-aspect-ratio: 3.5) {
+      -webkit-transform: scaleY(0.2857);
+      transform: scaleY(0.2857);
+    }
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    box-sizing: border-box;
+  }
+}
+
+@mixin borderTop1px($color) {
+  @include borderY1px($color, top);
+}
+
+
+@mixin borderX1px($color, $dir: left) {
+  position: relative;
+  &:after {
+    content: " ";
+    position: absolute;
+    top: 0;
+    @if $dir == "right" {
+      right: 0;
+    } @else {
+      left: 0;
+    }
+    width: 1px;
+    -webkit-transform: scaleX(0.5);
+    transform: scaleX(0.5);
+    height: 100%;
+    background-color: $color;
+    @media (-webkit-min-device-pixel-ratio: 2.5),
+    (min-device-aspect-ratio: 2.5) {
+      -webkit-transform: scaleX(0.4);
+      transform: scaleX(0.4);
+    }
+    @media (-webkit-min-device-pixel-ratio: 3), (min-device-aspect-ratio: 3) {
+      -webkit-transform: scaleX(0.33333);
+      transform: scaleX(0.33333);
+    }
+    @media (-webkit-min-device-pixel-ratio: 3.5),
+    (min-device-aspect-ratio: 3.5) {
+      -webkit-transform: scaleX(0.2857);
+      transform: scaleX(0.2857);
+    }
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    box-sizing: border-box;
+  }
+}
+
+@mixin border1px($color, $dir) {
+  @if $dir== "right" or $dir == "left" {
+    @include borderX1px($color, $dir);
+  } @else if $dir== "top" or $dir == "bottom" {
+    @include borderY1px($color, $dir);
+  }
+}
+
+@mixin css-var($header-height, $footer-height) {
+  #{--header-height}: $header-height;
+  #{--footer-height}: $footer-height;
+}
+
+@mixin flex-list($column-gap:$gap, $row-gap:$gap,$column-count:3) {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -$column-gap;
+  .item {
+    width: calc((100% - #{$column-gap} * #{$column-count}) / #{$column-count});
+    margin-right: $column-gap;
+    margin-bottom: $row-gap;
+  }
+}
+
+$blue: #3190e8;
+$bc: #e4e4e4;
+$fc: #fff;
+
+// 背景图片地址和大小
+@mixin bis($url) {
+  background-image: url($url);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+@mixin borderRadius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  -o-border-radius: $radius;
+  border-radius: $radius;
+}
+
+// 定位全屏
+@mixin allcover {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+// 定位上下左右居中
+@mixin center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// 定位上下居中
+@mixin ct {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+// 定位左右居中
+@mixin cl {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+// 宽高
+@mixin wh($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+// 字体大小、行高、字体
+@mixin font($size, $line-height, $family: 'Microsoft YaHei') {
+  font: #{$size}/#{$line-height} $family;
+}
+
+// 字体大小，颜色
+@mixin sc($size, $color) {
+  font-size: $size;
+  color: $color;
+}
+
+// flex 布局和 子元素 对其方式
+@mixin fj($type: space-between) {
+  display: flex;
+  justify-content: $type;
+
+}
+
+.title-bar {
+  padding: 0 $padding-lg;
+  display: flex;
+  align-items: center;
+  font-size: $font-size-lg;
+  height: 60px;
+  line-height: 60px;
+
+  .icon-back {
+    margin-right: $gap-lg;
+    font-size: $font-size-lx;
+  }
+
+  .title {
+    font-weight: 500;
+    flex: 1;
+    @include text-overflow;
+  }
+
+  .tools {
+    .iconfont {
+      margin-left: $gap-lg;
+    }
+  }
+}
+
 @mixin css-var(
   $text,
   $text-reversal,
@@ -26,32 +503,91 @@
 #root-body {
   &.light {
     @include css-var(
-      $text: #333,
-      $text-reversal: #fff,
-      $text-nav: #5d5d5d,
-      $text-secondary: #888,
-      $primary: #d23931,
-      //active
-        $link-bg: #f34d3f,
-      $header-bg: #da3d34,
-      $body-bg: #f0f0f0,
-      $module-bg: #fff,
-      $border: #ccc
+            $text: #333,
+            $text-reversal: #fff,
+            $text-nav: #5d5d5d,
+            $text-secondary: #888,
+            $primary: #d23931,
+              //active
+            $link-bg: #f34d3f,
+            $header-bg: #da3d34,
+            $body-bg: #f0f0f0,
+            $module-bg: #fff,
+            $border: #ccc
     );
   }
 
   &.dark {
     @include css-var(
-      $text: #fff,
-      $text-reversal: #333,
-      $text-nav: #d7d7d7,
-      $text-secondary: #ccc,
-      $primary: #f1423d,
-      $link-bg: #414141,
-      $header-bg: #414141,
-      $body-bg: #262626,
-      $module-bg: #2c2c2c,
-      $border: #4e4a4a
+            $text: #fff,
+            $text-reversal: #333,
+            $text-nav: #d7d7d7,
+            $text-secondary: #ccc,
+            $primary: #f1423d,
+            $link-bg: #414141,
+            $header-bg: #414141,
+            $body-bg: #262626,
+            $module-bg: #2c2c2c,
+            $border: #4e4a4a
+    );
+  }
+}
+
+
+@mixin css-var(
+  $text,
+  $text-reversal,
+  $text-nav,
+  $header-bg,
+  $text-secondary,
+  $primary,
+  $link-bg,
+  $body-bg,
+  $module-bg,
+  $border
+) {
+  #{--body-bg}: $body-bg;
+  #{--text}: $text;
+  #{--text-reversal}: $text-reversal;
+  #{--text-nav}: $text-nav;
+  #{--text-secondary}: $text-secondary;
+  #{--primary}: $primary;
+  #{--header-bg}: $header-bg;
+  #{--link-bg}: $link-bg;
+  #{--module-bg}: $module-bg;
+  #{--border}: $border;
+  #{--bg-reversal-opacity-9}: rgba($text, 0.9);
+}
+
+#root-body {
+  &.light {
+    @include css-var(
+            $text: #333,
+            $text-reversal: #fff,
+            $text-nav: #5d5d5d,
+            $text-secondary: #888,
+            $primary: #d23931,
+              //active
+            $link-bg: #f34d3f,
+            $header-bg: #da3d34,
+            $body-bg: #f0f0f0,
+            $module-bg: #fff,
+            $border: #ccc
+    );
+  }
+
+  &.dark {
+    @include css-var(
+            $text: #fff,
+            $text-reversal: #333,
+            $text-nav: #d7d7d7,
+            $text-secondary: #ccc,
+            $primary: #f1423d,
+            $link-bg: #414141,
+            $header-bg: #414141,
+            $body-bg: #262626,
+            $module-bg: #2c2c2c,
+            $border: #4e4a4a
     );
   }
 }

@@ -3,14 +3,25 @@ import axios, {type AxiosRequestConfig} from "axios";
 axios.defaults.timeout = 20 * 1000;
 axios.defaults.maxBodyLength = 5 * 1024 * 1024;
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = localStorage.getItem('BASE_URL')?.toString();
+axios.defaults.baseURL = "http://127.0.0.1:8000";
 
 axios.interceptors.request.use(
     (config: AxiosRequestConfig | any) => {
         // 添加 CORS 头部信息
         config.headers['Access-Control-Allow-Origin'] = '*';
+        // 读取 localStorage 中的 token
+        const profileRaw = localStorage.getItem('userProfile');
+        let token = '';
+        if (profileRaw) {
+            try {
+                const profile = JSON.parse(profileRaw);
+                token = profile.token || '';
+            } catch (e) {
+                console.warn('Failed to parse profile from localStorage:', e);
+            }
+        }
         // config.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS';
-        config.headers['Authorization'] = 'Bearer ' + localStorage.getItem('TC_TOKEN');
+        config.headers['Authorization'] = 'Bearer ' + token;
         config.params = {
             ...config.params,
             t: Date.now(),
