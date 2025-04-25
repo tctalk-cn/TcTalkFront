@@ -1,18 +1,17 @@
 <template>
   <div class="alert-container">
-    <section class="tip_text_container">
-      <div class="tip_icon">
+    <section class="tip-text-container">
+      <div class="tip-icon">
         <span></span>
         <span></span>
       </div>
-      <p class="tip_text">{{ alertText }}</p>
-      <div class="confrim" @click="emitCloseTipClick">确认</div>
+      <p class="tip-text">{{ alertText }}</p>
+      <div class="confirm" @click="emitCloseTipClick">确认</div>
     </section>
   </div>
 </template>
-<script setup lang="ts">
-// import { defineEmits } from "vue";
 
+<script setup lang="ts">
 defineProps<{
   alertText: string
 }>();
@@ -22,26 +21,27 @@ const emits = defineEmits(["closeTip"]);
 const emitCloseTipClick = () => {
   emits('closeTip'); // 可选地传递数据给父组件
 };
+
 </script>
 
 
 <style lang="scss" scoped>
 @keyframes tipMove {
   0% {
-    transform: scale(1)
+    transform: scale(1);
   }
   35% {
-    transform: scale(.8)
+    transform: scale(0.8);
   }
   70% {
-    transform: scale(1.1)
+    transform: scale(1.1);
   }
   100% {
-    transform: scale(1)
+    transform: scale(1);
   }
 }
 
-.alet_container {
+.alert-container {
   position: fixed;
   top: 0;
   left: 0;
@@ -50,25 +50,24 @@ const emitCloseTipClick = () => {
   z-index: 200;
 }
 
-.tip_text_container {
+.tip-text-container {
   position: absolute;
   top: 50%;
   left: 50%;
   margin-top: -6rem;
   margin-left: -6rem;
   width: 12rem;
-  animation: tipMove .4s;
+  animation: tipMove 0.4s;
   background-color: rgba(255, 255, 255, 1);
   border: 1px;
-  padding-top: .6rem;
+  padding-top: 0.6rem;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  border: 1px;
   border-radius: 0.25rem;
 
-  .tip_icon {
+  .tip-icon {
     @include wh(3rem, 3rem);
     border: 0.15rem solid #f8cb86;
     border-radius: 50%;
@@ -78,31 +77,31 @@ const emitCloseTipClick = () => {
     flex-direction: column;
 
     span:nth-of-type(1) {
-      @include wh(.12rem, 1.5rem);
+      @include wh(0.12rem, 1.5rem);
       background-color: #f8cb86;
     }
 
     span:nth-of-type(2) {
-      @include wh(.2rem, .2rem);
+      @include wh(0.2rem, 0.2rem);
       border: 1px;
       border-radius: 50%;
-      margin-top: .2rem;
+      margin-top: 0.2rem;
       background-color: #f8cb86;
     }
   }
 
-  .tip_text {
-    @include sc(.7rem, #333);
-    line-height: .9rem;
+  .tip-text {
+    @include sc(0.7rem, #333);
+    line-height: 0.9rem;
     text-align: center;
-    margin-top: .8rem;
-    padding: 0 .4rem;
+    margin-top: 0.8rem;
+    padding: 0 0.4rem;
   }
 
-  .confrim {
-    @include sc(.8rem, #fff);
+  .confirm {
+    @include sc(0.8rem, #fff);
     font-weight: bold;
-    margin-top: .8rem;
+    margin-top: 0.8rem;
     background-color: #4cd964;
     width: 100%;
     text-align: center;
@@ -112,5 +111,5 @@ const emitCloseTipClick = () => {
     border-bottom-right-radius: 0.25rem;
   }
 }
-
 </style>
+

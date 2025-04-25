@@ -1,57 +1,117 @@
 <template>
   <div class="login-container">
     <!-- 顶部 -->
-    <HeaderTop :head-title="isSmsLogin? '登录':'密码登录'" goBack='true'>
+    <HeaderTop :head-title="isSmsLogin ? '登录' : '密码登录'" goBack="true">
       <template #changeLogin>
-        <div slot="changeLogin" class="login-mode-toggle" @click="changeLoginWay">{{ isSmsLogin ? "密码登录" : "短信登录" }}
+        <div class="login-mode-toggle" @click="changeLoginWay">
+          {{ isSmsLogin ? "密码登录" : "短信登录" }}
         </div>
       </template>
     </HeaderTop>
+
     <form class="login-form" v-if="isSmsLogin">
-      <section class="input_container sms-phone-section">
-        <input type="text" placeholder="账号密码随便输入" name="phone" maxlength="11" v-model="smsPhoneNumber">
-        <button @click.prevent="getVerifyCode" :class="{right_phone_number:rightPhoneNumber}" v-show="!smsCountdown">
+      <section class="input-container sms-phone-section">
+        <input
+            type="text"
+            placeholder="账号密码随便输入"
+            name="phone"
+            maxlength="11"
+            v-model="smsPhoneNumber"
+        />
+        <button
+            @click.prevent="getVerifyCode"
+            :class="{ 'right-phone-number': rightPhoneNumber }"
+            v-show="!smsCountdown"
+        >
           获取验证码
         </button>
-        <button @click.prevent v-show="smsCountdown">已发送({{ smsCountdown }}s)</button>
+        <button @click.prevent v-show="smsCountdown">
+          已发送({{ smsCountdown }}s)
+        </button>
       </section>
-      <section class="input_container">
-        <input type="text" placeholder="验证码" name="mobileCode" maxlength="6" v-model="smsCode">
+
+      <section class="input-container">
+        <input
+            type="text"
+            placeholder="验证码"
+            name="mobileCode"
+            maxlength="6"
+            v-model="smsCode"
+        />
       </section>
     </form>
+
     <form class="login-form" v-else>
-      <section class="input_container">
-        <input type="text" placeholder="账号" v-model.lazy="accountUsername" autocomplete="username"/>
+      <section class="input-container">
+        <input
+            type="text"
+            placeholder="账号"
+            v-model.lazy="accountUsername"
+            autocomplete="username"
+        />
       </section>
-      <section class="input_container">
-        <input v-if="!isPasswordVisible" type="password" placeholder="密码" v-model="loginPassword"
-               autocomplete="current-password"/>
-        <input v-else type="text" placeholder="密码" v-model="loginPassword" autocomplete="current-password"/>
-        <div class="button_switch" :class="{change_to_text:isPasswordVisible}">
-          <div class="circle_button" :class="{trans_to_right: isPasswordVisible}" @click="changePassWordType"></div>
+
+      <section class="input-container">
+        <input
+            v-if="!isPasswordVisible"
+            type="password"
+            placeholder="密码"
+            v-model="loginPassword"
+            autocomplete="current-password"
+        />
+        <input
+            v-else
+            type="text"
+            placeholder="密码"
+            v-model="loginPassword"
+            autocomplete="current-password"
+        />
+        <div class="button-switch" :class="{ 'change-to-text': isPasswordVisible }">
+          <div
+              class="circle-button"
+              :class="{ 'trans-to-right': isPasswordVisible }"
+              @click="changePassWordType"
+          ></div>
           <span>显示</span>
         </div>
       </section>
-      <section class="input_container captcha-code-section">
-        <input type="text" placeholder="验证码" maxlength="4" v-model="captchaCode">
-        <div class="img_change_img">
-          <img v-if="captchaImageUrl" :src="captchaImageUrl">
-          <div class="change_img" @click="getCaptchaCode">
+
+      <section class="input-container captcha-code-section">
+        <input
+            type="text"
+            placeholder="验证码"
+            maxlength="4"
+            v-model="captchaCode"
+        />
+        <div class="img-change-img">
+          <img v-if="captchaImageUrl" :src="captchaImageUrl"/>
+          <div class="change-img" @click="getCaptchaCode">
             <p>看不清</p>
             <p>换一张</p>
           </div>
         </div>
       </section>
     </form>
-    <p class="login_tips">
+
+    <p class="login-tips">
       温馨提示：未注册过的账号，登录时将自动注册
     </p>
-    <p class="login_tips">
+    <p class="login-tips">
       注册过的用户可凭账号密码登录
     </p>
+
     <div class="login-submit-button" @click="mobileLogin">登录</div>
-    <router-link to="/forget" class="forgot-password-link" v-if="!isSmsLogin">重置密码？</router-link>
-    <alert-tip v-if="showAlert" :showHide="showAlert" @closeTip="closeAlert" :alertText="alertMessage"></alert-tip>
+
+    <router-link to="/forget" class="forgot-password-link" v-if="!isSmsLogin">
+      重置密码？
+    </router-link>
+
+    <alert-tip
+        v-if="showAlert"
+        :showHide="showAlert"
+        @closeTip="closeAlert"
+        :alertText="alertMessage"
+    ></alert-tip>
   </div>
 </template>
 <script setup lang="ts">
@@ -93,7 +153,7 @@ const captchaUuidRef = ref();
 const router = useRouter();
 
 // 设置token值
-const {setToken, clearToken} = useProfileStore();
+const {setToken, clearToken, loadMemberInfo} = useProfileStore();
 
 // 关闭提示
 const closeAlert = () => {
@@ -159,7 +219,10 @@ const mobileLogin = async () => {
         title: '结果',
         message: '登入成功跳转到首页',
       }).then(() => {
+        // 设置token
         setToken(loginResult.data.token);
+        // 加载登入用户信息并持久化
+        loadMemberInfo();
         router.push({name: Pages.recommend, replace: true,});
       });
     } else {
@@ -176,12 +239,9 @@ onMounted(() => {
   // 验证码赋值
   getCaptchaCode();
 })
-
-
 </script>
 
 <style lang="scss" scoped>
-
 .login-container {
   padding-top: 1.95rem;
 
@@ -196,7 +256,7 @@ onMounted(() => {
     background-color: #fff;
     margin-top: 0.5rem;
 
-    .input_container {
+    .input-container {
       display: flex;
       justify-content: space-between;
       padding: .6rem .8rem;
@@ -213,7 +273,7 @@ onMounted(() => {
         border-radius: 0.15rem;
       }
 
-      .right_phone_number {
+      .right-phone-number {
         background-color: #4cd964;
       }
     }
@@ -225,7 +285,7 @@ onMounted(() => {
     .captcha-code-section {
       height: 2.2rem;
 
-      .img_change_img {
+      .img-change-img {
         display: flex;
         align-items: center;
 
@@ -234,7 +294,7 @@ onMounted(() => {
           margin-right: .2rem;
         }
 
-        .change_img {
+        .change-img {
           display: flex;
           flex-wrap: wrap;
           width: 4rem;
@@ -254,8 +314,7 @@ onMounted(() => {
   }
 }
 
-
-.login_tips {
+.login-tips {
   @include sc(.5rem, red);
   padding: .4rem .6rem;
   line-height: .5rem;
@@ -265,7 +324,7 @@ onMounted(() => {
   }
 }
 
-.login-submit-button{
+.login-submit-button {
   margin: 0 .5rem 1rem;
   @include sc(.7rem, #fff);
   background-color: #4cd964;
@@ -275,7 +334,7 @@ onMounted(() => {
   text-align: center;
 }
 
-.button_switch {
+.button-switch {
   background-color: #ccc;
   display: flex;
   justify-content: center;
@@ -285,7 +344,7 @@ onMounted(() => {
   border-radius: 0.5rem;
   position: relative;
 
-  .circle_button {
+  .circle-button {
     transition: all .3s;
     position: absolute;
     top: -0.2rem;
@@ -297,7 +356,7 @@ onMounted(() => {
     border-radius: 50%;
   }
 
-  .trans_to_right {
+  .trans-to-right {
     transform: translateX(1.3rem);
   }
 
@@ -312,7 +371,7 @@ onMounted(() => {
   }
 }
 
-.change_to_text {
+.change-to-text {
   background-color: #4cd964;
 }
 
@@ -321,5 +380,6 @@ onMounted(() => {
   @include sc(.6rem, #3b95e9);
   margin-right: .3rem;
 }
+
 
 </style>
