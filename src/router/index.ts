@@ -22,6 +22,14 @@ const router = createRouter({
                         path: '/home',
                         name: Pages.home,
                         component: () => import("@/views/home/Home.vue"),
+                        redirect: {name: Pages.recommend},
+                        children: [
+                            {
+                                path: "recommend",
+                                name: Pages.recommend,
+                                component: () => import('@/views/recommend/Recommend.vue'),
+                            },
+                        ]
                     }
                 ]
             }
