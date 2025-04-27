@@ -4,7 +4,7 @@
       <span class="spike-header-title">{{ title }}</span>
     </div>
     <div class="spike-content">
-      <van-grid :column-num="items.length" :border="false" :square="false">
+      <van-grid :column-num="length" :border="false" :square="false">
         <van-grid-item
             v-for="(item, idx) in items"
             :key="idx"
@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{ title: string; items: any[] }>();
+defineProps<{ title: string; items: any[]; length: number }>();
 defineEmits(["itemClick"]);
 </script>
 

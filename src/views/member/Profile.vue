@@ -40,28 +40,16 @@
         </ul>
       </section>
       <!-- 常用服务 -->
-      <ServiceSection title="常用服务" :items="navItems" @item-click="handleRecentlyUseClick"/>
+      <ServiceSection title="常用服务" :items="navItems" :length="navItems.length"
+                      @item-click="()=>handleRecentlyUseClick"/>
 
       <!-- 创作中心 -->
-      <ServiceSection title="创作中心" :items="createItems" @item-click="handleCreativeClick"/>
+      <ServiceSection title="创作中心" :items="createItems" :length="createItems.length"
+                      @item-click="()=>handleCreativeClick"/>
 
-      <section class="spike">
-        <div class="spike-header">
-          <span class="spike-header-title">推荐服务</span>
-        </div>
-        <div class="spike-content">
-          <div v-for="(item, index) in recommendServiceItems" :key="index">
-            <van-grid :column-num="item.gridItems.length" :border="false" :square="false">
-              <van-grid-item v-for="(gridItem,idx) in item.gridItems"
-                             :key="idx"
-                             :icon="gridItem.icon"
-                             :text="gridItem.text"
-                             :badge="gridItem.badge"
-                             @click="handleRecommendServiceClick(gridItem.to)"/>
-            </van-grid>
-          </div>
-        </div>
-      </section>
+      <!-- 推荐服务 -->
+      <ServiceSection title="推荐服务" :items="recommendServiceItems" :length="4"
+                      @item-click="()=>handleCreativeClick"/>
       <!-- 订单、积分商城、会员卡、服务中心、下载APP -->
       <ActionList :actions="actionList"/>
     </section>
@@ -74,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {useProfileStore} from "@/stores/member.ts";
 import HeaderTop from "@/components/layout/header/HeaderTop.vue";
 import {storeToRefs} from "pinia";
@@ -89,7 +77,7 @@ const {memberInfo, memberStatisticsInfo} = storeToRefs(useProfileStore());
 const profiletitle = ref('我的');
 
 // 统计模块
-const statisticsItems = ref([
+const statisticsItems = computed(() => [
   {label: '动态', value: memberStatisticsInfo.value?.newsCount || 0, to: '/balance'},
   {label: '关注', value: memberStatisticsInfo.value?.attendCount || 0, to: '/benefit'},
   {label: '粉丝', value: memberStatisticsInfo.value?.fansCount || 0, to: '/points'},
@@ -149,91 +137,167 @@ const createItems = ref([
 
 const recommendServiceItems = ref([
   {
-    gridItems: [
-      {
-        icon: "user-circle-o",
-        text: "我的课程",
-        to: "/live/hot",
-        badge: ""
-      },
-      {
-        icon: "chart-trending-o",
-        text: "看视频免流量",
-        to: "/live/newperson",
-        badge: ""
-      },
+    icon: "user-circle-o",
+    text: "我的课程",
+    to: "/live/hot",
+    badge: ""
+  },
+  {
+    icon: "chart-trending-o",
+    text: "看视频免流量",
+    to: "/live/newperson",
+    badge: ""
+  },
 
-      {
-        icon: "orders-o",
-        text: "个性装扮",
-        to: "/live/vicinity",
-        badge: ""
-      },
-      {
-        icon: "pending-payment",
-        text: "我的钱包",
-        to: "/live/music",
-        badge: ""
-      },
-    ]
+  {
+    icon: "orders-o",
+    text: "个性装扮",
+    to: "/live/vicinity",
+    badge: ""
   },
   {
-    gridItems: [
-      {
-        icon: "cash-back-record-o",
-        text: "游戏中心",
-        to: "/",
-        badge: ""
-      },
-      {
-        icon: "shop-collect-o",
-        text: "会员购中心",
-        to: "/msite",
-        badge: ""
-      },
-      {
-        icon: "new-arrival-o",
-        text: "我的直播",
-        to: "/",
-        badge: ""
-      },
-      {
-        icon: "hot-sale-o",
-        text: "漫画",
-        to: "/",
-        badge: ""
-      },
-    ]
+    icon: "pending-payment",
+    text: "我的钱包",
+    to: "/live/music",
+    badge: ""
   },
   {
-    gridItems: [
-      {
-        icon: "hot-o",
-        text: "必火推广",
-        to: "/",
-        badge: ""
-      },
-      {
-        icon: "comment-o",
-        text: "社区中心",
-        to: "/",
-        badge: ""
-      },
-      {
-        icon: "like-o",
-        text: "同辰公益",
-        to: "/",
-        badge: ""
-      },
-      {
-        icon: "hot-sale-o",
-        text: "能量加油站",
-        to: "/",
-        badge: ""
-      },
-    ]
-  }
+    icon: "cash-back-record-o",
+    text: "游戏中心",
+    to: "/",
+    badge: ""
+  },
+  {
+    icon: "shop-collect-o",
+    text: "会员购中心",
+    to: "/msite",
+    badge: ""
+  },
+  {
+    icon: "new-arrival-o",
+    text: "我的直播",
+    to: "/",
+    badge: ""
+  },
+  {
+    icon: "hot-sale-o",
+    text: "漫画",
+    to: "/",
+    badge: ""
+  },
+  {
+    icon: "hot-o",
+    text: "必火推广",
+    to: "/",
+    badge: ""
+  },
+  {
+    icon: "comment-o",
+    text: "社区中心",
+    to: "/",
+    badge: ""
+  },
+  {
+    icon: "like-o",
+    text: "同辰公益",
+    to: "/",
+    badge: ""
+  },
+  {
+    icon: "hot-sale-o",
+    text: "能量加油站",
+    to: "/",
+    badge: ""
+  },
 ]);
+
+// const recommendServiceItems = ref([
+//   {
+//     gridItems: [
+//       {
+//         icon: "user-circle-o",
+//         text: "我的课程",
+//         to: "/live/hot",
+//         badge: ""
+//       },
+//       {
+//         icon: "chart-trending-o",
+//         text: "看视频免流量",
+//         to: "/live/newperson",
+//         badge: ""
+//       },
+//
+//       {
+//         icon: "orders-o",
+//         text: "个性装扮",
+//         to: "/live/vicinity",
+//         badge: ""
+//       },
+//       {
+//         icon: "pending-payment",
+//         text: "我的钱包",
+//         to: "/live/music",
+//         badge: ""
+//       },
+//     ]
+//   },
+//   {
+//     gridItems: [
+//       {
+//         icon: "cash-back-record-o",
+//         text: "游戏中心",
+//         to: "/",
+//         badge: ""
+//       },
+//       {
+//         icon: "shop-collect-o",
+//         text: "会员购中心",
+//         to: "/msite",
+//         badge: ""
+//       },
+//       {
+//         icon: "new-arrival-o",
+//         text: "我的直播",
+//         to: "/",
+//         badge: ""
+//       },
+//       {
+//         icon: "hot-sale-o",
+//         text: "漫画",
+//         to: "/",
+//         badge: ""
+//       },
+//     ]
+//   },
+//   {
+//     gridItems: [
+//       {
+//         icon: "hot-o",
+//         text: "必火推广",
+//         to: "/",
+//         badge: ""
+//       },
+//       {
+//         icon: "comment-o",
+//         text: "社区中心",
+//         to: "/",
+//         badge: ""
+//       },
+//       {
+//         icon: "like-o",
+//         text: "同辰公益",
+//         to: "/",
+//         badge: ""
+//       },
+//       {
+//         icon: "hot-sale-o",
+//         text: "能量加油站",
+//         to: "/",
+//         badge: ""
+//       },
+//     ]
+//   }
+// ]);
 
 // 下面是"我的订单"、"积分商城"、"会员卡"等列表
 const actionList = ref([
