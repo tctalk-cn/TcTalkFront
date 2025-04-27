@@ -3,23 +3,23 @@
     <slot name='logo'></slot>
     <slot name='search'></slot>
     <slot name="head-menu"></slot>
-<!--    <section class="head_goback" v-if="goBack">-->
-<!--      <van-icon name="arrow-left" size="20px" color="#fff" @click="backHome" style="z-index: 100"/>-->
-<!--    </section>-->
-<!--    <router-link :to="memberInfo&&memberInfo.id? '/profile':'/login'" v-if='signinUp' class="head_login">-->
-<!--      <svg class="user_avatar" v-if="memberInfo">-->
-<!--        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user"></use>-->
-<!--      </svg>-->
-<!--      <span class="login_span" v-else><router-link to="/login">登录</router-link>|<router-link-->
-<!--          to="/register">注册</router-link></span>-->
-<!--    </router-link>-->
-<!--    <section class="title_head ellipsis" v-if="headTitle">-->
-<!--      <span class="title_text">{{ headTitle }}</span>-->
-<!--      <div class="actions">-->
-<!--        <slot name="actions">-->
-<!--        </slot>-->
-<!--      </div>-->
-<!--    </section>-->
+    <section class="head_goback" v-if="goBack">
+      <van-icon name="arrow-left" size="20px" color="#fff" @click="backHome" style="z-index: 100"/>
+    </section>
+    <router-link :to="memberInfo&&memberInfo.id? '/profile':'/login'" v-if='signinUp' class="head_login">
+      <svg class="user_avatar" v-if="memberInfo">
+        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user"></use>
+      </svg>
+      <span class="login_span" v-else><router-link to="/login">登录</router-link>|<router-link
+          to="/register">注册</router-link></span>
+    </router-link>
+    <section class="title_head ellipsis" v-if="headTitle">
+      <span class="title_text">{{ headTitle }}</span>
+      <div class="actions">
+        <slot name="actions">
+        </slot>
+      </div>
+    </section>
 
     <slot name="edit"></slot>
     <slot name="msite-title"></slot>
@@ -41,16 +41,16 @@ const props = defineProps<{
   goBack?: string;
   goBackUrl?: string;
 }>();
-// const {memberInfo} = storeToRefs(useProfileStore());
-// const router = useRouter();
-//
-// function backHome() {
-//   if (props?.goBackUrl) {
-//     router.push({path: props?.goBackUrl});
-//     return;
-//   }
-//   router.back();
-// }
+const {memberInfo} = storeToRefs(useProfileStore());
+const router = useRouter();
+
+function backHome() {
+  if (props?.goBackUrl) {
+    router.push({path: props?.goBackUrl});
+    return;
+  }
+  router.back();
+}
 
 </script>
 

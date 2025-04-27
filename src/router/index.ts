@@ -23,6 +23,10 @@ const router = createRouter({
                         name: Pages.home,
                         component: () => import("@/views/home/Home.vue"),
                         redirect: {name: Pages.recommend},
+                        // meta: {
+                        //     keepAlive: false,
+                        //     showTabBar: false // 不显示 TabBar
+                        // },
                         children: [
                             {
                                 path: "recommend",
@@ -30,6 +34,12 @@ const router = createRouter({
                                 component: () => import('@/views/recommend/Recommend.vue'),
                             },
                         ]
+                    },
+                    // 会员首页
+                    {
+                        path: '/member',
+                        name: Pages.member,
+                        component: () => import("@/views/member/Profile.vue"),
                     }
                 ]
             }
