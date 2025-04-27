@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, onMounted, ref} from "vue";
+import {computed, markRaw, onMounted, ref} from "vue";
 import {useProfileStore} from "@/stores/member.ts";
 import HeaderTop from "@/components/layout/header/HeaderTop.vue";
 import {storeToRefs} from "pinia";
@@ -210,102 +210,13 @@ const recommendServiceItems = ref([
     badge: ""
   },
 ]);
-
-// const recommendServiceItems = ref([
-//   {
-//     gridItems: [
-//       {
-//         icon: "user-circle-o",
-//         text: "我的课程",
-//         to: "/live/hot",
-//         badge: ""
-//       },
-//       {
-//         icon: "chart-trending-o",
-//         text: "看视频免流量",
-//         to: "/live/newperson",
-//         badge: ""
-//       },
-//
-//       {
-//         icon: "orders-o",
-//         text: "个性装扮",
-//         to: "/live/vicinity",
-//         badge: ""
-//       },
-//       {
-//         icon: "pending-payment",
-//         text: "我的钱包",
-//         to: "/live/music",
-//         badge: ""
-//       },
-//     ]
-//   },
-//   {
-//     gridItems: [
-//       {
-//         icon: "cash-back-record-o",
-//         text: "游戏中心",
-//         to: "/",
-//         badge: ""
-//       },
-//       {
-//         icon: "shop-collect-o",
-//         text: "会员购中心",
-//         to: "/msite",
-//         badge: ""
-//       },
-//       {
-//         icon: "new-arrival-o",
-//         text: "我的直播",
-//         to: "/",
-//         badge: ""
-//       },
-//       {
-//         icon: "hot-sale-o",
-//         text: "漫画",
-//         to: "/",
-//         badge: ""
-//       },
-//     ]
-//   },
-//   {
-//     gridItems: [
-//       {
-//         icon: "hot-o",
-//         text: "必火推广",
-//         to: "/",
-//         badge: ""
-//       },
-//       {
-//         icon: "comment-o",
-//         text: "社区中心",
-//         to: "/",
-//         badge: ""
-//       },
-//       {
-//         icon: "like-o",
-//         text: "同辰公益",
-//         to: "/",
-//         badge: ""
-//       },
-//       {
-//         icon: "hot-sale-o",
-//         text: "能量加油站",
-//         to: "/",
-//         badge: ""
-//       },
-//     ]
-//   }
-// ]);
-
 // 下面是"我的订单"、"积分商城"、"会员卡"等列表
 const actionList = ref([
-  {to: '/order', icon: Order, text: '我的订单', isLink: true, isSvg: true},
-  {to: '/shop', icon: SixPoints, text: '积分商城', isLink: true, isSvg: true},
-  {to: '/vipcard', icon: Vip, text: '会员卡', isLink: true, isSvg: true},
-  {to: '/service', icon: Application, text: '服务中心', isLink: true, isSvg: true},
-  {to: '/download', icon: DownloadFour, text: '下载同辰APP', isLink: true, isSvg: true},
+  {to: '/order', icon: markRaw(Order), text: '我的订单', isLink: true, isSvg: true},
+  {to: '/shop', icon: markRaw(SixPoints), text: '积分商城', isLink: true, isSvg: true},
+  {to: '/vipcard', icon: markRaw(Vip), text: '会员卡', isLink: true, isSvg: true},
+  {to: '/service', icon: markRaw(Application), text: '服务中心', isLink: true, isSvg: true},
+  {to: '/download', icon: markRaw(DownloadFour), text: '下载同辰APP', isLink: true, isSvg: true},
 ]);
 
 
@@ -329,6 +240,9 @@ onMounted(() => {
 </script>
 <style lang="scss" scoped>
 .profile-page {
+  width: 100%;
+  overflow-x: hidden; /* 隐藏水平滚动条 */
+
   .profile-number {
     padding-top: 1.95rem;
 
@@ -448,172 +362,6 @@ onMounted(() => {
           }
         }
       }
-    }
-  }
-
-  .spike {
-    margin-top: 0.2rem;
-    background: $fc;
-
-    &-header {
-      padding-left: 0.2rem;
-      display: inline-block;
-
-      &-title {
-        display: inline-block;
-        height: 1.0rem;
-        line-height: 1.0rem;
-        font-size: 12px;
-        font-weight: bold;
-      }
-
-      &-countdown {
-        float: left;
-
-        &-lt {
-          margin-top: 1px;
-          margin-left: 10px;
-          font-size: 12px;
-          border: 1px solid #FB0017;
-          border-right: none;
-          border-bottom-left-radius: 22px;
-          border-top-left-radius: 22px;
-          height: 18px;
-          line-height: 18px;
-          padding: 0 3px;
-          color: #ffffff;
-          background: #FB0017;
-          float: left;
-        }
-
-        &-rt {
-          margin-top: 1px;
-          font-size: 12px;
-          float: left;
-          border: 1px solid #FB0017;
-          border-bottom-right-radius: 22px;
-          border-top-right-radius: 22px;
-          height: 18px;
-          line-height: 18px;
-          padding: 0 3px;
-        }
-      }
-
-      &-more {
-        float: right;
-
-        &-text {
-          height: 20px;
-          line-height: 15px;
-          font-size: 10px;
-        }
-
-        .van-icon {
-          margin-left: 2px;
-          height: 10px;
-          line-height: 10px;
-          float: right;
-        }
-      }
-    }
-
-    &-content {
-      height: auto;
-
-      .van-card-full {
-        background-color: #f1f1f1;
-      }
-    }
-  }
-
-  .profile-1reTe {
-    margin-top: .2rem;
-    background: $fc;
-
-    .myorder {
-      padding-left: 1.6rem;
-      display: flex;
-      align-items: center;
-
-      aside {
-        @include wh(.7rem, .7rem);
-        margin-left: -.866667rem;
-        margin-right: .266667rem;
-        display: flex;
-        align-items: center;
-
-        svg {
-          @include wh(100%, 100%);
-        }
-      }
-
-      .myorder-div {
-        width: 100%;
-        border-bottom: 1px solid #f1f1f1;
-        padding: .433333rem .266667rem .433333rem 0;
-        @include sc(.7rem, #333);
-        display: flex;
-        justify-content: space-between;
-
-        span {
-          display: block;
-        }
-
-        .myorder-divsvg {
-          @include wh(.46667rem, .466667rem);
-
-          svg {
-            @include wh(100%, 100%);
-          }
-        }
-      }
-    }
-
-    .myorder:nth-of-type(3) .myorder-div {
-      border: 0;
-    }
-  }
-
-  .router-slid-enter-active, .router-slid-leave-active {
-    transition: all .4s;
-  }
-
-  .router-slid-enter, .router-slid-leave-active {
-    transform: translate3d(2rem, 0, 0);
-    opacity: 0;
-  }
-
-  .head_menu_slot {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-right: 0.4rem;
-    margin-top: 0.4rem;
-    white-space: nowrap; /* 防止换行 */
-  }
-
-  .menu-item {
-    margin-left: 1rem;
-    color: #fff;
-  }
-
-  .action-button {
-    margin-left: .1rem; /* 添加左侧边距 */
-    margin-right: .1rem; /* 添加右侧边距 */
-  }
-
-  .switch {
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    line-height: 18px;
-    text-align: center;
-    border-radius: 50%;
-
-    .van-icon-play {
-      color: #fff;
-      transform: rotate(90deg);
-      vertical-align: 17%;
     }
   }
 }
