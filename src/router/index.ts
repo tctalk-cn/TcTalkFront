@@ -41,13 +41,19 @@ const router = createRouter({
                         name: Pages.member,
                         component: () => import("@/views/member/Profile.vue"),
                         children: [
-                            {
-                                path: 'info',// 个人信息详情页
-                                name: Pages.memberInfo,
-                                component: () => import("@/views/member/children/Info.vue"),
-                            },
+                            // {
+                            //     path: 'info',// 个人信息详情页
+                            //     name: Pages.memberInfo,
+                            //     component: () => import("@/views/member/children/Info.vue"),
+                            // },
                         ]
-                    }
+                    },
+                    {
+                        // 个人信息详情页
+                        path: '/member/info',
+                        name: Pages.member,
+                        component: () => import("@/views/member/children/Info.vue"),
+                    },
                 ]
             }
         ]

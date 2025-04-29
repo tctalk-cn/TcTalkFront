@@ -22,7 +22,30 @@ export const useProfileStore = defineStore(
             showAlert: false,
             alertText: null,
             // 你也可以加用户信息等字段
-            memberInfo: {} as UmsMember,
+            memberInfo: {
+                id: "",
+                uid: "",
+                memberLevelId: 0,
+                username: "",
+                nickname: "",
+                shortUsername: "",
+                phone: "",
+                status: 1,
+                avatarUrl: "",
+                gender: 0,
+                birthday: "",
+                city: "",
+                job: "",
+                school: "",
+                personalizedSignature: "",
+                integration: 0,
+                shortDescription: "",
+                detailDescription: "",
+                tags: "",
+                hasResetUsername: 0,
+                memberLevelName: "",
+                qrCodeUrl: "",
+            },
             memberStatisticsInfo: {} as MemberStatisticsInfo,
         }),
 
@@ -178,15 +201,7 @@ export const useProfileStore = defineStore(
             // 改性别
             async resetGender(gender: number) {
                 const {code, message} = await useResetGender(gender);
-                if (code === "200") {
-                    if (gender === 0) {
-                        this.gender = "保密";
-                    } else if (gender === 1) {
-                        this.gender = "男";
-                    } else {
-                        this.gender = "女";
-                    }
-                }
+                this.memberInfo.gender = gender;
                 return {code, message};
             },
         },
