@@ -1,14 +1,26 @@
 import {defineStore} from "pinia";
+import nofaceImage from '@/assets/images/noface.gif';
 import {UmsMember} from "@/models/member.ts";
-import {useMemberInfo} from "@/api/member/member_api.ts";
+import {
+    useMemberInfo, useGenerateQrCode,
+    useMemberStatisticsInfo, useResetBirthday,
+    useResetGender, useResetNickname,
+    useResetSignature, useResetUsername, useUploadAvatar
+}
+    from "@/api/member/member_api.ts";
 import {MemberStatisticsInfo} from "@/models/member_statistics_info.ts";
-import {useMemberStatisticsInfo} from "../api/member/member_api.ts";
 
 export const useProfileStore = defineStore(
     "userProfile", {
 
         state: () => ({
             token: '',
+            // 用户手机
+            show: false, // 显示提示框
+            isEnter: true,  //是否登录
+            isLeave: false, //是否退出
+            showAlert: false,
+            alertText: null,
             // 你也可以加用户信息等字段
             memberInfo: {} as UmsMember,
             memberStatisticsInfo: {} as MemberStatisticsInfo,
@@ -16,6 +28,55 @@ export const useProfileStore = defineStore(
 
         getters: {
             isLogin: (state) => !!state.token,
+            getAvatarUrl: (state) => state.memberInfo?.avatarUrl || nofaceImage,
+            getNickname: (state) => state.memberInfo?.nickname || "暂未设置",
+            getUsername: (state) => state.memberInfo?.username || "登录/注册",
+            getGender: (state) => {
+                const gender = state.memberInfo?.gender;
+                if (gender === 0) {
+                    return "保密";
+                } else if (gender === 1) {
+                    return "男";
+                } else if (gender === 2) {
+                    return "女";
+                } else {
+                    return "保密"; // 默认值，防止为空
+                }
+            },
+            getBirthday: (state) => {
+                const birthday = state.memberInfo?.birthday;
+                if (!birthday) {
+                    return "生日当天会收到祝福～";
+                }
+                const date = new Date(birthday);
+                const y = date.getFullYear();
+                const m = (date.getMonth() + 1).toString().padStart(2, '0');
+                const d = date.getDate().toString().padStart(2, '0');
+                return `${y}/${m}/${d}`;
+            },
+
+            getPersonalizedSignature: (state) => {
+                return state.memberInfo?.personalizedSignature || '介绍一下自己吧';
+            },
+            getSchool: (state) => {
+                return state.memberInfo?.school || '填写学校发现更多校友~';
+            },
+            getUid: (state) => {
+                return state.memberInfo?.uid || '';
+            },
+            getMemberLevelName: (state) => {
+                return state.memberInfo?.memberLevelName || '普通会员';
+            },
+            getQrCodeUrl: (state) => {
+                return state.memberInfo?.qrCodeUrl || '';
+            },
+            getPhone: (state) => {
+                return state.memberInfo?.phone || '';
+            },
+            hasResetUsername: (state) => {
+                return state.memberInfo?.hasResetUsername || 0;
+            },
+
         },
         actions: {
             setToken(token: string) {
@@ -33,6 +94,100 @@ export const useProfileStore = defineStore(
             async getMemberStatistics() {
                 const {data} = await useMemberStatisticsInfo();
                 this.memberStatisticsInfo = data;
+            },
+            // 退出登录
+            async signOut() {
+                this.waitingThing();
+                this.clearToken();
+                this.memberInfo = {};
+                this.memberStatisticsInfo = {};
+            },
+
+            async exitLogin() {
+                this.show = true;
+                this.isEnter = true;
+                this.isLeave = true;
+            },
+
+            waitingThing() {
+                // 取消退出
+                if (this.timer) {
+                    clearTimeout(this.timer);
+                }
+                this.isEnter = false;
+                this.isLeave = true;
+                this.timer = setTimeout(() => {
+                    clearTimeout(this.timer);
+                    this.show = false;
+                }, 200);
+            },
+
+            changePhone() {
+                this.showAlert = true;
+                this.alertText = '请在手机APP中设置';
+            },
+
+            // 上传头像
+            async uploadAvatar() {
+                if (this.memberInfo) {
+                    let input = document.querySelector('.profileinfopanel-upload') as HTMLInputElement;
+                    let formData = new FormData();
+                    formData.append('file', input.files[0]);
+                    try {
+                        const {data} = await useUploadAvatar(formData);
+                        this.memberInfo.avatarUrl = data;
+                        this.avatarUrl = data;
+                    } catch (err) {
+                        this.showAlert = true;
+                        this.alertText = '上传失败';
+                        throw new Error(err);
+                    }
+                }
+            },
+
+            // 重置用户名
+            async resetUsername(newUsername: string) {
+                await useResetUsername(newUsername);
+                this.memberInfo.username = newUsername;
+                this.memberInfo.hasResetUsername = 1;
+            },
+
+            // 重置昵称
+            async resetNickname(nickname: string) {
+                await useResetNickname(nickname);
+                this.memberInfo.nickname = nickname;
+            },
+
+            // 重置生日
+            async resetBirthday(birthday: string) {
+                await useResetBirthday(birthday);
+                this.memberInfo.birthday = birthday;
+            },
+
+            // 重置签名
+            async resetSignature(signature: string) {
+                await useResetSignature(signature);
+                this.memberInfo.signature = signature;
+            },
+
+            // 生成二维码
+            async generateQrCode() {
+                let {data} = await useGenerateQrCode();
+                this.memberInfo.qrCodeUrl = data;
+            },
+            // 改性别
+            async resetGender(gender: number) {
+                const {code, message} = await useResetGender(gender);
+                if (code === "200") {
+                    if (gender === 0) {
+                        this.gender = "保密";
+                    } else if (gender === 1) {
+                        this.gender = "男";
+                    } else {
+                        this.gender = "女";
+                    }
+                }
+                return {code, message};
             },
         },
         // 持久化配置

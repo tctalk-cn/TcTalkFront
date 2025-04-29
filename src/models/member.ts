@@ -77,4 +77,9 @@ export interface UmsMember {
      * 会员等级
      */
     memberLevelName: string;
+
+    /**
+     * 二维码
+     */
+    qrCodeUrl: string;
 }
