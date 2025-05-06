@@ -27,9 +27,9 @@
         </div>
       </router-link>
 
-      <router-link to="/member/setusername" class="profile__item">
+      <router-link to="/member/setUsername" class="profile__item">
         <span class="profile__label">用户名</span>
-        <div class="profile__value">{{ getNickname }}
+        <div class="profile__value">{{ getUsername }}
           <IconPark :icon="Right"
                     theme="filled"
                     fill="#d8d8d8"
@@ -62,7 +62,7 @@
         </div>
       </div>
 
-      <div class="profile__item" @click="showQrcode = true">
+      <div class="profile__item" @click="viewQrCode">
         <span class="profile__label">二维码名片</span>
         <div class="profile__value">
           <IconPark :icon="Right"
@@ -71,7 +71,7 @@
                     class="mr-1" :size="20"/>
         </div>
       </div>
-      <div class="profile__item" @click="showQrcode = true">
+      <div class="profile__item">
         <span class="profile__label">UID</span>
         <div class="profile__value">
           {{ getUid }}
@@ -87,7 +87,7 @@
       学校设置
     </section>
     <section class="profile__section">
-      <div class="profile__item" @click="openSex">
+      <div class="profile__item">
         <span class="profile__label">学校</span>
         <div class="profile__value">
           {{ getSchool }}
@@ -138,27 +138,18 @@
                   class="mr-1" :size="20"/>
       </div>
     </section>
-    <section class="profile__exit" @click="exitlogin">退出登录</section>
+    <section class="profile__exit" @click="exitLogin">退出登录</section>
     <!-- 弹窗们（性别、生日、二维码、退出确认） -->
     <SexPopup v-model:visible="showGenderPopup" @confirm="changeGender"/>
     <BirthdayPopup v-model:visible="showBirthdayPopup" @confirm="setBirthday"/>
-    <QrcodeDialog v-model:visible="showQrCode"/>
-    <ExitConfirmDialog v-model:visible="showExitDialog"/>
-
-    <!--二维码展示-->
-    <section class="gender-info">
-      <van-popup v-model:show="showQrCode" round position="bottom" :style="{height:'40%'}" @close="showQrCode = false"
-                 closeable
-                 close-icon="close"
-                 :close-on-click-overlay="false">
-        <van-image :src="getQrCodeUrl"/>
-        <van-button type="primary" round class="mt-1" size="small" block @click="showQrCode = false">关闭</van-button>
-      </van-popup>
-    </section>
+    <QrcodeDialog v-model:visible="showQrCode" v-model:getQrCodeUrl="getQrCodeUrl" @confirm="showQrCode=!showQrCode"/>
+    <ExitConfirmDialog v-model:visible="showExitDialog" @confirm="outLogin"/>
     <alert-tip v-if="showAlert" @closeTip="showAlert = false" :alertText="alertText"></alert-tip>
-    <transition name="router-slid" mode="out-in">
-      <router-view></router-view>
-    </transition>
+    <router-view v-slot="{ Component }">
+      <transition name="router-slid" mode="out-in">
+        <component :is="Component"/>
+      </transition>
+    </router-view>
   </div>
 </template>
 <script setup lang="ts">
@@ -185,7 +176,6 @@ const {
   showAlert,
   alertText,
   getGender,
-  generateQrCode,
   getAvatarUrl,
   getNickname,
   getUsername,
@@ -206,13 +196,12 @@ const {
   uploadAvatar,
   resetGender,
   resetBirthday,
+  generateQrCode
 } = useProfileStore();
 // 性别选择
 const showGenderPopup = ref(false);
 // 日期选择器
 const showBirthdayPopup = ref(false);
-// 最小日期选择
-const minDate = ref(new Date('1950-01-01'));
 // 是否展示二维码
 const showQrCode = ref(false);
 // 是否展示退出框
@@ -232,16 +221,15 @@ const setBirthday = ({selectedValues}) => {
   showBirthdayPopup.value = !showBirthdayPopup.value;
 }
 
-const onDatePickerConfirm = ({selectedValues}) => {
-  resetBirthday(selectedValues.join('/'));
-  showDatePicker.value = false;
-}
-
 const viewQrCode = () => {
-  if (getQrCodeUrl === null || getQrCodeUrl === "") {
+  if (getQrCodeUrl === null || getQrCodeUrl.value === "") {
     generateQrCode();
   }
   showQrCode.value = true;
+}
+// 打开生日选择
+const openBirthday = () => {
+  showBirthdayPopup.value = true
 }
 </script>
 

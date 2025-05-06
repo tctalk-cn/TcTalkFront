@@ -14,4 +14,7 @@ export const Pages = {
     profileSetUsername: 'profileSetUsername',
     profileSetNickname: 'profileSetNickname',
     profileSetSignature: 'profileSetSignature',
+    profileSetPhone: 'profileSetPhone',
+    profileSetPassword: 'profileSetPassword',
+
 }

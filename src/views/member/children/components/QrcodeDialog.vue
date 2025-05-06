@@ -1,30 +1,31 @@
 <template>
-  <van-dialog
+
+  <van-popup
       :show="visible"
-      title="我的二维码"
-      show-cancel-button
+      round
+      position="bottom"
+      :style="{height:'40%'}"
       @update:show="val => emit('update:visible', val)"
   >
-    <div class="qrcode-wrapper">
-<!--      <img src="your-qrcode-url.png" alt="二维码" />-->
-    </div>
-  </van-dialog>
+    <van-image :src="getQrCodeUrl"/>
+    <van-button
+        type="primary"
+        round class="mt-1"
+        size="small"
+        block
+        @click="onConfirm">关闭
+    </van-button>
+  </van-popup>
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue'
+import {defineProps, defineEmits} from 'vue'
 
-const props = defineProps({ visible: Boolean })
+const props = defineProps({visible: Boolean, getQrCodeUrl: String})
 const emit = defineEmits(['update:visible'])
+const onConfirm = (value) => {
+  emit('confirm', value)
+  emit('update:visible', false)
+}
 </script>
 
-<style scoped>
-.qrcode-wrapper {
-  text-align: center;
-  padding: 20px 0;
-}
-.qrcode-wrapper img {
-  width: 150px;
-  height: 150px;
-}
-</style>
