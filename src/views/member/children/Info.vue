@@ -177,9 +177,6 @@ import ExitConfirmDialog from "@/views/member/children/components/ExitConfirmDia
 const router = useRouter();
 
 const {
-  show,
-  isEnter,
-  isLeave,
   showAlert,
   alertText,
   getGender,
@@ -187,7 +184,6 @@ const {
   getNickname,
   getUsername,
   getBirthday,
-  getPersonalizedSignature,
   getSchool,
   getUid,
   getQrCodeUrl,
@@ -197,7 +193,6 @@ const {
 
 const {
   signOut,
-  changePhone,
   uploadAvatar,
   resetGender,
   resetBirthday,
