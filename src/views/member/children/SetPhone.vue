@@ -30,7 +30,7 @@ import {useRouter} from "vue-router";
 import {useProfileStore} from "@/stores/member.ts";
 
 const router = useRouter();
-const {setPhoneNumber} = useProfileStore(); // 假设 store 中有此方法
+const {changePhone} = useProfileStore(); // 假设 store 中有此方法
 
 const phone = ref("");
 const isInvalid = ref(false);
@@ -55,7 +55,7 @@ const validatePhone = () => {
 
 const submitPhone = () => {
   if (!validatePhone()) return;
-  setPhoneNumber(phone.value); // 假设存在该方法
+  changePhone(phone.value); // 假设存在该方法
   router.go(-1);
 };
 </script>

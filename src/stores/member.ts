@@ -145,7 +145,7 @@ export const useProfileStore = defineStore(
                 }, 200);
             },
 
-            changePhone() {
+            changePhone(phone: string) {
                 this.showAlert = true;
                 this.alertText = '请在手机APP中设置';
             },
