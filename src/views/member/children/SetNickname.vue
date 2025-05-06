@@ -1,8 +1,8 @@
 <template>
-  <div class="rating_page">
+  <div class="nickname-page">
     <HeaderTop head-title="修改昵称" go-back="true"/>
-    <section class="setnickname">
-      <section class="setnickname-top">
+    <section class="nickname-form">
+      <section class="nickname-form__top">
         <van-form>
           <van-field
               v-model="nicknameRef"
@@ -12,86 +12,68 @@
               clearable
               required
               :rules="[{ validator, message: '长度不合法' }]"
+              :input-class="{ 'invalid-border': showError && !canSubmit }"
               @clear="clearInput"
           ></van-field>
           <div>
-            <p class="unlikep">昵称长度在5到24位之间</p>
+            <p v-if="showError && !canSubmit" class="nickname-form__error-msg">
+              昵称长度在5到24位之间
+            </p>
           </div>
         </van-form>
       </section>
-      <section class="reset">
-        <button :class="{fontopacity:opacityall}" @click="changeNickname">确认修改</button>
+      <section class="nickname-form__submit">
+        <button :class="{ 'is-active': canSubmit }" @click="changeNickname">确认修改</button>
       </section>
     </section>
   </div>
 </template>
 
-
 <script setup lang="ts">
 import HeaderTop from "@/components/layout/header/HeaderTop.vue";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import {useRouter} from "vue-router";
 import {useProfileStore} from "@/stores/member.ts";
 import {storeToRefs} from "pinia";
 
-const validator = (val) => {
-  if (val.length < 5 || val.length > 24) {
-    earn.value = false;
-    opacityall.value = false;
-    return false;
-  } else {
-    earn.value = true;
-    opacityall.value = true;
-    return true;
-  }
-};
-
-const {getNickname} = storeToRefs(useProfileStore());
-// 输入框提醒
-const earn = ref(true);
-// 输入框边框颜色
-const bordercolor = ref(false);
-// 字体透明度
-const opacityall = ref(false);
-// 输入框的内容
-const nicknameRef = getNickname;
-// // 新用户名
 const {resetNickname} = useProfileStore();
 
+const {getNickname} = storeToRefs(useProfileStore());
+// 输入框双向绑定
+const nicknameRef = ref(getNickname.value || "");
+// 校验函数
+const isValidLength = (val: string) => val.length >= 5 && val.length <= 24;
+// 透明度按钮控制（computed 自动跟随）
+const canSubmit = computed(() => isValidLength(nicknameRef.value));
+// 显示提示文本颜色
+const showError = ref(false);
+
+// 路由
 const router = useRouter();
 
-const nicknameCheck = () => {
-  if (nicknameRef.value.length < 5 || nicknameRef.value.length > 24) {
-    earn.value = false;
-    bordercolor.value = true;
-    opacityall.value = false;
-    return false;
-  } else {
-    earn.value = true;
-    bordercolor.value = false;
-    opacityall.value = true;
-    return true;
-  }
-}
+// 提交修改
 const changeNickname = () => {
-  let checkResult = nicknameCheck();
-  if (!checkResult) {
+  if (!canSubmit.value) {
+    showError.value = true;
     return;
   }
   resetNickname(nicknameRef.value);
   router.go(-1);
-}
+};
 
+// 清空输入框
 const clearInput = () => {
   nicknameRef.value = "";
-  bordercolor.value = false;
-  opacityall.value = false;
+  showError.value = false;
+};
 
-}
+// 用于 van-field rules
+const validator = (val: string) => isValidLength(val);
+
 </script>
 
 <style lang="scss" scoped>
-.rating_page {
+.nickname-page {
   position: absolute;
   top: 0;
   left: 0;
@@ -102,23 +84,23 @@ const clearInput = () => {
   padding-top: 1.95rem;
 }
 
-.setnickname {
+.nickname-form {
   margin: 0 auto;
 
-  .setnickname-top {
-    padding-top: .4rem;
+  &__top {
+    padding-top: 0.4rem;
 
-    .setname-input {
-      border-color: #ea3106;
+    &__error-msg {
+      @include sc(0.58rem, #ea3106);
+      padding-top: 0.1rem;
     }
 
-    .unlikep {
-      @include sc(.58rem, #ea3106);
-      padding-top: .1rem;
+    .nickname-form__input--error {
+      border: 1px solid #ea3106 !important;
     }
   }
 
-  .reset {
+  &__submit {
     width: 100%;
     background: #3199e8;
 
@@ -127,15 +109,15 @@ const clearInput = () => {
       width: 100%;
       background: none;
       line-height: 2rem;
-      @include sc(.7rem, #fff);
-      opacity: .6;
-      transition: all 1s;
+      @include sc(0.7rem, #fff);
+      opacity: 0.6;
+      transition: opacity 0.3s;
     }
 
-    .fontopacity {
-      transition: all 1s;
+    .is-active {
       opacity: 1;
     }
   }
 }
+
 </style>

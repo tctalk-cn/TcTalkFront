@@ -1,128 +1,132 @@
 <template>
-  <div class="rating_page">
-    <HeaderTop head-title="修改用户名" go-back="true"/>
-    <section class="setname">
-      <section class="setname-top">
-        <input type="text" placeholder="输入用户名" :class="{'setname-input':bordercolor}" @input="usernameCheck"
-               v-model="usernameRef"/>
+  <div class="username-page">
+    <HeaderTop head-title="修改用户名" go-back="true" />
+
+    <section class="username-form">
+      <section class="username-form__body">
+        <input
+            type="text"
+            placeholder="输入用户名"
+            :class="{ 'username-form__input--error': isInvalid }"
+            @input="validateUsername"
+            v-model="username"
+        />
         <div>
-          <p v-if="earn">用户名只能修改一次（5-24字符之间）</p>
-          <p class="unlikep" v-else>用户名长度在5到24位之间</p>
+          <p v-if="showTips">用户名只能修改一次（5-24字符之间）</p>
+          <p v-else class="username-form__error-msg">用户名长度在5到24位之间</p>
         </div>
       </section>
-      <section class="reset">
-        <button :class="{fontopacity:opacityall}" @click="resetName">确认修改</button>
+
+      <section class="username-form__submit">
+        <button :class="{ 'is-active': isValid }" @click="submitUsername">确认修改</button>
       </section>
     </section>
   </div>
 </template>
 
-
 <script setup lang="ts">
 import HeaderTop from "@/components/layout/header/HeaderTop.vue";
-import {ref} from "vue";
-import {useRouter} from "vue-router";
-import {useProfileStore} from "@/stores/member.ts";
-// 输入框提醒
-const earn = ref(true);
-// 输入框边框颜色
-const bordercolor = ref(false);
-// 字体透明度
-const opacityall = ref(false);
-// 输入框的内容
-const usernameRef = ref("");
-// 新用户名
-const {resetUsername} = useProfileStore();
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useProfileStore } from "@/stores/member.ts";
+
 const router = useRouter();
-// 用户名check
-const usernameCheck = () => {
-  if (usernameRef.value.length < 5 || usernameRef.value.length > 24) {
-    earn.value = false;
-    bordercolor.value = true;
-    opacityall.value = false;
+const { resetUsername } = useProfileStore();
+
+const username = ref("");
+const isInvalid = ref(false);        // 是否显示红色边框
+const isValid = ref(false);          // 是否可点击提交按钮
+const showTips = ref(true);          // 是否显示默认提示信息
+
+// 表单验证
+const validateUsername = () => {
+  const length = username.value.length;
+  if (length < 5 || length > 24) {
+    showTips.value = false;
+    isInvalid.value = true;
+    isValid.value = false;
     return false;
   } else {
-    earn.value = true;
-    bordercolor.value = false;
-    opacityall.value = true;
+    showTips.value = true;
+    isInvalid.value = false;
+    isValid.value = true;
     return true;
   }
-}
+};
 
-const resetName = () => {
-  let checkResult = usernameCheck();
-  if (!checkResult) {
-    return;
-  }
-  resetUsername(usernameRef.value);
+// 提交用户名
+const submitUsername = () => {
+  if (!validateUsername()) return;
+  resetUsername(username.value);
   router.go(-1);
-}
+};
 </script>
+
 
 <style lang="scss" scoped>
 
-.rating_page {
+.username-page {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   z-index: 202;
   background: #f2f2f2;
   padding-top: 1.95rem;
 }
 
-.setname {
+.username-form {
   margin: 0 auto;
 
-  .setname-top {
-    padding: .6rem .8rem;
+  &__body {
+    padding: 0.6rem 0.8rem;
 
     input {
-      background: none;
-      width: 15.2rem;
-      border: 1px solid #ddd;
-      @include borderRadius(2px);
-      padding: .2rem .1rem;
+      width: 100%;
+      padding: 0.2rem 0.1rem;
+      font-size: 0.7rem;
       line-height: 1.2rem;
-      font-size: .7rem;
+      border: 1px solid #ddd;
+      border-radius: 2px;
+      background: none;
       display: block;
     }
 
-    .setname-input {
+    .username-form__input--error {
       border-color: #ea3106;
     }
 
     p {
       width: 100%;
-      @include sc(.4rem, #666);
-      padding: .4rem 0 1rem;
+      font-size: 0.4rem;
+      color: #666;
+      padding: 0.4rem 0 1rem;
     }
 
-    .unlikep {
-      @include sc(.58rem, #ea3106);
-      padding-top: .1rem;
+    .username-form__error-msg {
+      font-size: 0.58rem;
+      color: #ea3106;
+      padding-top: 0.1rem;
     }
   }
 
-  .reset {
+  &__submit {
     width: 100%;
     background: #3199e8;
 
     button {
-      display: block;
       width: 100%;
       background: none;
+      display: block;
       line-height: 2rem;
-      @include sc(.7rem, #fff);
-      opacity: .6;
-      transition: all 1s;
+      font-size: 0.7rem;
+      color: #fff;
+      opacity: 0.6;
+      transition: opacity 0.3s ease;
     }
 
-    .fontopacity {
-      transition: all 1s;
+    .is-active {
       opacity: 1;
     }
   }
 }
+
 </style>
