@@ -1,6 +1,5 @@
 import {defineStore} from "pinia";
 import nofaceImage from '@/assets/images/noface.gif';
-import {UmsMember} from "@/models/member.ts";
 import {
     useMemberInfo, useGenerateQrCode,
     useMemberStatisticsInfo, useResetBirthday,
@@ -205,6 +204,10 @@ export const useProfileStore = defineStore(
                 this.memberInfo.gender = gender;
                 return {code, message};
             },
+            // 修改密码
+            async updatePassword(pwd: string) {
+                this.alertText = '暂不支持';
+            }
         },
         // 持久化配置
         persist: {
