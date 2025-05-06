@@ -25,16 +25,31 @@
                     class="mr-1" :size="20"/>
         </div>
       </router-link>
-
-      <router-link to="/member/setUsername" class="profile__item">
+      <router-link
+          :to="hasResetUsername <= 0 ? '/member/setUsername' : ''"
+          class="profile__item"
+          @click.native.prevent="hasResetUsername > 0 && $event.preventDefault()"
+      >
         <span class="profile__label">用户名</span>
-        <div class="profile__value">{{ getUsername }}
-          <IconPark :icon="Right"
-                    theme="filled"
-                    fill="#d8d8d8"
-                    class="mr-1" :size="20"/>
+        <div class="profile__value">
+          {{ getUsername }}
+          <IconPark
+              v-if="hasResetUsername <= 0"
+              :icon="Right"
+              theme="filled"
+              fill="#d8d8d8"
+              class="mr-1"
+              :size="20"
+          />
+          <span
+              v-else
+              class="mr-1"
+              style="display: inline-block; width: 20px; height: 20px;"
+          ></span>
         </div>
       </router-link>
+
+
     </section>
     <!-- 性别、生日、二维码、UID -->
     <section class="profile__section">
