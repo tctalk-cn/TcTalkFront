@@ -6,16 +6,15 @@
     <section class="profile__section">
       <div class="profile__item">
         <span class="profile__label">头像</span>
-        <div class="profile__value">
+        <div class="profile__value" @click="triggerAvatarUpload">
           <van-image :src="getAvatarUrl" round width="40" height="40"/>
           <IconPark :icon="Right"
                     theme="filled"
                     fill="#d8d8d8"
                     class="mr-1" :size="20"/>
         </div>
-        <input type="file" class="profile__upload" @change="uploadAvatar"/>
+        <input ref="avatarInput" type="file" class="profile__upload" @change="uploadAvatar"/>
       </div>
-
       <router-link to="/member/setNickname" class="profile__item">
         <span class="profile__label">昵称</span>
         <div class="profile__value">
@@ -130,15 +129,8 @@
                     class="mr-1" :size="20"/>
         </div>
       </router-link>
-      <div class="profile__item" @click="showExitDialog = true">
-        <span class="profile__label">退出登录</span>
-        <IconPark :icon="Right"
-                  theme="filled"
-                  fill="#d8d8d8"
-                  class="mr-1" :size="20"/>
-      </div>
     </section>
-    <section class="profile__exit" @click="exitLogin">退出登录</section>
+    <section class="profile__exit" @click="showExitDialog = true">退出登录</section>
     <!-- 弹窗们（性别、生日、二维码、退出确认） -->
     <SexPopup v-model:visible="showGenderPopup" @confirm="changeGender"/>
     <BirthdayPopup v-model:visible="showBirthdayPopup" @confirm="setBirthday"/>
@@ -189,8 +181,6 @@ const {
 } = storeToRefs(useProfileStore());
 
 const {
-  exitLogin,
-  waitingThing,
   signOut,
   changePhone,
   uploadAvatar,
@@ -206,6 +196,11 @@ const showBirthdayPopup = ref(false);
 const showQrCode = ref(false);
 // 是否展示退出框
 const showExitDialog = ref(false);
+const avatarInput = ref<HTMLInputElement | null>(null);
+const triggerAvatarUpload = () => {
+  avatarInput.value?.click();
+};
+
 const outLogin = () => {
   signOut();
   router.push({name: Pages.login});
@@ -236,6 +231,11 @@ const openBirthday = () => {
 <style lang="scss" scoped>
 
 .profile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: #f2f2f2;
   padding-top: 1.95rem;
 
@@ -258,10 +258,6 @@ const openBirthday = () => {
     padding: .2rem .4rem;
     border-bottom: 0.05rem solid #ddd;
     background: #fff;
-
-    &:last-child {
-      border-bottom: none;
-    }
   }
 
   &__label {

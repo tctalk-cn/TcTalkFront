@@ -40,37 +40,41 @@ const router = createRouter({
                         path: '/member',
                         name: Pages.member,
                         component: () => import("@/views/member/Profile.vue"),
+                        children: [
+                            {
+                                // 个人信息详情页
+                                path: 'info',
+                                name: Pages.memberInfo,
+                                component: () => import("@/views/member/children/Info.vue"),
+                            },
+                            {
+                                // 设置用户名称
+                                path: 'setUsername',
+                                name: Pages.profileSetUsername,
+                                component: () => import("@/views/member/children/SetUsername.vue"),
+                            },
+                            {
+                                // 设置昵称
+                                path: 'setNickname',
+                                name: Pages.profileSetNickname,
+                                component: () => import("@/views/member/children/SetNickname.vue"),
+                            },
+                            {
+                                // 设置电话
+                                path: 'setPhone',
+                                name: Pages.profileSetPhone,
+                                component: () => import("@/views/member/children/SetPhone.vue"),
+                            },
+                            {
+                                // 设置电话
+                                path: 'setPassword',
+                                name: Pages.profileSetPassword,
+                                component: () => import("@/views/member/children/SetPassword.vue"),
+                            },
+
+                        ]
                     },
-                    {
-                        // 个人信息详情页
-                        path: '/member/info',
-                        name: Pages.member,
-                        component: () => import("@/views/member/children/Info.vue"),
-                    },
-                    {
-                        // 设置用户名称
-                        path: '/member/setUsername',
-                        name: Pages.profileSetUsername,
-                        component: () => import("@/views/member/children/SetUsername.vue"),
-                    },
-                    {
-                        // 设置昵称
-                        path: '/member/setNickname',
-                        name: Pages.profileSetNickname,
-                        component: () => import("@/views/member/children/SetNickname.vue"),
-                    },
-                    {
-                        // 设置电话
-                        path: '/member/setPhone',
-                        name: Pages.profileSetPhone,
-                        component: () => import("@/views/member/children/SetPhone.vue"),
-                    },
-                    {
-                        // 设置电话
-                        path: '/member/setPassword',
-                        name: Pages.profileSetPassword,
-                        component: () => import("@/views/member/children/SetPassword.vue"),
-                    },
+
                 ]
             }
         ]

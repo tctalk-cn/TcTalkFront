@@ -53,11 +53,7 @@
       <!-- 订单、积分商城、会员卡、服务中心、下载APP -->
       <ActionList :actions="actionList"/>
     </section>
-    <router-view v-slot="{ Component }">
-      <transition name="router-slid" mode="out-in">
-        <component :is="Component"/>
-      </transition>
-    </router-view>
+    <router-view/>
   </div>
 </template>
 

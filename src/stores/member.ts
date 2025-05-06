@@ -152,8 +152,9 @@ export const useProfileStore = defineStore(
 
             // 上传头像
             async uploadAvatar() {
+                console.info(this.memberInfo);
                 if (this.memberInfo) {
-                    let input = document.querySelector('.profileinfopanel-upload') as HTMLInputElement;
+                    let input = document.querySelector('.profile__upload') as HTMLInputElement;
                     let formData = new FormData();
                     formData.append('file', input.files[0]);
                     try {
