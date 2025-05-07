@@ -17,4 +17,8 @@ export const Pages = {
     profileSetPhone: 'profileSetPhone',
     profileSetPassword: 'profileSetPassword',
 
+    creativeCenter: 'creativeCenter',
+    myIndex: 'myIndex',
+    myAlbum: 'myAlbum',
+
 }

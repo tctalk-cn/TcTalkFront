@@ -98,7 +98,27 @@ export const useProfileStore = defineStore(
             hasResetUsername: (state) => {
                 return state.memberInfo?.hasResetUsername || 0;
             },
-
+            getWorksCount:(state) => {
+                return state.memberStatisticsInfo?.worksCount || 0;
+            },
+            getNewsCount:(state) => {
+                return state.memberStatisticsInfo?.newsCount || 0;
+            },
+            getAttendCount:(state) => {
+                return state.memberStatisticsInfo?.attendCount || 0;
+            },
+            getLikesCount:(state) => {
+                return state.memberStatisticsInfo?.likesCount || 0;
+            },
+            getBarrageCount:(state) => {
+                return state.memberStatisticsInfo?.barrageCount || 0;
+            },
+            getFansCount:(state) => {
+                return state.memberStatisticsInfo?.fansCount || 0;
+            },
+            getCollectWorksCount:(state) => {
+                return state.memberStatisticsInfo?.collectWorksCount || 0;
+            },
         },
         actions: {
             setToken(token: string) {

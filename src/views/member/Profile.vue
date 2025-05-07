@@ -1,6 +1,6 @@
 <template>
   <div class="profile-page">
-    <HeaderTop :head-title="profiletitle">
+    <HeaderTop :head-title="profileTitle">
       <!-- 其他插槽内容... -->
       <template #actions>
         <van-icon class="action-button" name="tv-o"/>
@@ -41,15 +41,15 @@
       </section>
       <!-- 常用服务 -->
       <ServiceSection title="常用服务" :items="navItems" :length="navItems.length"
-                      @item-click="()=>handleRecentlyUseClick"/>
+                      @item-click="handleRecentlyUseClick"/>
 
       <!-- 创作中心 -->
       <ServiceSection title="创作中心" :items="createItems" :length="createItems.length"
-                      @item-click="()=>handleCreativeClick"/>
+                      @item-click="handleCreativeClick"/>
 
       <!-- 推荐服务 -->
       <ServiceSection title="推荐服务" :items="recommendServiceItems" :length="4"
-                      @item-click="()=>handleCreativeClick"/>
+                      @item-click="handleCreativeClick"/>
       <!-- 订单、积分商城、会员卡、服务中心、下载APP -->
       <ActionList :actions="actionList"/>
     </section>
@@ -70,7 +70,7 @@ import ActionList from "@/views/member/components/ActionList.vue";
 
 const {getMemberStatistics} = useProfileStore();
 const {memberInfo, memberStatisticsInfo} = storeToRefs(useProfileStore());
-const profiletitle = ref('我的');
+const profileTitle = ref('我的');
 
 // 统计模块
 const statisticsItems = computed(() => [
@@ -221,6 +221,7 @@ const handleRecommendServiceClick = (to) => {
   router.push({path: to});
 }
 const handleCreativeClick = (to) => {
+  console.info("handleCreativeClick" + to);
   router.push({path: to});
 }
 

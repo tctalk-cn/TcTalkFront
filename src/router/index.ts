@@ -23,10 +23,6 @@ const router = createRouter({
                         name: Pages.home,
                         component: () => import("@/views/home/Home.vue"),
                         redirect: {name: Pages.recommend},
-                        // meta: {
-                        //     keepAlive: false,
-                        //     showTabBar: false // 不显示 TabBar
-                        // },
                         children: [
                             {
                                 path: "recommend",
@@ -74,7 +70,24 @@ const router = createRouter({
 
                         ]
                     },
-
+                    // 创作中心
+                    {
+                        path: '/creative/center',
+                        name: Pages.creativeCenter,
+                        component: () => import("@/views/creation/Center.vue"),
+                        meta: {
+                            keepAlive: true,
+                            showTabBar: false
+                        },
+                        redirect: {name: Pages.myAlbum},
+                        children: [
+                            {
+                                path: 'myAlbum',
+                                name: Pages.myAlbum,
+                                component: () => import("@/views/creation/album/Index.vue"),
+                            },
+                        ]
+                    }
                 ]
             }
         ]

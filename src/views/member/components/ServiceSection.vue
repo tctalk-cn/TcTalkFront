@@ -11,7 +11,7 @@
             :icon="item.icon"
             :text="item.text"
             :badge="item.badge"
-            @click="$emit('itemClick', item.to)"
+            @click="$emit('item-click', item.to)"
         />
       </van-grid>
     </div>
@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 defineProps<{ title: string; items: any[]; length: number }>();
-defineEmits(["itemClick"]);
+defineEmits(["item-click"]);
 </script>
 
 <style lang="scss" scoped>
