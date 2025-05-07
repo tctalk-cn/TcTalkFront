@@ -148,7 +148,7 @@
     <section class="profile__exit" @click="showExitDialog = true">退出登录</section>
     <!-- 弹窗们（性别、生日、二维码、退出确认） -->
     <SexPopup v-model:visible="showGenderPopup" @confirm="changeGender"/>
-    <BirthdayPopup v-model:visible="showBirthdayPopup" @confirm="setBirthday"/>
+    <BirthdayPopup v-model:visible="showBirthdayPopup" v-model:birthday="getBirthday" @confirm="setBirthday"/>
     <QrcodeDialog v-model:visible="showQrCode" v-model:getQrCodeUrl="getQrCodeUrl" @confirm="showQrCode=!showQrCode"/>
     <ExitConfirmDialog v-model:visible="showExitDialog" @confirm="outLogin"/>
     <alert-tip v-if="showAlert" @closeTip="showAlert = false" :alertText="alertText"></alert-tip>
