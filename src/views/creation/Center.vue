@@ -48,6 +48,9 @@
       <RouterView/>
     </div>
   </div>
+  <!--引入上传组件-->
+  <UploadPopup v-model="showUpload"/>
+
 </template>
 <script setup lang="ts">
 import HeaderTop from "@/components/layout/header/HeaderTop.vue";
@@ -55,6 +58,7 @@ import {ref, watch} from "vue";
 import {storeToRefs} from "pinia";
 import {useProfileStore} from "@/stores/member.ts";
 import {useRoute, useRouter} from "vue-router";
+import UploadPopup from "@/views/creation/components/UploadPopup.vue";
 
 const profileTitle = ref("创作中心");
 
@@ -150,7 +154,6 @@ const handlePublishClick = () => {
     }
 
     .user-info__action {
-      // 按钮区
     }
   }
 
@@ -174,36 +177,6 @@ const handlePublishClick = () => {
 
     .router-view-wrapper {
       padding-top: 0.5rem;
-    }
-  }
-}
-
-.upload-container {
-  margin-top: 2rem;
-
-  .spike {
-    margin-top: 0.4rem;
-    background: $fc;
-
-    &-header {
-      padding-left: 0.4rem;
-      display: inline-block;
-
-      &-title {
-        display: inline-block;
-        height: 1.2rem;
-        line-height: 1.2rem;
-        font-size: 0.75rem;
-        font-weight: bold;
-      }
-    }
-
-    &-content {
-      height: auto;
-
-      .van-card-full {
-        background-color: #f1f1f1;
-      }
     }
   }
 }
