@@ -1,63 +1,66 @@
 <template>
-  <HeaderTop go-back="true" :head-title="profileTitle" go-back-url="/member">
-    <!-- 其他插槽内容... -->
-    <template #actions>
-      <van-icon class="action-button" name="newspaper-o"/>
-    </template>
-  </HeaderTop>
-  <div class="user-container">
-    <!-- 导航栏 -->
-    <div class="author">
-      <img :src="getAvatarUrl" class="privateImage" alt=""/>
-      <div>
-        <p>昵称：{{ getNickname }}</p>
-        <p>等级：
-          <van-tag round type="danger" color="#ffe1e1" text-color="#ad0000">{{ getMemberLevelName }}</van-tag>
-        </p>
-        <span>TC账号：{{ getUid }}</span>
+  <div class="center-container">
+    <HeaderTop go-back="true" :head-title="profileTitle" go-back-url="/member">
+      <!-- 其他插槽内容... -->
+      <template #actions>
+        <van-icon class="action-button" name="newspaper-o"/>
+      </template>
+    </HeaderTop>
+    <!-- 用户信息区域 -->
+    <div class="center-container__user-info">
+      <!-- 导航栏 -->
+      <div class="user-info__header">
+        <img class="user-info__avatar" :src="getAvatarUrl" alt=""/>
+        <div class="user-info__details">
+          <p>昵称：{{ getNickname }}</p>
+          <p>等级：
+            <van-tag type="danger" color="#ffe1e1" text-color="#ad0000">{{ getMemberLevelName }}</van-tag>
+          </p>
+          <span>TC账号：{{ getUid }}</span>
+        </div>
+        <div class="user-info__action">
+          <van-button color="#ff69b4" size="normal" @click="handlePublishClick">
+            发布
+          </van-button>
+        </div>
       </div>
-      <div class="ml-20">
-        <van-button color="#ff69b4" size="small" @click="publish">
-          发布
-        </van-button>
+      <div class="center-container__stats">
+        <div class="flex justify-evenly mb-2 mt-4">
+          <p class="text-sm text-gray-300">{{ getWorksCount }}作品</p>
+          <p class="text-sm text-gray-300">{{ getLikesCount }}获赞</p>
+          <p class="text-sm text-gray-300">{{ getAttendCount }}关注</p>
+          <p class="text-sm text-gray-300">{{ getFansCount }}粉丝</p>
+        </div>
       </div>
     </div>
-    <div class="mt-28 w-full">
-      <div class="flex justify-evenly mb-2 mt-4">
-        <p class="text-sm text-gray-300">{{ getWorksCount }}作品</p>
-        <p class="text-sm text-gray-300">{{ getLikesCount }}获赞</p>
-        <p class="text-sm text-gray-300">{{ getAttendCount }}关注</p>
-        <p class="text-sm text-gray-300">{{ getFansCount }}粉丝</p>
-      </div>
+    <!-- 内容区域-->
+    <div class="center-container__tabs">
+      <van-tabs v-model:active="currentTab" lazy-render @clickTab="onTabClick" animated scrollspy>
+        <van-tab v-for="(item) in profileTabs" :key="item.name" :name="item.name">
+          <template #title>
+            <van-icon v-if="item.icon" :name="item.icon"/>
+            <div v-if="!item.icon"> {{ item.label }}</div>
+          </template>
+        </van-tab>
+      </van-tabs>
     </div>
-  </div>
-  <!-- 内容 -->
-  <div class="myContent">
-    <van-tabs v-model:active="currentKey" lazy-render @clickTab="onTabClick" animated scrollspy>
-      <van-tab v-for="(item) in menus" :key="item.name" :name="item.name">
-        <template #title>
-          <van-icon v-if="item.icon" :name="item.icon"/>
-          <div v-if="!item.icon"> {{ item.label }}</div>
-        </template>
-      </van-tab>
-    </van-tabs>
-    <div class="mt-0.5">
+    <div class="center-container__content">
       <RouterView/>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import HeaderTop from "@/components/layout/header/HeaderTop.vue";
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import {storeToRefs} from "pinia";
 import {useProfileStore} from "@/stores/member.ts";
+import {useRoute, useRouter} from "vue-router";
 
 const profileTitle = ref("创作中心");
 
 const {
   getAvatarUrl,
   getNickname,
-  getUsername,
   getUid,
   getMemberLevelName,
   getWorksCount,
@@ -66,23 +69,66 @@ const {
   getFansCount
 } = storeToRefs(useProfileStore());
 
+const router = useRouter();
+const route = useRoute();
+
+const profileTabs: TabMenuItem[] = [
+  {id: 1, label: '专辑', name: 'album'},
+  {id: 2, label: '声音', name: 'audio'},
+  {id: 3, label: '视频', name: 'video'},
+  {id: 4, label: '动态', name: 'dt'},
+  {id: 5, label: '收藏', name: 'favorites'},
+  {id: 6, label: '笔记', name: 'notes'},
+  {id: 7, label: '更多', name: 'more', icon: 'more-o'},
+];
+const showUpload = ref(false);
+
+const currentTab = ref<TabMenuItem["name"]>(route.meta.menu as TabMenuItem["name"]);
+
+watch(
+    () => route.meta.menu,
+    (menu) => {
+      currentTab.value = menu as TabMenuItem["name"];
+    }
+);
+
+// tab点击切换页面
+interface TabClickEvent {
+  name: TabMenuItem["name"];
+  title: string;
+}
+
+const onTabClick = (tab: TabClickEvent) => {
+  currentTab.value = tab.name;
+  router.push({name: tab.name});
+};
+
+const handlePublishClick = () => {
+  showUpload.value = true
+}
+
 </script>
 
 <style lang="scss" scoped>
-.user-container {
+.center-container {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: $blue;
+  flex-direction: column;
+  padding-top: 1.95rem;
 
-  .author {
-    position: absolute;
-    top: 2.0rem;
-    left: 1rem;
+  &__user-info {
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
+    background-color: $blue;
 
-    img {
+    .user-info__header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-info__avatar {
       width: 5rem;
       height: 5rem;
       border-radius: 50%;
@@ -90,12 +136,10 @@ const {
       border: 0.1rem solid #fff;
     }
 
-    div {
-      margin-left: 1.0rem;
-
+    .user-info__details {
       p {
         margin: 0;
-        font-size: 1.0rem;
+        font-size: 1rem;
         color: #fff;
       }
 
@@ -103,6 +147,33 @@ const {
         font-size: 0.8rem;
         color: #c1c1c1;
       }
+    }
+
+    .user-info__action {
+      // 按钮区
+    }
+  }
+
+  &__stats {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  &__tabs {
+    margin-bottom: 0.5rem;
+  }
+
+  &__content {
+    padding-top: 0.5rem;
+  }
+
+  .content-container {
+    .van-tabs {
+      margin-bottom: 0.5rem;
+    }
+
+    .router-view-wrapper {
+      padding-top: 0.5rem;
     }
   }
 }
