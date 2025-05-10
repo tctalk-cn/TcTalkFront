@@ -2,10 +2,6 @@ import {createApp} from 'vue'
 import '@/style.css';
 import "@/utils/extend";
 import 'tailwindcss/tailwind.css';
-
-// import '@/assets/base.scss';
-// import '@/assets/theme.scss';
-// import '@/assets/mixin.scss';
 import '@/assets/fonts/iconfont.css';
 
 import App from './App.vue'
