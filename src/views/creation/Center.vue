@@ -118,6 +118,7 @@ const handlePublishClick = () => {
   display: flex;
   flex-direction: column;
   padding-top: 1.95rem;
+  height: 100vh; // 视口高度
 
   &__user-info {
     display: flex;
@@ -167,10 +168,13 @@ const handlePublishClick = () => {
   }
 
   &__content {
-   padding: 0.5rem 0.5rem;
+    padding: 0.5rem 0.5rem;
   }
 
   .content-container {
+    flex: 1; // 占据剩余空间
+    overflow-y: auto;
+
     .van-tabs {
       margin-bottom: 0.5rem;
     }

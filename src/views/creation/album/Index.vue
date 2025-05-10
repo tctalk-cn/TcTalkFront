@@ -29,6 +29,7 @@
             :on-more="() => {}"
             :on-share="()=>{}"
         />
+        <van-divider/>
       </div>
     </van-list>
   </van-pull-refresh>
@@ -97,6 +98,4 @@ const onRefresh = () => {
   margin-top: 0.2rem; /* Adjust the top margin as needed */
   margin-bottom: 0.2rem; /* Adjust the bottom margin as needed */
 }
-
-
 </style>

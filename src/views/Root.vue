@@ -1,15 +1,15 @@
 <template>
-  <div id="dashboard">
+  <div id="dashboard" :class="{ 'with-footer': showTabBar }">
     <div class="main">
       <!--1.缓存组件状态:使用 <keep-alive> 包裹的组件会在切换时被缓存，而不是被销毁。当切换回该组件时，它会恢复之前的状态，而不需要重新渲染
         2.性能优化： 对于频繁切换的页面或组件，使用 <keep-alive> 可以避免重复渲染，从而提高应用的性能，尤其是在大型应用中。
         3.控制哪些组件被缓存： <keep-alive> 提供了 include 和 exclude 属性，允许开发者指定哪些组件应该被缓存，哪些应该不缓存。
     -->
-      <keep-alive>
-        <router-view v-slot="{ Component }" v-if="$route.meta.keepAlive">
+      <router-view v-slot="{ Component }" v-if="$route.meta.keepAlive">
+        <keep-alive>
           <component :is="Component"/>
-        </router-view>
-      </keep-alive>
+        </keep-alive>
+      </router-view>
       <router-view v-slot="{ Component }" v-if="!$route.meta.keepAlive">
         <component :is="Component"/>
       </router-view>
@@ -66,7 +66,8 @@ const updateCurrentIndex = () => {
   }
 };
 const updateTabBarVisibility = () => {
-  showTabBar.value = route.meta.showTabBar !== false;
+  // 只要有一层 route 明确要求隐藏 tabbar，就隐藏它
+  showTabBar.value = !route.matched.some(record => record.meta.showTabBar === false);
 };
 onMounted(() => {
   updateCurrentIndex();
@@ -87,7 +88,10 @@ watch(() => route.name, () => {
   flex-direction: column;
   overflow-y: auto;
   height: 100vh;
-  padding-bottom: 5rem; // 给 footer 预留空间（根据 tabbar 高度设定）
+}
+
+#dashboard.with-footer {
+  padding-bottom: 5rem;
 }
 
 .header {

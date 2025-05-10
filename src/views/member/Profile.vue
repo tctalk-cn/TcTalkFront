@@ -53,7 +53,9 @@
       <!-- 订单、积分商城、会员卡、服务中心、下载APP -->
       <ActionList :actions="actionList"/>
     </section>
-    <router-view/>
+    <router-view v-slot="{ Component }" v-if="$route.meta.keepAlive">
+      <component :is="Component"/>
+    </router-view>
   </div>
 </template>
 
