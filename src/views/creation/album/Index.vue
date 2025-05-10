@@ -70,11 +70,9 @@ const loadAlbumData = async (type = 'refresh') => {
   }
 
   searchParam.beginAlbumId = albums[albums.length - 1].id;
-
   if (albums.length < searchParam.pageSize) {
     finished.value = true;
   }
-
   loading.value = false;
 }
 
@@ -142,8 +140,6 @@ const more = (id: string) => {
       }
 
       .album-info-wrapper {
-        //margin-left: 8rem;
-        //position: absolute; /* 使用相对定位 */
         flex-grow: 1; /* 让标题占满剩余空间 */
         white-space: nowrap;
         overflow: hidden;
@@ -191,7 +187,6 @@ const more = (id: string) => {
             vertical-align: middle;
           }
         }
-
       }
 
       .count-info {
@@ -201,8 +196,8 @@ const more = (id: string) => {
         width: 100%; /* 让 footer 占满 .program-description */
 
         .icon-play {
-          width: 0.875rem; // Converted 14px to rem
-          height: 0.75rem; // Converted 12px to rem
+          width: 0.875rem;
+          height: 0.75rem;
           background-size: 100% 100%;
           background-position: left center;
           background-image: url("@/assets/images/ico-play.png");

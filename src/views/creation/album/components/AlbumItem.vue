@@ -42,10 +42,10 @@
     </div>
 
     <div class="album-actions">
-      <van-button hairline round size="small" @click.stop="share(id)">分享</van-button>
+      <van-button hairline round size="small" @click.stop="onShare">分享</van-button>
       <van-button hairline round size="small" @click.stop="onViewData">数据</van-button>
-      <van-button hairline round size="small" @click.stop="edit(id)">编辑</van-button>
-      <van-button hairline round size="small" @click.stop="more(id)">...</van-button>
+      <van-button hairline round size="small" @click.stop="onEdit">编辑</van-button>
+      <van-button hairline round size="small" @click.stop="onMore">...</van-button>
     </div>
   </div>
 </template>
@@ -82,9 +82,9 @@ const props = defineProps<{
   onEdit?: () => void;
   onDelete?: () => void;
   onViewData?: () => void;
+  onShare?: () => void;
+  onMore?: () => void;
 }>();
-const showMoreDialog = ref(false);
-
 const formatDateTime = (time: string) => {
   if (time == null || time === '') {
     return 'N/A';
