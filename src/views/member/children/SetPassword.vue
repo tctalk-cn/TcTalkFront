@@ -34,7 +34,7 @@
 import HeaderTop from "@/components/layout/header/HeaderTop.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { useProfileStore } from "@/stores/member.ts";
+import { useProfileStore } from "@/stores/member_store.ts";
 
 const router = useRouter();
 const { updatePassword } = useProfileStore(); // 假设有该方法

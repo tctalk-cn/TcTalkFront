@@ -56,7 +56,7 @@
 import HeaderTop from "@/components/layout/header/HeaderTop.vue";
 import {ref, watch} from "vue";
 import {storeToRefs} from "pinia";
-import {useProfileStore} from "@/stores/member.ts";
+import {useProfileStore} from "@/stores/member_store.ts";
 import {useRoute, useRouter} from "vue-router";
 import UploadPopup from "@/views/creation/components/UploadPopup.vue";
 

@@ -43,7 +43,6 @@
 
 
 <script setup lang="ts">
-import {defineProps} from 'vue';
 import IconPark from "@/components/common/IconPark.vue";
 import {CuttingOne} from "@icon-park/vue-next";
 

@@ -59,7 +59,7 @@
 
 <script setup lang="ts">
 import {computed, markRaw, onMounted, ref} from "vue";
-import {useProfileStore} from "@/stores/member.ts";
+import {useProfileStore} from "@/stores/member_store.ts";
 import HeaderTop from "@/components/layout/header/HeaderTop.vue";
 import {storeToRefs} from "pinia";
 import {Application, DownloadFour, Order, Phone, Right, SixPoints, Vip} from "@icon-park/vue-next";

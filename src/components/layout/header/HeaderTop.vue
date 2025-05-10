@@ -31,7 +31,7 @@
   </header>
 </template>
 <script setup lang="ts">
-import {useProfileStore} from "@/stores/member.ts";
+import {useProfileStore} from "@/stores/member_store.ts";
 import {useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 

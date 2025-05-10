@@ -33,7 +33,7 @@
 import HeaderTop from "@/components/layout/header/HeaderTop.vue";
 import {computed, ref} from "vue";
 import {useRouter} from "vue-router";
-import {useProfileStore} from "@/stores/member.ts";
+import {useProfileStore} from "@/stores/member_store.ts";
 import {storeToRefs} from "pinia";
 
 const {resetNickname} = useProfileStore();

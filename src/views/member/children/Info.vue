@@ -162,7 +162,7 @@
 <script setup lang="ts">
 import HeaderTop from "@/components/layout/header/HeaderTop.vue";
 import {storeToRefs} from "pinia";
-import {useProfileStore} from "@/stores/member.ts";
+import {useProfileStore} from "@/stores/member_store.ts";
 import {Right} from "@icon-park/vue-next";
 import IconPark from "@/components/common/IconPark.vue";
 import AlertTip from "@/components/common/AlertTip.vue";

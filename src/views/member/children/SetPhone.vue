@@ -27,7 +27,7 @@
 import HeaderTop from "@/components/layout/header/HeaderTop.vue";
 import {ref} from "vue";
 import {useRouter} from "vue-router";
-import {useProfileStore} from "@/stores/member.ts";
+import {useProfileStore} from "@/stores/member_store.ts";
 
 const router = useRouter();
 const {changePhone} = useProfileStore(); // 假设 store 中有此方法
