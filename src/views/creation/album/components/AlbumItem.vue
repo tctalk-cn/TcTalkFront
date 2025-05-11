@@ -5,30 +5,30 @@
           class="album-card__cover"
           :to="{ path: '/creative/albumDetail', query: { albumId: id, albumCreatorMemberId } }"
       >
-        <van-image :src="coverUrl" :alt="name" />
+        <van-image :src="coverUrl" :alt="name"/>
       </router-link>
 
       <div class="album-card__info">
         <div class="album-card__title">{{ name }}</div>
         <div class="album-card__stats">
           <p v-if="showPlayCount" @click="navigateToDetail">
-            <IconPark :icon="Play" theme="filled" :size="12" />
+            <IconPark :icon="Play" theme="filled" :size="12"/>
             <span>{{ useNumberFormat(playCount || 0) }}</span>
           </p>
           <p v-if="showCommentCount">
-            <IconPark :icon="Comment" theme="filled" :size="12" @click="onPlay" />
+            <IconPark :icon="Comment" theme="filled" :size="12"/>
             <span>{{ commentCount }}</span>
           </p>
           <p v-if="showLikeCount">
-            <IconPark :icon="Like" theme="filled" :size="12" @click="onPlay" />
+            <IconPark :icon="Like" theme="filled" :size="12"/>
             <span>{{ likeCount }}</span>
           </p>
           <p v-if="showSubscriptionCount">
-            <IconPark :icon="Rss" theme="filled" :size="12" @click="onPlay" />
+            <IconPark :icon="Rss" theme="filled" :size="12"/>
             <span>{{ subscriptionCount }}</span>
           </p>
           <p v-if="showBarrageCount">
-            <IconPark :icon="AlarmClock" theme="filled" :size="12" @click="onPlay" />
+            <IconPark :icon="AlarmClock" theme="filled" :size="12"/>
             <span>{{ barrageCount }}</span>
           </p>
         </div>
@@ -38,21 +38,21 @@
     </div>
 
     <div class="album-card__actions">
-      <van-button round type="primary" size="small" @click="props.onShare">分享</van-button>
-      <van-button round type="default" size="small" @click="props.onViewData">数据</van-button>
-      <van-button round type="default" size="small" @click="props.onEdit">编辑</van-button>
-      <van-button round type="default" size="small" @click="props.onMore">...</van-button>
+      <van-button type="primary" size="mini" @click="props.onShare">分享</van-button>
+      <van-button type="default" size="mini" @click="props.onViewData">数据</van-button>
+      <van-button type="default" size="mini" @click="props.onEdit">编辑</van-button>
+      <van-button type="default" size="mini" @click="props.onMore">...</van-button>
     </div>
 
   </div>
 </template>
 
 <script setup lang="ts">
-import { AlarmClock, Comment, Like, Play, Rss } from '@icon-park/vue-next'
+import {AlarmClock, Comment, Like, Play, Rss} from '@icon-park/vue-next'
 import IconPark from '@/components/common/IconPark.vue'
-import { useNumberFormat } from '@/utils/number.ts'
-import { formatDate } from '@/utils/date.ts'
-import { useRouter } from 'vue-router'
+import {useNumberFormat} from '@/utils/number.ts'
+import {formatDate} from '@/utils/date.ts'
+import {useRouter} from 'vue-router'
 
 const router = useRouter()
 
@@ -99,11 +99,15 @@ const formatDateTime = (time?: string) => {
 }
 
 const navigateToDetail = () => {
-  router.push({ path: '/creative/albumDetail', query: { albumId: props.id, albumCreatorMemberId: props.albumCreatorMemberId } })
+  router.push({
+    path: '/creative/albumDetail',
+    query: {albumId: props.id, albumCreatorMemberId: props.albumCreatorMemberId}
+  })
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
+
 .album-card {
   display: flex;
   flex-direction: column;
@@ -111,6 +115,7 @@ const navigateToDetail = () => {
   border-radius: 0.4rem;
   box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  padding-bottom: 0.5rem;
 
   &__header {
     display: flex;
@@ -173,9 +178,8 @@ const navigateToDetail = () => {
   &__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.5rem;
     justify-content: flex-end;
-    padding: 0.5rem;
   }
 }
 </style>

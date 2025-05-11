@@ -154,7 +154,8 @@ const handlePublishClick = () => {
       }
     }
 
-    .user-info__action {
+    .user-info__action .van-button {
+      padding: 0.5rem 1rem;
     }
   }
 
@@ -168,20 +169,12 @@ const handlePublishClick = () => {
   }
 
   &__content {
-    padding: 0.5rem 0.5rem;
+    padding: 0 0.5rem;
   }
 
   .content-container {
     flex: 1; // 占据剩余空间
     overflow-y: auto;
-
-    .van-tabs {
-      margin-bottom: 0.5rem;
-    }
-
-    .router-view-wrapper {
-      padding-top: 0.5rem;
-    }
   }
 }
 </style>

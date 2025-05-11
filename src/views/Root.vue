@@ -104,7 +104,7 @@ watch(() => route.name, () => {
 }
 
 .content {
-  padding: 2px;
+  padding: 0.1rem;
 }
 
 .footer {

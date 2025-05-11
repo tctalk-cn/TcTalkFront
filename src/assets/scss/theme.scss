@@ -106,8 +106,6 @@ keygen,
 legend,
 select,
 textarea {
-  font: $font-size Helvetica, sans-serif, STHeiTi;
-  color: $text;
   outline: 0;
   line-height: 1.5;
 }
@@ -138,9 +136,7 @@ button {
   text-align: center;
   box-sizing: border-box;
   line-height: 1;
-  border: none;
-  outline: none;
-  background: none;
+
   &:disabled {
     opacity: 0.4;
   }
@@ -200,8 +196,6 @@ textarea {
     padding: $padding $padding-lg;
   }
 }
-
-
 
 .scroller-container {
   height: 100%;

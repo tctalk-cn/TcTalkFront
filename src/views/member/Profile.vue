@@ -223,7 +223,6 @@ const handleRecommendServiceClick = (to) => {
   router.push({path: to});
 }
 const handleCreativeClick = (to) => {
-  console.info("handleCreativeClick" + to);
   router.push({path: to});
 }
 
