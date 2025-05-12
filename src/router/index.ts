@@ -87,7 +87,40 @@ const router = createRouter({
                                 component: () => import("@/views/creation/album/Index.vue"),
                             },
                         ]
-                    }
+                    },
+                    // 创作中心-专辑明细
+                    {
+                        path: '/creative/albumDetail',
+                        name: Pages.albumDetail,
+                        component: () => import("@/views/creation/album/detail/AlbumDetail.vue"),
+                        // redirect: {name: Pages.albumVideoList},
+                        // children: [
+                        //     {
+                        //         path: 'albumVideoList',
+                        //         name: Pages.albumVideoList,
+                        //         component: () => import("@/views/creation/album/detail/children/MediaList.vue"),
+                        //         meta: {menu: Pages.albumVideoList},
+                        //     },
+                        //     {
+                        //         path: 'albumCommentList',
+                        //         name: Pages.albumCommentList,
+                        //         component: () => import("@/views/creation/album/detail/children/CommentList.vue"),
+                        //         meta: {menu: Pages.albumCommentList},
+                        //     },
+                        //     {
+                        //         path: 'albumSimilarRecommendList',
+                        //         name: Pages.albumSimilarRecommendList,
+                        //         component: () => import("@/views/creation/album/detail/children/SimilarRecommendList.vue"),
+                        //         meta: {menu: Pages.albumSimilarRecommendList},
+                        //     },
+                        //     {
+                        //         path: 'albumProgramList',
+                        //         name: Pages.albumProgramList,
+                        //         component: () => import("@/views/creation/album/detail/children/ProgramList.vue"),
+                        //         meta: {menu: Pages.albumProgramList},
+                        //     },
+                        // ],
+                    },
                 ]
             }
         ]

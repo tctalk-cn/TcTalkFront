@@ -20,5 +20,6 @@ export const Pages = {
     creativeCenter: 'creativeCenter',
     myIndex: 'myIndex',
     myAlbum: 'myAlbum',
+    albumDetail: 'albumDetail',
 
 }

@@ -4,7 +4,8 @@ import {
     useMemberInfo, useGenerateQrCode,
     useMemberStatisticsInfo, useResetBirthday,
     useResetGender, useResetNickname,
-    useResetSignature, useResetUsername, useUploadAvatar
+    useResetSignature, useResetUsername, useUploadAvatar,
+    useMemberById
 }
     from "@/api/member/member_api.ts";
 import {MemberStatisticsInfo} from "@/models/member_statistics_info.ts";
@@ -98,25 +99,25 @@ export const useProfileStore = defineStore(
             hasResetUsername: (state) => {
                 return state.memberInfo?.hasResetUsername || 0;
             },
-            getWorksCount:(state) => {
+            getWorksCount: (state) => {
                 return state.memberStatisticsInfo?.worksCount || 0;
             },
-            getNewsCount:(state) => {
+            getNewsCount: (state) => {
                 return state.memberStatisticsInfo?.newsCount || 0;
             },
-            getAttendCount:(state) => {
+            getAttendCount: (state) => {
                 return state.memberStatisticsInfo?.attendCount || 0;
             },
-            getLikesCount:(state) => {
+            getLikesCount: (state) => {
                 return state.memberStatisticsInfo?.likesCount || 0;
             },
-            getBarrageCount:(state) => {
+            getBarrageCount: (state) => {
                 return state.memberStatisticsInfo?.barrageCount || 0;
             },
-            getFansCount:(state) => {
+            getFansCount: (state) => {
                 return state.memberStatisticsInfo?.fansCount || 0;
             },
-            getCollectWorksCount:(state) => {
+            getCollectWorksCount: (state) => {
                 return state.memberStatisticsInfo?.collectWorksCount || 0;
             },
         },
@@ -227,7 +228,11 @@ export const useProfileStore = defineStore(
             // 修改密码
             async updatePassword(pwd: string) {
                 this.alertText = '暂不支持';
-            }
+            },
+            async queryMemberById(memberId: string) {
+                const {data} = await useMemberById(memberId);
+                return data;
+            },
         },
         // 持久化配置
         persist: {
