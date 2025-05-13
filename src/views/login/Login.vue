@@ -122,7 +122,7 @@ import HeaderTop from "@/components/layout/header/HeaderTop.vue";
 import {useRouter} from "vue-router";
 import {Pages} from "@/router/pages.ts";
 import {showDialog} from "vant";
-import {useProfileStore} from "@/stores/member.ts";
+import {useProfileStore} from "@/stores/member_store.ts";
 import {useCaptcha, useLogin} from "@/api/login/login_api.ts";
 
 // 登录方式，默认短信登录

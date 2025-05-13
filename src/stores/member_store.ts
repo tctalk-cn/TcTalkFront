@@ -46,7 +46,22 @@ export const useProfileStore = defineStore(
                 memberLevelName: "",
                 qrCodeUrl: "",
             },
-            memberStatisticsInfo: {} as MemberStatisticsInfo,
+            memberStatisticsInfo: {
+                memberId: 0,
+                consumeAmount: 0,
+                orderCount: 0,
+                couponCount: 0,
+                commentCount: 0,
+                returnOrderCount: 0,
+                loginCount: 0,
+                attendCount: 0,
+                likesCount: 0,
+                worksCount: 0,
+                barrageCount: 0,
+                newsCount: 0,
+                fansCount: 0,
+                collectWorksCount: 0
+            },
         }),
 
         getters: {
