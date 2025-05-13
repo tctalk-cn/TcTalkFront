@@ -129,6 +129,16 @@ export const useAlbumStore = defineStore({
                 const {data} = await useApplyCompleted(albumId);
                 return data;
             },
+            /**
+             * 列举专辑下的媒体数据
+             * @param albumId 专辑ID
+             * @param beginMediaId 开始的媒体ID
+             * @param pageSize 分页大小
+             */
+            async listMediaByAlbum(albumId: string, beginMediaId: string, pageSize: number, mediaType: number) {
+                const {data} = await useListMediaByAlbum(albumId, beginMediaId, pageSize, mediaType);
+                return data;
+            },
         },
         // 持久化配置
         persist: {
