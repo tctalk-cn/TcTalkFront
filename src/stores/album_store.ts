@@ -86,6 +86,7 @@ export const useAlbumStore = defineStore({
             /**
              * 专辑是否被当前用户订阅
              * @param albumId 专辑ID
+             * @param albumCreatorMemberId 专辑创建者会员ID
              */
             async isSubscribedByMember(albumCreatorMemberId: string, albumId: string) {
                 const {data} = await useIsSubscribed(albumCreatorMemberId, albumId);

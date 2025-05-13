@@ -31,18 +31,16 @@
           <p>{{ albumInfo.subscriptionCount }}<span>订阅量</span></p>
         </div>
         <footer class="description_footer">
-          <p class="ellipsis">
-              <span>
-                 <van-tag v-for="(attrWithVal, index) in albumInfo.attributeValues"
-                          :key="index"
-                          class="ml-1"
-                          mark
-                          color="#ffe1e1" text-color="#ad0000"
-                          type="primary">
-                    {{ attrWithVal.attributeValueName }}
-                  </van-tag>
-              </span>
-          </p>
+          <div class="flex flex-wrap gap-1">
+            <van-tag v-for="(attrWithVal, index) in albumInfo.attributeValues"
+                     :key="index"
+                     class="ml-1"
+                     mark
+                     color="#ffe1e1" text-color="#ad0000"
+                     type="primary">
+              {{ attrWithVal.attributeValueName }}
+            </van-tag>
+          </div>
         </footer>
       </div>
     </header>
@@ -60,18 +58,20 @@
     <!--浮动面板-->
     <van-floating-panel v-model:height="height" :anchors="anchors">
       <div class="media-container">
-        <div class="media-header">
+        <div class="media-container__header">
           <van-grid :column-num="2" :border="false">
             <van-grid-item>
-              <van-button v-if="latestListenHistory!==null&&latestListenHistory?.mediaTitle"
+              <van-button v-if="latestListenHistory?.mediaTitle"
                           icon="play-circle"
-                          type="default" size="normal"
-                          class="play-button">
+                          type="default"
+                          size="normal"
+                          class="w-full text-xs"
+              >
                 继续播放
                 <van-divider vertical :hairline="false"/>
                 <span class="last-play-media-name">{{ latestListenHistory.mediaTitle }}</span>
               </van-button>
-              <van-button v-else icon="play-circle" type="default" size="normal" class="play-button">
+              <van-button v-else icon="play-circle" type="default" size="normal" class="w-full text-xs">
                 开始播放
                 <van-divider vertical :hairline="false"/>
               </van-button>
@@ -90,7 +90,7 @@
             </van-grid-item>
           </van-grid>
         </div>
-        <div class="media-context">
+        <div class="media-container__tabs">
           <!-- 内容 -->
           <van-tabs v-model:active="currentActivity" lazy-render @clickTab="onTabClick" animated scrollspy>
             <van-tab v-for="(item) in mediaMenus" :key="item.name" :name="item.name">
@@ -100,8 +100,8 @@
               </template>
             </van-tab>
           </van-tabs>
-          <div class="mt-0.5 ml-2">
-            <RouterView :album-id="route.query.albumId"/>
+          <div class="media-container__content">
+            <RouterView/>
           </div>
         </div>
       </div>
@@ -179,15 +179,7 @@ const shareOptions = [
     {name: '加到听单', icon: 'add-o'},
   ],
 ];
-
-interface MediaMenu {
-  id: number,
-  label: string,
-  name: string,
-  icon?: string,
-}
-
-const mediaMenus: MediaMenu[] = [
+const mediaMenus: MenuItem[] = [
   {
     id: 1,
     label: '节目',
@@ -253,23 +245,6 @@ onMounted(async () => {
   latestListenHistory.value = await lastListenHistory(albumId);
 });
 
-
-const share = (id: string) => {
-
-}
-
-const viewData = (id: string) => {
-
-}
-
-const edit = (id: string) => {
-
-}
-
-const more = (id: string) => {
-
-}
-
 const onAlbumShareSelect = (option) => {
   switch (option.event) {
     case 'applyCompleted':
@@ -280,17 +255,14 @@ const onAlbumShareSelect = (option) => {
 
   }
 }
-
 </script>
 
 <style lang="scss" scoped>
-
 .album-detail-container {
   padding-top: 1.95rem;
   padding-bottom: 3rem;
   background-color: #202020;
-  min-height: 100vh; /* 让背景色填满整个视窗高度 */
-
+  height: 100vh;
 
   .album-detail-header {
     position: relative;
@@ -329,6 +301,7 @@ const onAlbumShareSelect = (option) => {
             @include wh(5.9rem, 5.9rem);
             display: block;
             border-radius: 0.15rem;
+            box-shadow: 0 0.3rem 0.8rem rgba(0, 0, 0, 0.1);
           }
         }
 
@@ -392,35 +365,8 @@ const onAlbumShareSelect = (option) => {
         @include fj;
         margin-top: 0.8rem;
         padding-right: 1rem;
-
-        p {
-          @include sc(.5rem, #fff);
-
-          span {
-            color: #fff;
-          }
-
-          .tip_icon {
-            padding: 0 .04rem;
-            border: 0.025rem solid #fff;
-            border-radius: 0.1rem;
-            font-size: .4rem;
-            display: inline-block;
-          }
-        }
-
-        .ellipsis {
-          width: 84%;
-        }
-
-        .footer_arrow {
-          @include wh(.45rem, .45rem);
-          position: absolute;
-          right: .3rem;
-        }
       }
     }
-
   }
 
   .album-detail-content {
@@ -482,26 +428,31 @@ const onAlbumShareSelect = (option) => {
 
 .media-container {
 
-  .media-header {
-    width: 100%;
-    font-weight: bold;
+  &____header {
 
-    .play-button {
-      color: #FF4500;
-
-      .last-play-media-name {
-        /* 设置最大宽度以适应按钮宽度，适当调整 */
-        max-width: 4.5rem;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        display: inline-block;
-        vertical-align: middle;
-      }
-    }
   }
 
-  .media-context {
+  &__tabs {
+    margin-bottom: 0.5rem;
+
+
+    //.play-button {
+    //  color: #FF4500;
+    //
+    //  .last-play-media-name {
+    //    /* 设置最大宽度以适应按钮宽度，适当调整 */
+    //    max-width: 4.5rem;
+    //    overflow: hidden;
+    //    white-space: nowrap;
+    //    text-overflow: ellipsis;
+    //    display: inline-block;
+    //    vertical-align: middle;
+    //  }
+    //}
+  }
+
+  &__content {
+    padding: 0 0.5rem;
   }
 }
 </style>

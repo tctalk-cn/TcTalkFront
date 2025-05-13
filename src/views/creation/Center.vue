@@ -76,7 +76,7 @@ const {
 const router = useRouter();
 const route = useRoute();
 
-const profileTabs: TabMenuItem[] = [
+const profileTabs: MenuItem[] = [
   {id: 1, label: '专辑', name: 'album'},
   {id: 2, label: '声音', name: 'audio'},
   {id: 3, label: '视频', name: 'video'},
@@ -87,18 +87,18 @@ const profileTabs: TabMenuItem[] = [
 ];
 const showUpload = ref(false);
 
-const currentTab = ref<TabMenuItem["name"]>(route.meta.menu as TabMenuItem["name"]);
+const currentTab = ref<MenuItem["name"]>(route.meta.menu as MenuItem["name"]);
 
 watch(
     () => route.meta.menu,
     (menu) => {
-      currentTab.value = menu as TabMenuItem["name"];
+      currentTab.value = menu as MenuItem["name"];
     }
 );
 
 // tab点击切换页面
 interface TabClickEvent {
-  name: TabMenuItem["name"];
+  name: MenuItem["name"];
   title: string;
 }
 
