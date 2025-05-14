@@ -110,7 +110,7 @@ defineProps<{
       margin-bottom: 0.4rem;
 
       .video-title {
-        font-size: 1rem;
+        font-size: $font-size-mx;
         font-weight: bold;
         color: #333;
         line-height: 1.4;
@@ -140,7 +140,7 @@ defineProps<{
       .video-count {
         display: flex;
         gap: 0.6rem;
-        font-size: 0.75rem;
+        font-size: $font-size;
         color: #999;
 
         p {

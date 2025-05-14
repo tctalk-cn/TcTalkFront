@@ -153,7 +153,7 @@ const updateSortedList = () => {
 
 .van-dropdown-menu {
   background-color: #f5f5f5; /* 背景色 */
-  font-size: 0.8rem; /* 字体大小 */
+  font-size: $font-size; /* 字体大小 */
   color: #333; /* 字体颜色 */
   border-radius: 1rem; /* 圆角边框 */
   padding: 0.2rem;

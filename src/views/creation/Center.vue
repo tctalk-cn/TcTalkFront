@@ -144,12 +144,12 @@ const handlePublishClick = () => {
     .user-info__details {
       p {
         margin: 0;
-        font-size: 1rem;
+        font-size: $font-size-mx;
         color: #fff;
       }
 
       span {
-        font-size: 0.8rem;
+        font-size: $font-size;
         color: #c1c1c1;
       }
     }

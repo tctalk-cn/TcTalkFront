@@ -91,7 +91,7 @@ const emitCloseTipClick = () => {
   }
 
   .tip-text {
-    @include sc(0.7rem, #333);
+    @include sc($font-size, #333);
     line-height: 0.9rem;
     text-align: center;
     margin-top: 0.8rem;
@@ -99,7 +99,7 @@ const emitCloseTipClick = () => {
   }
 
   .confirm {
-    @include sc(0.8rem, #fff);
+    @include sc($font-size, #fff);
     font-weight: bold;
     margin-top: 0.8rem;
     background-color: #4cd964;

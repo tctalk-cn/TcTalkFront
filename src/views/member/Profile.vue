@@ -272,7 +272,7 @@ onMounted(() => {
 
         p {
           font-weight: 700;
-          @include sc(.8rem, $fc);
+          @include sc($font-size, $fc);
 
           .user-icon {
             @include wh(0.5rem, 0.75rem);

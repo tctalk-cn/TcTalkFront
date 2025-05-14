@@ -94,8 +94,4 @@ const onRefresh = () => {
 </script>
 
 <style lang="scss" scoped>
-//.van-divider {
-//  margin-top: 0.2rem; /* Adjust the top margin as needed */
-//  margin-bottom: 0.2rem; /* Adjust the bottom margin as needed */
-//}
 </style>

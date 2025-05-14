@@ -379,7 +379,7 @@ const onAlbumShareSelect = (option) => {
 
     .album-detail-title {
       text-align: left;
-      font-size: 1.2rem;
+      font-size: $font-size-lg;
       font-weight: bold;
       color: #fff;
     }
@@ -387,7 +387,7 @@ const onAlbumShareSelect = (option) => {
     .album-detail-text {
       margin-top: 0.5rem;
       text-align: left;
-      font-size: 0.7rem;
+      font-size: $font-size-md;
       color: #f8f8f8;
     }
   }
@@ -434,21 +434,6 @@ const onAlbumShareSelect = (option) => {
 
   &__tabs {
     margin-bottom: 0.5rem;
-
-
-    //.play-button {
-    //  color: #FF4500;
-    //
-    //  .last-play-media-name {
-    //    /* 设置最大宽度以适应按钮宽度，适当调整 */
-    //    max-width: 4.5rem;
-    //    overflow: hidden;
-    //    white-space: nowrap;
-    //    text-overflow: ellipsis;
-    //    display: inline-block;
-    //    vertical-align: middle;
-    //  }
-    //}
   }
 
   &__content {

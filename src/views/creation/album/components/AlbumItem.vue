@@ -143,7 +143,7 @@ const navigateToDetail = () => {
 
   &__title {
     margin-left: 0.5rem;
-    font-size: 1rem;
+    font-size: $font-size-mx;
     font-family: 'Helvetica Neue', Tahoma, Arial, serif;
     white-space: nowrap;
     overflow: hidden;
@@ -153,7 +153,7 @@ const navigateToDetail = () => {
   &__stats {
     display: flex;
     gap: 0.2rem;
-    font-size: 0.8rem;
+    font-size: $font-size;
     color: #999;
     margin: auto 0 0.8rem 0.5rem;
 
@@ -169,7 +169,7 @@ const navigateToDetail = () => {
   }
 
   &__update-time {
-    font-size: 0.8rem;
+    font-size: $font-size;
     color: #999;
     flex-shrink: 0;
     margin-left: 1rem;

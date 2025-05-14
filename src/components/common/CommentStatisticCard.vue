@@ -122,7 +122,7 @@ const handleFeedback = (type) => {
 
   .top-section {
     text-align: left;
-    font-size: 0.8rem;
+    font-size: $font-size;
     font-weight: bold;
     margin-bottom: 1rem;
   }
@@ -145,7 +145,7 @@ const handleFeedback = (type) => {
     .right-side {
       flex: 1;
       margin-left: 2rem;
-      font-size: 0.5rem;
+      font-size: $font-size-xs;
       gap: 1rem; /* Adjust spacing between <span> and <van-progress> */
 
       .progress-item {
