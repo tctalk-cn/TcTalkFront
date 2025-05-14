@@ -8,8 +8,7 @@ import {
     useMemberById
 }
     from "@/api/member/member_api.ts";
-import {MemberStatisticsInfo} from "@/models/member_statistics_info.ts";
-
+ 
 export const useProfileStore = defineStore(
     "userProfile", {
 

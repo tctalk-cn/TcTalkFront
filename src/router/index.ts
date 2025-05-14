@@ -101,12 +101,12 @@ const router = createRouter({
                                 component: () => import("@/views/creation/album/detail/children/MediaList.vue"),
                                 meta: {menu: Pages.albumVideoList},
                             },
-                            // {
-                            //     path: 'albumCommentList',
-                            //     name: Pages.albumCommentList,
-                            //     component: () => import("@/views/creation/album/detail/children/CommentList.vue"),
-                            //     meta: {menu: Pages.albumCommentList},
-                            // },
+                            {
+                                path: 'albumCommentList',
+                                name: Pages.albumCommentList,
+                                component: () => import("@/views/creation/album/detail/children/CommentList.vue"),
+                                meta: {menu: Pages.albumCommentList},
+                            },
                             // {
                             //     path: 'albumSimilarRecommendList',
                             //     name: Pages.albumSimilarRecommendList,

@@ -21,6 +21,7 @@ export const Pages = {
     myIndex: 'myIndex',
     myAlbum: 'myAlbum',
     albumDetail: 'albumDetail',
-    albumVideoList:'albumVideoList',
+    albumVideoList: 'albumVideoList',
+    albumCommentList: 'albumCommentList',
 
 }

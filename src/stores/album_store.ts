@@ -18,135 +18,176 @@ import {
 } from "@/api/creation/album_subscription_api.ts";
 import {useLastListenHistory} from "@/api/member/listen_history_api.ts";
 import {useListMediaByAlbum} from "@/api/creation/video_api.ts";
+import {AlbumCommentCreator} from "@/models/album_comment.ts";
+import {MediaCommentCreator} from "@/models/media_comment.ts";
+import {StreamerPerformanceQualityCommentCreator} from "@/models/streamer_performance_quality_comment.ts";
+import {useAddAlbumComment, useListAlbumComment, useQueryAlbumComment} from "@/api/creation/album_comment_api.ts";
+import {useAddStreamerComment, useQueryStreamerComment} from "@/api/creation/streamer_comment_api.ts";
+import {useAddComment} from "@/api/creation/comment_api.ts";
 
-export const useAlbumStore = defineStore({
-        id: "albumStore",
-        state: () => ({
-            albumInfo: {
-                id: "",
-                name: "",
-                remark: "",
-                company: "",
-                coverUrl: "",
-                channelId: "",
-                categoryLevel1Id: "",
-                categoryLevel1Name: "",
-                categoryLevel2Id: "",
-                categoryLevel2Name: "",
-                categoryLevel3Id: "",
-                categoryLevel3Name: "",
-                categoryLevel4Id: "",
-                categoryLevel4Name: "",
-                copyright: "",
-                sellPoint: "",
-                paid: false,
-                feeType: "",
-                onSale: false,
-                creatorMemberId: "",
-                creatorNickname: "",
-                creatorTeamMemberIds: "",
-                commentCount: 0,
-                shareCount: 0,
-                viewsCount: 0,
-                subscriptionCount: 0,
-                permissions: 0,
-                auditStatus: 0,
-                finished: false,
-                original: true,
-                description: "",
-                createTime: "",
-                updateTime: "",
-                recommendCount: 0.0,
-                averageCount: 0.0,
-                poorCount: 0.0,
-                recommendPercent: 0.0,
-                averagePercent: 0.0,
-                poorPercent: 0.0,
-                lastSelected: true,
-                attributeValues: [] as AlbumAlbumAttributeValueCreator[],
-            } as Album,
-            isSubscribed: false as Boolean,
-        }),
-        actions: {
+export const useAlbumStore = defineStore(
+        "albumStore",
+        {
+            state: () => ({
+                albumInfo: {
+                    id: "",
+                    name: "",
+                    remark: "",
+                    company: "",
+                    coverUrl: "",
+                    channelId: "",
+                    categoryLevel1Id: "",
+                    categoryLevel1Name: "",
+                    categoryLevel2Id: "",
+                    categoryLevel2Name: "",
+                    categoryLevel3Id: "",
+                    categoryLevel3Name: "",
+                    categoryLevel4Id: "",
+                    categoryLevel4Name: "",
+                    copyright: "",
+                    sellPoint: "",
+                    paid: false,
+                    feeType: "",
+                    onSale: false,
+                    creatorMemberId: "",
+                    creatorNickname: "",
+                    creatorTeamMemberIds: "",
+                    commentCount: 0,
+                    shareCount: 0,
+                    viewsCount: 0,
+                    subscriptionCount: 0,
+                    permissions: 0,
+                    auditStatus: 0,
+                    finished: false,
+                    original: true,
+                    description: "",
+                    createTime: "",
+                    updateTime: "",
+                    recommendCount: 0.0,
+                    averageCount: 0.0,
+                    poorCount: 0.0,
+                    recommendPercent: 0.0,
+                    averagePercent: 0.0,
+                    poorPercent: 0.0,
+                    lastSelected: true,
+                    attributeValues: [] as AlbumAlbumAttributeValueCreator[],
+                } as Album,
+                isSubscribed: false as Boolean,
+            }),
+            actions: {
 
-            // 加载专辑数据
-            async loadAlbums(beginAlbumId: string, pageSize: number) {
-                const {data} = await useLoadAlbums(beginAlbumId, pageSize);
-                return data;
-            },
+                // 加载专辑数据
+                async loadAlbums(beginAlbumId: string, pageSize: number) {
+                    const {data} = await useLoadAlbums(beginAlbumId, pageSize);
+                    return data;
+                },
 
-            /**
-             * 查看专辑信息
-             * @param albumId 专辑ID
-             * @param albumCreatorMemberId 专辑创建者ID
-             */
-            async queryAlbum(albumCreatorMemberId: string, albumId: string) {
-                const {data} = await useQueryAlbum(albumCreatorMemberId, albumId);
-                this.albumInfo = data;
-            },
-            /**
-             * 专辑是否被当前用户订阅
-             * @param albumId 专辑ID
-             * @param albumCreatorMemberId 专辑创建者会员ID
-             */
-            async isSubscribedByMember(albumCreatorMemberId: string, albumId: string) {
-                const {data} = await useIsSubscribed(albumCreatorMemberId, albumId);
-                return data;
-            },
-            /**
-             * 订阅当前专辑
-             @param albumCreatorMemberId 专辑创建者会员ID
-             * @param albumId 专辑ID
-             */
-            async addSubscription(albumCreatorMemberId: string, albumId: string) {
-                const {data} = await useCreateAlbumSubscription({
-                    subscribedAlbumId: albumId,
-                    subscribedCreatorMemberId: albumCreatorMemberId,
-                });
-                this.isSubscribed = true;
-                this.albumInfo.subscriptionCount += 1;
-                return data;
-            },
-            /**
-             * 取消订阅当前专辑
-             * @param albumCreatorMemberId 专辑创建者会员ID
-             * @param albumId 专辑ID
-             */
-            async cancelSubscription(albumCreatorMemberId: string, albumId: string) {
-                const {data} = await useCancelAlbumSubscription({
-                    subscribedAlbumId: albumId,
-                    subscribedCreatorMemberId: albumCreatorMemberId,
-                });
-                this.isSubscribed = false;
-                this.albumInfo.subscriptionCount -= 1;
-                return data;
-            },
+                /**
+                 * 查看专辑信息
+                 * @param albumId 专辑ID
+                 * @param albumCreatorMemberId 专辑创建者ID
+                 */
+                async queryAlbum(albumCreatorMemberId: string, albumId: string) {
+                    const {data} = await useQueryAlbum(albumCreatorMemberId, albumId);
+                    this.albumInfo = data;
+                },
+                /**
+                 * 专辑是否被当前用户订阅
+                 * @param albumId 专辑ID
+                 * @param albumCreatorMemberId 专辑创建者会员ID
+                 */
+                async isSubscribedByMember(albumCreatorMemberId: string, albumId: string) {
+                    const {data} = await useIsSubscribed(albumCreatorMemberId, albumId);
+                    return data;
+                },
+                /**
+                 * 订阅当前专辑
+                 @param albumCreatorMemberId 专辑创建者会员ID
+                 * @param albumId 专辑ID
+                 */
+                async addSubscription(albumCreatorMemberId: string, albumId: string) {
+                    const {data} = await useCreateAlbumSubscription({
+                        subscribedAlbumId: albumId,
+                        subscribedCreatorMemberId: albumCreatorMemberId,
+                    });
+                    this.isSubscribed = true;
+                    this.albumInfo.subscriptionCount += 1;
+                    return data;
+                },
+                /**
+                 * 取消订阅当前专辑
+                 * @param albumCreatorMemberId 专辑创建者会员ID
+                 * @param albumId 专辑ID
+                 */
+                async cancelSubscription(albumCreatorMemberId: string, albumId: string) {
+                    const {data} = await useCancelAlbumSubscription({
+                        subscribedAlbumId: albumId,
+                        subscribedCreatorMemberId: albumCreatorMemberId,
+                    });
+                    this.isSubscribed = false;
+                    this.albumInfo.subscriptionCount -= 1;
+                    return data;
+                },
 
-            async lastListenHistory(albumId: string) {
-                const {data} = await useLastListenHistory(albumId);
-                return data;
+                async lastListenHistory(albumId: string) {
+                    const {data} = await useLastListenHistory(albumId);
+                    return data;
+                },
+                async applyCompleted(albumId: string) {
+                    const {data} = await useApplyCompleted(albumId);
+                    return data;
+                },
+                /**
+                 * 列举专辑下的媒体数据
+                 * @param albumId 专辑ID
+                 * @param beginMediaId 开始的媒体ID
+                 * @param pageSize 分页大小
+                 */
+                async listMediaByAlbum(albumId: string, beginMediaId: string, pageSize: number, mediaType: number) {
+                    const {data} = await useListMediaByAlbum(albumId, beginMediaId, pageSize, mediaType);
+                    return data;
+                },
+                // listAlbumComment 列举专辑的评论列表
+                async listAlbumComment(mediaCreatorMemberId: string, mediaId: string, toCommentId: string, pageSize: number) {
+                    const {data} = await useListAlbumComment(mediaCreatorMemberId, mediaId, toCommentId, pageSize);
+                    return data;
+                },
+                // 添加评论
+                async addComment(commentCreator: MediaCommentCreator) {
+                    const {data} = await useAddComment(commentCreator);
+                    return data;
+                },
+                async queryAlbumComment(albumCreatorMemberId: string, albumId: string) {
+                    const {data} = await useQueryAlbumComment(albumCreatorMemberId, albumId);
+                    return data;
+                },
+                // 添加评论
+                async addAlbumComment(commentCreator: AlbumCommentCreator) {
+                    const {data} = await useAddAlbumComment(commentCreator);
+                    return data;
+                },
+                async queryStreamerComment(albumCreatorMemberId: string, albumId: string) {
+                    const {data} = await useQueryStreamerComment(albumCreatorMemberId, albumId);
+                    return data;
+                },
+                // 添加主播人评论
+                async addStreamerComment(commentCreator: StreamerPerformanceQualityCommentCreator) {
+                    const {data} = await useAddStreamerComment(commentCreator);
+                    return data;
+                },
+
+                async listStreamerOtherAlbums(albumCreatorMemberId: string, currentAlbumId: string) {
+                    const {data} = await useLoadStreamerOtherAlbums(3, albumCreatorMemberId, currentAlbumId);
+                    return data;
+                },
             },
-            async applyCompleted(albumId: string) {
-                const {data} = await useApplyCompleted(albumId);
-                return data;
-            },
-            /**
-             * 列举专辑下的媒体数据
-             * @param albumId 专辑ID
-             * @param beginMediaId 开始的媒体ID
-             * @param pageSize 分页大小
-             */
-            async listMediaByAlbum(albumId: string, beginMediaId: string, pageSize: number, mediaType: number) {
-                const {data} = await useListMediaByAlbum(albumId, beginMediaId, pageSize, mediaType);
-                return data;
-            },
-        },
-        // 持久化配置
-        persist: {
-            key: 'albumStore',
-            storage: localStorage,
-            paths: ['albumInfo',],
+            // 持久化配置
+            persist: {
+                key: 'albumStore',
+                storage: localStorage,
+                paths: ['albumInfo',],
+            }
+
         }
-
-    })
+    )
 ;
