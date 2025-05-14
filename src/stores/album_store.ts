@@ -24,11 +24,13 @@ import {StreamerPerformanceQualityCommentCreator} from "@/models/streamer_perfor
 import {useAddAlbumComment, useListAlbumComment, useQueryAlbumComment} from "@/api/creation/album_comment_api.ts";
 import {useAddStreamerComment, useQueryStreamerComment} from "@/api/creation/streamer_comment_api.ts";
 import {useAddComment} from "@/api/creation/comment_api.ts";
+import defaultAvatar from '@/assets/images/avatar_default.png';
 
 export const useAlbumStore = defineStore(
         "albumStore",
         {
             state: () => ({
+                defaultAvatar: defaultAvatar,
                 albumInfo: {
                     id: "",
                     name: "",
@@ -74,6 +76,7 @@ export const useAlbumStore = defineStore(
                 } as Album,
                 isSubscribed: false as Boolean,
             }),
+            getters: {},
             actions: {
 
                 // 加载专辑数据

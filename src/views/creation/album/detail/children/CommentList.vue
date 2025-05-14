@@ -17,9 +17,9 @@
             finished-text="没有更多了"
             @load="loadCommentData('load')"
         >
-          <div v-for="(item,index) in albumComments" :key="index" class="comment-msg">
+          <div v-for="(item) in albumComments" :key="item.id" class="comment-msg">
             <div class="avatar">
-              <img :src=item.commentAvatarUrl :alt="item.commentNickname"/>
+              <img :src="item.commentAvatarUrl||defaultAvatar" :alt="item.commentNickname"/>
             </div>
             <div class="content-wrapper">
               <div class="header">
@@ -62,9 +62,7 @@
                                class="sub-name">
                     {{ reply.relayNickname }}
                     <van-tag color="#FF69B4"
-                             style="font-size: 0.4rem;
-                                 display: inline-block;
-                                  margin-left: 0.2rem"
+                             class="author-tag"
                              v-if="reply.relayMemberId===albumCreatorMemberId">作者
                     </van-tag>
                   </router-link>
@@ -90,9 +88,12 @@ import {useAlbumStore} from "@/stores/album_store.ts";
 import {useRoute, useRouter} from "vue-router";
 import CommentStatisticCard from "@/components/common/CommentStatisticCard.vue";
 import {AlbumComment} from "@/models/album_comment.ts";
+import {storeToRefs} from "pinia";
 
 const route = useRoute();
 const router = useRouter();
+
+const {defaultAvatar} = storeToRefs(useAlbumStore());
 
 const {listAlbumComment, queryAlbumComment} = useAlbumStore();
 const albumId = route.query.albumId as string;
@@ -132,33 +133,40 @@ const loadCommentData = async (type = 'refresh') => {
     // 重置 finished 状态
     finished.value = false;
   }
-  // 数据加载
-  const commentList = await listAlbumComment(albumCreatorMemberId, albumId, searchParam.toCommentId, searchParam.pageSize);
-  if (type === 'refresh') {
-    albumComments.value = commentList;
-    // 在数据加载完成后再更新 refreshing 状态
-    refreshing.value = false;
-    if (!commentList || commentList.length < searchParam.pageSize) {
-      finished.value = true;
-    }
-    if (commentList !== null && commentList.length > 0) {
-      searchParam.toCommentId = commentList[commentList.length - 1].id;
-    }
-  } else {
-    // 加载更多时，追加到现有的评论列表
-    if (commentList && commentList.length > 0) {
-      albumComments.value = albumComments.value.concat(commentList);
-      // 更新分页起点
-      searchParam.toCommentId = commentList[commentList.length - 1].id;
-      // 检查是否加载完全部数据
-      if (commentList.length < searchParam.pageSize) {
-        finished.value = true; // 没有更多数据了
+  try {
+    // 数据加载
+    const commentList = await listAlbumComment(albumCreatorMemberId, albumId, searchParam.toCommentId, searchParam.pageSize);
+    if (type === 'refresh') {
+      albumComments.value = commentList;
+      // 在数据加载完成后再更新 refreshing 状态
+      refreshing.value = false;
+      if (!commentList || commentList.length < searchParam.pageSize) {
+        finished.value = true;
+      }
+      if (commentList !== null && commentList.length > 0) {
+        searchParam.toCommentId = commentList[commentList.length - 1].id;
       }
     } else {
-      finished.value = true; // 没有更多数据了
+      // 加载更多时，追加到现有的评论列表
+      if (commentList && commentList.length > 0) {
+        albumComments.value = albumComments.value.concat(commentList);
+        // 更新分页起点
+        searchParam.toCommentId = commentList[commentList.length - 1].id;
+        // 检查是否加载完全部数据
+        if (commentList.length < searchParam.pageSize) {
+          finished.value = true; // 没有更多数据了
+        }
+      } else {
+        finished.value = true; // 没有更多数据了
+      }
+      // 在数据加载完成后再更新 loading 状态
+      loading.value = false;
+
     }
-    // 在数据加载完成后再更新 loading 状态
+  } catch (error) {
+    console.error('加载评论失败:', error);
     loading.value = false;
+    refreshing.value = false;
   }
 };
 
@@ -286,6 +294,12 @@ onMounted(async () => {
               text-decoration: none;
               white-space: nowrap;
               margin-right: 0.2rem;
+
+              .author-tag {
+                font-size: 0.6rem;
+                display: inline-block;
+                margin-left: 0.2rem;
+              }
             }
 
             .sub-content {
