@@ -230,7 +230,7 @@ onMounted(async () => {
 
           .name {
             color: #333;
-            font-size: 0.9rem;
+            font-size: $font-size;
             margin-right: 0.2rem;
           }
 
@@ -257,7 +257,7 @@ onMounted(async () => {
           margin-top: 0.3rem;
           color: #333;
           line-height: 1.5;
-          font-size: 0.9rem;
+          font-size: $font-size;
         }
 
         .actions {
@@ -270,7 +270,7 @@ onMounted(async () => {
             display: flex;
             align-items: center;
             color: #999;
-            font-size: 0.8rem;
+            font-size: $font-size-sm;
 
             span {
               margin-left: 0.2rem;
@@ -287,7 +287,7 @@ onMounted(async () => {
           .sub-comment {
             align-items: center;
             margin-bottom: 0.4rem;
-            font-size: 0.8rem;
+            font-size: $font-size-sm;
 
             .sub-name {
               color: #1e90ff;
@@ -296,14 +296,14 @@ onMounted(async () => {
               margin-right: 0.2rem;
 
               .author-tag {
-                font-size: 0.6rem;
+                font-size: $font-size-mini;
                 display: inline-block;
                 margin-left: 0.2rem;
               }
             }
 
             .sub-content {
-              font-size: 0.85rem;
+              font-size: $font-size;
               margin-top: 0.3rem;
               color: #333;
               line-height: 1rem;
@@ -312,7 +312,7 @@ onMounted(async () => {
 
           .sub-total {
             color: #1e90ff;
-            font-size: 0.85rem;
+            font-size: $font-size;
             margin-top: 0.4rem;
             display: inline-block;
           }
