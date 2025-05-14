@@ -72,7 +72,7 @@ function backHome() {
 
   .head_login {
     right: 0.55rem;
-    @include sc(0.65rem, #fff);
+    @include sc($font-size-sm, #fff);
     @include ct;
 
     .login_span {
