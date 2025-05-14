@@ -27,6 +27,7 @@
                      :play-count="item.commentCount"
                      showPlayCount
                      :video="item.mediaType===0"/>
+          <van-divider/>
         </div>
       </van-list>
     </van-pull-refresh>
@@ -161,4 +162,6 @@ const updateSortedList = () => {
     color: #007aff; /* 标题颜色 */
   }
 }
+
+
 </style>

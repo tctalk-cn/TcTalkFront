@@ -17,6 +17,7 @@ import {
     useCancelAlbumSubscription
 } from "@/api/creation/album_subscription_api.ts";
 import {useLastListenHistory} from "@/api/member/listen_history_api.ts";
+import {useListMediaByAlbum} from "@/api/creation/video_api.ts";
 
 export const useAlbumStore = defineStore({
         id: "albumStore",

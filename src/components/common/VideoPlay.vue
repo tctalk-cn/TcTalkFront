@@ -1,7 +1,7 @@
 <template>
   <div class="video-play">
-    <div class="video-imag">
-      <VanImage :src="picUrl" :alt="title" radius="2" height="6rem" width="7rem" />
+    <div class="video-image">
+      <VanImage :src="picUrl" :alt="title" radius="2"  fit="cover" width="100%" height="100%"/>
     </div>
     <div class="video-description">
       <div class="video-header">
@@ -39,10 +39,10 @@
           </p>
         </div>
         <div class="video-actions">
-          <van-button hairline round size="mini">分享</van-button>
-          <van-button hairline round size="mini">数据</van-button>
-          <van-button hairline round size="mini">编辑</van-button>
-          <van-button hairline round size="mini">...</van-button>
+          <van-button icon="share-o" plain size="mini" round>分享</van-button>
+          <van-button icon="chart-trending-o" plain size="mini" round>数据</van-button>
+          <van-button icon="edit" plain size="mini" round>编辑</van-button>
+          <van-button plain size="mini" round>...</van-button>
         </div>
       </div>
     </div>
@@ -69,20 +69,24 @@ defineProps<{
 
 </script>
 <style lang="scss">
-
 .video-play {
   display: flex;
-  margin: 0.4rem 0.2rem;
+  padding: 0.4rem;
+  border-radius: 0.6rem;
   background-color: #fff;
-  border-radius: 0.4rem;
   box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
-  padding: 0.2rem;
+  transition: box-shadow 0.2s;
+  gap: 0.6rem;
 
-  .video-imag {
+  &:hover {
+    box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.1);
+  }
+
+  .video-image {
     width: 7rem;
-    height: 6rem;
-    flex-shrink: 0; /* Prevents image from shrinking */
-    border-radius: 0.2rem;
+    aspect-ratio: 16 / 9; // 更现代，自动计算高度
+    flex-shrink: 0;
+    border-radius: 0.4rem;
     overflow: hidden;
     background-color: #e7e7e7;
     background-image: url("@/assets/images/tv.png");
@@ -90,24 +94,26 @@ defineProps<{
     background-position: 1.5rem 0;
     background-repeat: no-repeat;
     transition: all 0.3s;
-    padding-right: 0.1rem;
+    box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.15);
   }
 
   .video-description {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    margin-left: 0.4rem;
     overflow: hidden;
 
     .video-header {
       display: flex;
       justify-content: space-between; /* 让标题和日期分开 */
       align-items: center;
+      margin-bottom: 0.4rem;
 
       .video-title {
         font-size: 1rem;
-        margin-bottom: 0.2rem;
+        font-weight: bold;
+        color: #333;
+        line-height: 1.4;
         font-family: Helvetica Neue, Tahoma, Arial, serif;
       }
 
@@ -118,7 +124,6 @@ defineProps<{
       }
 
     }
-
 
     .video-desc {
       font-size: 0.6rem !important;
@@ -133,20 +138,15 @@ defineProps<{
       margin-top: auto; /* Pushes the footer to the bottom */
 
       .video-count {
-        font-size: 0.8rem !important;
-        color: #999;
         display: flex;
-        justify-content: flex-start;
-        gap: 0.3rem;
+        gap: 0.6rem;
+        font-size: 0.75rem;
+        color: #999;
 
         p {
           display: flex;
-          align-items: center; /* Ensures icons and text in each <p> are vertically centered */
-          margin-right: 0.4rem;
-
-          span {
-            margin-left: 0.2rem;
-          }
+          align-items: center;
+          gap: 0.2rem;
         }
       }
 
@@ -158,7 +158,6 @@ defineProps<{
     }
 
   }
-
 
 }
 

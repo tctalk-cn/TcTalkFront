@@ -18,7 +18,15 @@
 <script setup>
 import {computed, ref, watch} from "vue";
 
-const props = defineProps({visible: Boolean, birthday: String})
+const props = defineProps({
+  visible: Boolean,
+  birthday: {
+    type: String,
+    default: '',
+    validator: val => /^\d{4}-\d{2}-\d{2}$/.test(val)
+  }
+})
+
 const emit = defineEmits(['update:visible', 'confirm'])
 const currentDate = ref(['2000', '01', '01']) // 默认初始值
 const today = computed(() => {
@@ -34,12 +42,20 @@ watch(
     () => props.birthday,
     (val) => {
       if (val) {
-        const [y, m, d] = val.split('-')
-        currentDate.value = [y, m.padStart(2, '0'), d.padStart(2, '0')]
+        const parts = val.split('-')
+        if (parts.length === 3) {
+          const [y, m, d] = parts
+          currentDate.value = [
+            y,
+            m?.padStart(2, '0') ?? '01',
+            d?.padStart(2, '0') ?? '01'
+          ]
+        }
       }
     },
     {immediate: true}
 )
+
 
 const onConfirm = (value) => {
   emit('confirm', value)
