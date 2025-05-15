@@ -71,16 +71,12 @@ defineProps<{
 <style lang="scss">
 .video-play {
   display: flex;
-  padding: 0.4rem;
-  border-radius: 0.6rem;
+  padding:$padding;
+  border-radius: $border-radius-mx;
   background-color: #fff;
   box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.2s;
   gap: 0.6rem;
-
-  &:hover {
-    box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.1);
-  }
 
   .video-image {
     width: 7rem;

@@ -148,20 +148,20 @@ const updateSortedList = () => {
 <style lang="scss" scoped>
 .show-list-container {
   margin: 0.4rem 0.2rem;
-  background-color: #fff;
+  background-color: $body-bg;
 
   .media-list-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
+    padding: $padding-sm $padding-md;
+    font-size: $font-size;
   }
 }
 
 .van-dropdown-menu {
   background-color: #f5f5f5; /* 背景色 */
-  font-size: 0.8rem; /* 字体大小 */
+  font-size: $font-size; /* 字体大小 */
   color: #333; /* 字体颜色 */
   border-radius: 1rem; /* 圆角边框 */
   padding: 0.2rem;
