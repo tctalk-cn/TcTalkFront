@@ -69,7 +69,7 @@
               >
                 继续播放
                 <van-divider vertical :hairline="false"/>
-                <span class="last-play-media-name">{{ latestListenHistory.mediaTitle }}</span>
+                <span class="last-play-media-name">{{ latestListenHistory?.mediaTitle }}</span>
               </van-button>
               <van-button v-else icon="play-circle" type="default" size="normal" class="w-full text-xs">
                 开始播放
@@ -92,7 +92,7 @@
         </div>
         <div class="media-container__tabs">
           <!-- 内容 -->
-          <van-tabs v-model:active="currentActivity" lazy-render @clickTab="onTabClick" animated scrollspy>
+          <van-tabs v-model:active="currentActivity" lazy-render @clickTab="onTabClick" animated :scrollspy="false">
             <van-tab v-for="(item) in mediaMenus" :key="item.name" :name="item.name">
               <template #title>
                 <van-icon v-if="item.icon" :name="item.icon"/>
@@ -113,11 +113,10 @@
         @select="onAlbumShareSelect"
     />
   </div>
-  Detail
 </template>
 <script setup lang="ts">
 import HeaderTop from "@/components/layout/header/HeaderTop.vue";
-import {onMounted, ref, toRefs, watch} from "vue";
+import {onMounted, onUnmounted, ref, toRefs, watch} from "vue";
 import {showToast} from "vant";
 import {UmsMember} from "@/models/member.ts";
 import {useRoute, useRouter} from "vue-router";
@@ -208,7 +207,7 @@ const mediaMenus: MenuItem[] = [
   }
 ];
 
-const currentActivity = ref<string>("albumVideoList");
+const currentActivity = ref<string>(route.meta.menu as string ?? "albumVideoList");
 watch(
     () => route.meta.menu,
     (menu) => {
@@ -235,6 +234,7 @@ const onTabClick = (tab) => {
 const latestListenHistory = ref<MemberListenHistory>(null);
 // 初始化加载
 onMounted(async () => {
+  window.addEventListener('resize', updateAnchors);
   // 根据当前路由的 meta 信息设置 currentActivity
   if (route.meta.menu) {
     currentActivity.value = route.meta.menu as string;
@@ -244,6 +244,19 @@ onMounted(async () => {
   creatorMember.value = await queryMemberById(albumInfo.value.creatorMemberId);
   latestListenHistory.value = await lastListenHistory(albumId);
 });
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateAnchors);
+});
+
+const updateAnchors = () => {
+  const h = window.innerHeight;
+  anchors.splice(0, anchors.length,
+      Math.round(0.2 * h), Math.round(0.3 * h), Math.round(0.4 * h),
+      Math.round(0.5 * h), Math.round(0.6 * h), Math.round(0.7 * h), Math.round(0.8 * h)
+  );
+};
+
 
 const onAlbumShareSelect = (option) => {
   switch (option.event) {
