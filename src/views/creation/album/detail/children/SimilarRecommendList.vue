@@ -79,10 +79,6 @@ const formatAlbumTitle = (album: Album) => {
 
 // 加载专辑数据
 const loadRecommendAlbumData = async (type = 'refresh') => {
-  if (loading.value || finished.value) {
-    return;
-  }
-
   if (type === 'refresh') {
     // 重置分页和状态
     searchParam.pageNum = 1;
