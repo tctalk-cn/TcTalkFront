@@ -183,7 +183,7 @@ const mediaMenus: MenuItem[] = [
   {
     id: 1,
     label: '节目',
-    name: 'albumProgramList',
+    name: 'albumShowList',
   },
   {
     id: 2,

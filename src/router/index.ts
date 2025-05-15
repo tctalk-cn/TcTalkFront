@@ -113,12 +113,12 @@ const router = createRouter({
                             //     component: () => import("@/views/creation/album/detail/children/SimilarRecommendList.vue"),
                             //     meta: {menu: Pages.albumSimilarRecommendList},
                             // },
-                            // {
-                            //     path: 'albumProgramList',
-                            //     name: Pages.albumProgramList,
-                            //     component: () => import("@/views/creation/album/detail/children/ProgramList.vue"),
-                            //     meta: {menu: Pages.albumProgramList},
-                            // },
+                            {
+                                path: 'albumShowList',
+                                name: Pages.albumShowList,
+                                component: () => import("@/views/creation/album/detail/children/ShowList.vue"),
+                                meta: {menu: Pages.albumShowList},
+                            },
                         ],
                     },
                 ]

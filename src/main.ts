@@ -57,7 +57,6 @@ import locale from 'element-plus/es/locale/lang/zh-cn';
 const app = createApp(App);
 // element-plus
 app.use(ElementPlus, {locale});
-app.component(ElIcon.name, ElIcon);
 // 全局注册所有图标组件
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)

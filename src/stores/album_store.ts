@@ -17,7 +17,7 @@ import {
     useCancelAlbumSubscription
 } from "@/api/creation/album_subscription_api.ts";
 import {useLastListenHistory} from "@/api/member/listen_history_api.ts";
-import {useListMediaByAlbum} from "@/api/creation/video_api.ts";
+import {useListMediaByAlbum, usePin2Top} from "@/api/creation/video_api.ts";
 import {AlbumCommentCreator} from "@/models/album_comment.ts";
 import {MediaCommentCreator} from "@/models/media_comment.ts";
 import {StreamerPerformanceQualityCommentCreator} from "@/models/streamer_performance_quality_comment.ts";
@@ -182,6 +182,11 @@ export const useAlbumStore = defineStore(
                 async listStreamerOtherAlbums(albumCreatorMemberId: string, currentAlbumId: string) {
                     const {data} = await useLoadStreamerOtherAlbums(3, albumCreatorMemberId, currentAlbumId);
                     return data;
+                },
+
+                async pin2Top(albumId: string, mediaId: string) {
+                    const {data} = await usePin2Top(albumId, mediaId);
+                    return data.list;
                 },
             },
             // 持久化配置

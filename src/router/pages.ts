@@ -23,5 +23,6 @@ export const Pages = {
     albumDetail: 'albumDetail',
     albumVideoList: 'albumVideoList',
     albumCommentList: 'albumCommentList',
+    albumShowList: "albumShowList",
 
 }
