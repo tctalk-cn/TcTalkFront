@@ -25,6 +25,7 @@ import {useAddAlbumComment, useListAlbumComment, useQueryAlbumComment} from "@/a
 import {useAddStreamerComment, useQueryStreamerComment} from "@/api/creation/streamer_comment_api.ts";
 import {useAddComment} from "@/api/creation/comment_api.ts";
 import defaultAvatar from '@/assets/images/avatar_default.png';
+import {useAlbumSimilarRecommend, useQueryHotWordsByAlbumId,useQueryRegionsByAlbumId} from "@/api/recommend/recommend_api.ts";
 
 export const useAlbumStore = defineStore(
         "albumStore",
@@ -186,6 +187,11 @@ export const useAlbumStore = defineStore(
 
                 async pin2Top(albumId: string, mediaId: string) {
                     const {data} = await usePin2Top(albumId, mediaId);
+                    return data.list;
+                },
+
+                async similarRecommend(albumCreatorMemberId: string, currentAlbumId: string, pageNum: number, pageSize: number) {
+                    const {data} = await useAlbumSimilarRecommend(albumCreatorMemberId, currentAlbumId, pageNum, pageSize);
                     return data.list;
                 },
             },

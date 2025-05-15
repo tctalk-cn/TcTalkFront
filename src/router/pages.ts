@@ -24,5 +24,6 @@ export const Pages = {
     albumVideoList: 'albumVideoList',
     albumCommentList: 'albumCommentList',
     albumShowList: "albumShowList",
+    albumSimilarRecommendList: 'albumSimilarRecommendList',
 
 }
