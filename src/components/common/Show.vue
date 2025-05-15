@@ -100,21 +100,29 @@ const displayDate = computed(() => {
   margin: 0.2rem 0.2rem;
   background-color: #fff;
   border-radius: $border-radius;
-  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.08);
   padding: $padding-sm $padding;
   flex-grow: 1;
   flex-direction: column;
   overflow: hidden;
+  transition: box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
 
   .show-header {
     display: flex;
     justify-content: space-between; /* 让标题和日期分开 */
     align-items: center;
     margin-bottom: 0.4rem;
+    border-bottom: 0.1rem solid #f0f0f0;
 
     .show-title {
       font-size: $font-size-mx;
       font-family: Arial, serif;
+      font-weight: bold;
+      color: #333;
       flex-grow: 1; /* 让标题占满剩余空间 */
       white-space: nowrap;
       overflow: hidden;
@@ -130,6 +138,9 @@ const displayDate = computed(() => {
   }
 
   .show-tag {
+    display: flex;
+    gap: $gap-xs;
+    margin-top: 0.4rem;
     margin-bottom: 0.4rem;
   }
 
