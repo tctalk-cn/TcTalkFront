@@ -1,9 +1,33 @@
 <template>
-  <div class="similar-recommend-list-container">
-    <Title title="主播的其他专辑" :show-more="true"/>
+  <Title title="主播的其他专辑" :show-more="true"/>
+  <van-grid :column-num="3" :border="true"
+            :gutter="4"
+            style="--van-grid-item-content-background: transparent; --van-grid-item-content-padding: 0.2rem;">
+    <van-grid-item v-for="(item) in streamerOtherAlbums" :key="item.id">
+      <router-link class="similar-album-info"
+                   :to='{path: "/creative/albumDetail",
+                     query: {albumId: item.id,albumCreatorMemberId:item.creatorMemberId}}'>
+        <div class="similar-cover-image-container">
+          <van-image :src="item.coverUrl" :alt="item.name"/>
+        </div>
+        <div class="similar-album-info-wrapper">
+          <div class="similar-album-title">
+            <van-text-ellipsis rows="2" :content="formatAlbumTitle(item)"/>
+          </div>
+        </div>
+      </router-link>
+    </van-grid-item>
+  </van-grid>
+  <Title title="收听本专辑的人也在听"/>
+  <van-list
+      v-model:loading="loading"
+      :finished="finished"
+      finished-text="没有更多了"
+      @load="loadRecommendAlbumData('load')"
+  >
     <van-grid :column-num="3" :border="true"
               style="--van-grid-item-content-background: transparent; --van-grid-item-content-padding: 0.2rem;">
-      <van-grid-item v-for="(item) in streamerOtherAlbums" :key="item.id">
+      <van-grid-item v-for="(item) in similarRecommendAlbums" :key="item.id">
         <router-link class="similar-album-info"
                      :to='{path: "/creative/albumDetail",
                      query: {albumId: item.id,albumCreatorMemberId:item.creatorMemberId}}'>
@@ -12,38 +36,13 @@
           </div>
           <div class="similar-album-info-wrapper">
             <div class="similar-album-title">
-              <van-text-ellipsis rows="2" :content="assembleTile(item)"/>
+              <van-text-ellipsis rows="2" :content="formatAlbumTitle(item)"/>
             </div>
           </div>
         </router-link>
       </van-grid-item>
     </van-grid>
-    <Title title="收听本专辑的人也在听"/>
-    <van-list
-        v-model:loading="loading"
-        :finished="finished"
-        finished-text="没有更多了"
-        @load="loadRecommendAlbumData('load')"
-    >
-      <van-grid :column-num="3" :border="true"
-                style="--van-grid-item-content-background: transparent; --van-grid-item-content-padding: 0.2rem;">
-        <van-grid-item v-for="(item) in similarRecommendAlbums" :key="item.id">
-          <router-link class="similar-album-info"
-                       :to='{path: "/creative/albumDetail",
-                     query: {albumId: item.id,albumCreatorMemberId:item.creatorMemberId}}'>
-            <div class="similar-cover-image-container">
-              <van-image :src="item.coverUrl" :alt="item.name"/>
-            </div>
-            <div class="similar-album-info-wrapper">
-              <div class="similar-album-title">
-                <van-text-ellipsis rows="2" :content="assembleTile(item)"/>
-              </div>
-            </div>
-          </router-link>
-        </van-grid-item>
-      </van-grid>
-    </van-list>
-  </div>
+  </van-list>
 </template>
 <script setup lang="ts">
 import Title from "@/components/common/Title.vue";
@@ -70,15 +69,20 @@ onMounted(async () => {
   streamerOtherAlbums.value = await listStreamerOtherAlbums(albumCreatorMemberId, albumId);
 });
 
+
 // 定义动态拼接函数
-const assembleTile = (albumItem: Album): string => {
-  const freeLabel = albumItem.paid ? '' : '【免费】';
-  const name = albumItem.name || '';
-  return `${freeLabel} ${name}`;
+const formatAlbumTitle = (album: Album) => {
+  const prefix = album.paid ? '' : '【免费】';
+  return `${prefix} ${album.name ?? ''}`;
 };
+
 
 // 加载专辑数据
 const loadRecommendAlbumData = async (type = 'refresh') => {
+  if (loading.value || finished.value) {
+    return;
+  }
+
   if (type === 'refresh') {
     // 重置分页和状态
     searchParam.pageNum = 1;
@@ -116,38 +120,32 @@ const loadRecommendAlbumData = async (type = 'refresh') => {
 };
 </script>
 <style lang="scss" scoped>
-.similar-recommend-list-container {
-  width: 100%; /* 父容器自适应宽度 */
-  padding: 0.5rem 0.5rem; /* 添加适当的内边距 */
-  background: #FFFFFF;
 
-  .similar-album-info {
-    align-items: center; /* 子元素垂直居中 */
-    padding: 0 0.1rem;
-    flex-wrap: nowrap; /* 防止子元素换行 */
+.similar-album-info {
+  display: flex;
+  flex-direction: column;
 
+  .similar-cover-image-container {
+    flex-shrink: 0; /* 不允许压缩 */
+    height: 6rem;
+    border-radius: $border-radius-mx;
+    overflow: hidden;
+    background-color: #e7e7e7;
+    background-image: url("@/assets/images/tv.png");
+    background-size: 6rem 6rem;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
 
-    .similar-cover-image-container {
-      flex-shrink: 0; /* 不允许压缩 */
-      height: 6rem;
-      border-radius: 0.6rem;
-      overflow: hidden;
-      background-color: #e7e7e7;
-      background-image: url("@/assets/images/tv.png");
-      background-size: 6rem 6rem;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-
-    .similar-album-info-wrapper {
-      overflow: hidden; /* 防止内容超出 */
-      .similar-album-title {
-        font-size: 0.8rem;
-        font-weight: bold;
-        align-items: center;
-      }
+  .similar-album-info-wrapper {
+    overflow: hidden; /* 防止内容超出 */
+    .similar-album-title {
+      font-size: $font-size;
+      font-weight: bold;
+      align-items: center;
     }
   }
 }
+
 
 </style>
