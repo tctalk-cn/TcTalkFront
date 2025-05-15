@@ -8,6 +8,7 @@
             @click="toggleSortOrder"
             color="#1989fa"
             size="24"
+            title="点击切换排序"
         />
       </div>
       <van-list
@@ -41,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import {useAlbumStore} from "@/stores/album_store.ts";
 import {useRoute, useRouter} from "vue-router";
 import Show from "@/components/common/Show.vue";
@@ -81,35 +82,38 @@ const loadMediaData = async (type = 'refresh') => {
     // 刷新时重置所有数据和状态
     mediaList.value = [];
     searchParam.beginMediaId = "0";
+    totalCount.value = 0;
     finished.value = false;
     loading.value = false;
   }
 
-  const medias = await listMediaByAlbum(route.query.albumId as string, searchParam.beginMediaId, searchParam.pageSize, null);
-  if (medias.list && medias.list.length > 0) {
-    if (type === 'refresh') {
-      mediaList.value = medias.list; // 刷新时替换数据
-    } else {
-      mediaList.value = [...new Set([...mediaList.value, ...medias.list])]; // 加载更多时追加数据
-    }
+  try {
+    const medias = await listMediaByAlbum(route.query.albumId as string, searchParam.beginMediaId, searchParam.pageSize, null);
+    if (medias.list && medias.list.length > 0) {
+      if (type === 'refresh') {
+        mediaList.value = medias.list; // 刷新时替换数据
+      } else {
+        mediaList.value = [...new Set([...mediaList.value, ...medias.list])]; // 加载更多时追加数据
+      }
 
-    // 更新 `beginMediaId` 为最后一项的 ID
-    searchParam.beginMediaId = medias.list[medias.list.length - 1].id > medias.list[0].id ? medias.list[medias.list.length - 1].id : medias.list[0].id;
+      // 更新 `beginMediaId` 为最后一项的 ID
+      searchParam.beginMediaId = medias.list[medias.list.length - 1].id > medias.list[0].id ? medias.list[medias.list.length - 1].id : medias.list[0].id;
 
-    // 仅在首次加载或数据变化时更新 `totalCount`
-    if (type === 'refresh' || totalCount.value === 0) {
-      totalCount.value = medias.total;
+      // 仅在首次加载或数据变化时更新 `totalCount`
+      if (type === 'refresh' || totalCount.value === 0) {
+        totalCount.value = medias.total;
+      }
     }
+    // 判断是否没有更多数据了
+    finished.value = !medias.list || medias.list.length < searchParam.pageSize;
+  } catch (err) {
+    console.error("加载媒体失败：", err);
+  } finally {
+    // 完成加载操作
+    loading.value = false;
+    refreshing.value = false;
+    loadingInProgress.value = false;
   }
-  // 判断是否没有更多数据了
-  finished.value = !medias.list || medias.list.length < searchParam.pageSize;
-  // 每次加载完成后更新排序
-  updateSortedList();
-
-  // 完成加载操作
-  loading.value = false;
-  refreshing.value = false;
-  loadingInProgress.value = false;
 }
 
 // 刷新
@@ -122,27 +126,20 @@ const onRefresh = () => {
   refreshing.value = true;
   loadMediaData();
 }
+
 // 切换排序时重新计算排序列表
 const toggleSortOrder = () => {
   isAscending.value = !isAscending.value;
-  updateSortedList();
 };
 
-const sortedList = ref([]); // 用 ref 存储已排序的列表
-
-// 更新排序后的列表
-const updateSortedList = () => {
-  sortedList.value = mediaList.value.slice().sort((a, b) => {
-    // 置顶的项始终在前面
-    // 先按 position 降序排序
+const sortedList = computed(() => {
+  return mediaList.value.slice().sort((a, b) => {
     if (a.position !== b.position) {
-      return b.position - a.position; // position 越大，越靠前
+      return b.position - a.position;
     }
     return isAscending.value ? a.id - b.id : b.id - a.id;
   });
-};
-
-
+});
 </script>
 
 <style lang="scss" scoped>
