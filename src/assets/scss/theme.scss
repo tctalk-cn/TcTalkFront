@@ -9,13 +9,13 @@ $font-size-lg: 1.2rem;
 $font-size-lx: 1.8rem;
 
 // border-radius
-$border-radius: 0.2rem;
+$border-radius: 0.4rem;
 $border-radius-sm: 0.1rem;
 $border-radius-md: 0.3rem;
 $border-radius-mx: 0.6rem;
 $border-radius-lg: 1.2rem;
 
-$gap: 10px;
+$gap: 0.8rem;
 $gap-xs: $gap * 0.3;
 $gap-sm: $gap * 0.5;
 $gap-md: $gap * 1;
@@ -27,7 +27,7 @@ $gap-lx: $gap * 2;
 $padding: 0.8rem;
 $padding-xs: $padding * 0.3;
 $padding-sm: $padding * 0.5;
-$padding-md: $padding * 1;
+$padding-md: $padding * 0.8;
 $padding-mx: $padding * 1.2;
 $padding-lg: $padding * 1.5;
 $padding-lx: $padding * 2;

@@ -4,18 +4,18 @@
     <div class="show-header">
       <div class="show-title">{{ title }}</div>
       <div class="show-right">
-        <span>{{ formatDate(new Date(createTime), 'yyyy-MM') }}</span>
+        <span>{{ displayDate }}</span>
       </div>
     </div>
     <div class="show-tag">
-      <van-tag type="default" plain v-if="mediaType==0">视频</van-tag>
-      <van-tag type="default" plain v-if="mediaType==1">音频</van-tag>
+      <van-tag type="default" plain v-if="isVideo">视频</van-tag>
+      <van-tag type="default" plain v-if="isAudio">音频</van-tag>
       <van-tag type="primary" plain v-if="pin2Top" class="ml-1">置顶</van-tag>
     </div>
     <div class="show-footer">
       <div class="show-count">
         <p v-if="showPlayCount">
-          <IconPark :icon="mediaType==0?Play:Headset"
+          <IconPark :icon="isVideo?Play:Headset"
                     theme="filled"
                     :size="12"
                     @click="onPlay"/>
@@ -30,8 +30,8 @@
         </p>
       </div>
       <div class="show-actions">
-        <van-icon name="video-o" v-if="mediaType==0" @click="onPlay"/>
-        <van-icon name="music-o" v-if="mediaType==1" @click="onPlay"/>
+        <van-icon name="video-o" v-if="isVideo" @click="onPlay"/>
+        <van-icon name="music-o" v-if="isAudio" @click="onPlay"/>
         <van-icon name="more-o" @click="showMoreDialog = !showMoreDialog"/>
       </div>
     </div>
@@ -39,7 +39,6 @@
   <!--更多操作弹出框-->
   <section>
     <van-popup v-model:show="showMoreDialog" round position="bottom" :style="{height:'60%'}"
-               @close="showMoreDialog = false"
                closeable
                close-icon="close"
                :close-on-click-overlay="false">
@@ -60,7 +59,7 @@ import {AlarmClock, Headset, Play} from "@icon-park/vue-next";
 import {useFormatDuring, useNumberFormat} from "@/utils/number.ts";
 import IconPark from "@/components/common/IconPark.vue";
 import {formatDate} from "@/utils/date.ts";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import {showToast} from "vant";
 
 const props = defineProps<{
@@ -88,16 +87,21 @@ const handlePin2Top = () => {
     showToast('此声音已置顶');
   }
 }
+const isVideo = computed(() => props.mediaType === 0);
+const isAudio = computed(() => props.mediaType === 1);
+const displayDate = computed(() => {
+  return props.createTime ? formatDate(new Date(props.createTime), 'yyyy-MM') : '--';
+});
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 
 .show-container {
   display: flex;
   margin: 0.2rem 0.2rem;
   background-color: #fff;
-  border-radius: 0.4rem;
+  border-radius: $border-radius;
   box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
-  padding: 0.5rem 1rem;
+  padding: $padding-sm $padding;
   flex-grow: 1;
   flex-direction: column;
   overflow: hidden;
@@ -109,7 +113,7 @@ const handlePin2Top = () => {
     margin-bottom: 0.4rem;
 
     .show-title {
-      font-size: 1rem;
+      font-size: $font-size-mx;
       font-family: Arial, serif;
       flex-grow: 1; /* 让标题占满剩余空间 */
       white-space: nowrap;
@@ -119,7 +123,7 @@ const handlePin2Top = () => {
 
     .show-right {
       flex-shrink: 0; /* 防止被挤压 */
-      font-size: 0.8rem !important;
+      font-size: $font-size;
       color: #999;
       margin-left: 1rem;
     }
@@ -138,7 +142,7 @@ const handlePin2Top = () => {
     .show-count {
       flex-grow: 1; // 让它占据剩余空间
       display: flex;
-      font-size: 0.8rem !important;
+      font-size: $font-size;
       color: #999;
       gap: 0.3rem;
       align-items: center;
@@ -156,7 +160,7 @@ const handlePin2Top = () => {
 
     .show-actions {
       display: flex;
-      gap: 0.2rem;
+      gap: $gap-xs;
       align-items: center;
       justify-content: flex-end; /* 让图标对齐 */
       flex-shrink: 0; /* 确保不会被压缩 */
