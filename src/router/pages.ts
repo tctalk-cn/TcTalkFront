@@ -26,4 +26,7 @@ export const Pages = {
     albumShowList: "albumShowList",
     albumSimilarRecommendList: 'albumSimilarRecommendList',
 
+    albumStatistic: 'albumStatistic',
+    basicData: 'basicData',
+    audienceAnalysis: 'audienceAnalysis',
 }

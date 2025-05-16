@@ -121,6 +121,25 @@ const router = createRouter({
                             },
                         ],
                     },
+                    // 创作中心-专辑数据分析
+                    {
+                        path: '/creative/albumStatistic',
+                        name: Pages.albumStatistic,
+                        component: () => import("@/views/creation/album/Statistic.vue"),
+                        redirect: {name: Pages.basicData},
+                        children: [
+                            {
+                                path: 'basicData',
+                                name: Pages.basicData,
+                                component: () => import("@/views/creation/album/statistic/BasicData.vue"),
+                            },
+                            {
+                                path: 'audienceAnalysis',
+                                name: Pages.audienceAnalysis,
+                                component: () => import("@/views/creation/album/statistic/AudienceData.vue"),
+                            }
+                        ],
+                    },
                 ]
             }
         ]

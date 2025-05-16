@@ -17,7 +17,11 @@ import {
     useCancelAlbumSubscription
 } from "@/api/creation/album_subscription_api.ts";
 import {useLastListenHistory} from "@/api/member/listen_history_api.ts";
-import {useListMediaByAlbum, usePin2Top} from "@/api/creation/video_api.ts";
+import {
+    useListMediaByAlbum, usePin2Top, useLatest30DayPlayStats, useLatest7DayPlayStats,
+    useLatestOneYearDayPlayStats,
+    useYesterdayPlayStats
+} from "@/api/creation/video_api.ts";
 import {AlbumCommentCreator} from "@/models/album_comment.ts";
 import {MediaCommentCreator} from "@/models/media_comment.ts";
 import {StreamerPerformanceQualityCommentCreator} from "@/models/streamer_performance_quality_comment.ts";
@@ -25,7 +29,11 @@ import {useAddAlbumComment, useListAlbumComment, useQueryAlbumComment} from "@/a
 import {useAddStreamerComment, useQueryStreamerComment} from "@/api/creation/streamer_comment_api.ts";
 import {useAddComment} from "@/api/creation/comment_api.ts";
 import defaultAvatar from '@/assets/images/avatar_default.png';
-import {useAlbumSimilarRecommend, useQueryHotWordsByAlbumId,useQueryRegionsByAlbumId} from "@/api/recommend/recommend_api.ts";
+import {
+    useAlbumSimilarRecommend,
+    useQueryHotWordsByAlbumId,
+    useQueryRegionsByAlbumId
+} from "@/api/recommend/recommend_api.ts";
 
 export const useAlbumStore = defineStore(
         "albumStore",
@@ -193,6 +201,27 @@ export const useAlbumStore = defineStore(
                 async similarRecommend(albumCreatorMemberId: string, currentAlbumId: string, pageNum: number, pageSize: number) {
                     const {data} = await useAlbumSimilarRecommend(albumCreatorMemberId, currentAlbumId, pageNum, pageSize);
                     return data.list;
+                },
+                // 专辑播放统计
+                async latest7DayPlayStats(creatorMemberId: string, albumId: string) {
+                    const {data} = await useLatest7DayPlayStats(creatorMemberId, albumId);
+                    return data;
+                },
+                // 专辑播放统计
+                async yesterdayPlayStats(creatorMemberId: string, albumId: string) {
+                    const {data} = await useYesterdayPlayStats(creatorMemberId, albumId);
+                    return data;
+                },
+                // 专辑播放统计
+                async latest30DayPlayStats(creatorMemberId: string, albumId: string) {
+                    const {data} = await useLatest30DayPlayStats(creatorMemberId, albumId);
+                    return data;
+                },
+
+                // 专辑播放统计
+                async latestOneYearDayPlayStats(creatorMemberId: string, albumId: string) {
+                    const {data} = await useLatestOneYearDayPlayStats(creatorMemberId, albumId);
+                    return data;
                 },
             },
             // 持久化配置

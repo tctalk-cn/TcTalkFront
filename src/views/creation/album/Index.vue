@@ -24,7 +24,7 @@
             :show-subscription-count="true"
             :subscription-count="item.subscriptionCount"
             :update-time="item.updateTime"
-            :on-view-data="() => {router.push({path:'/creative/albumData',query: {albumId: item.id,albumCreatorMemberId:item.creatorMemberId}})}"
+            :on-view-data="() => {router.push({path:'/creative/albumStatistic',query: {albumId: item.id,albumCreatorMemberId:item.creatorMemberId}})}"
             :on-edit="()=>{}"
             :on-more="() => {}"
             :on-share="()=>{}"
