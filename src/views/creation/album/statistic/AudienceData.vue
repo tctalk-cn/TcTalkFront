@@ -84,7 +84,7 @@ import {LineChart, PieChart, BarChart} from "echarts/charts";
 import {GridComponent, TooltipComponent, LegendComponent} from "echarts/components";
 import {CanvasRenderer} from "echarts/renderers";
 import VChart from "vue-echarts";
-import {useAlbumStore} from "@/stores/album.js";
+import {useAlbumStore} from "@/stores/album_store.js";
 import {useRoute} from "vue-router";
 import {MediaSummary} from "@/models/media_summary.ts";
 
@@ -106,7 +106,7 @@ const mediaSummaryData = ref({} as MediaSummary);
 // 热点词map
 const hotWordsMapRef = ref({});
 // 热点城市map
-const hotCitiesMapRef = ref<[]>({});
+const hotCitiesMapRef = ref({});
 
 // 计算折线图数据
 const regionChartOption = computed(() => {
@@ -202,8 +202,6 @@ onMounted(async () => {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/mixin';
-
 .audience-data-container {
   background-color: $fc;
   padding: 0 1rem;
@@ -320,7 +318,5 @@ onMounted(async () => {
       color: #f56c6c;
     }
   }
-
-
 }
 </style>

@@ -111,7 +111,7 @@ import {GridComponent, TooltipComponent, LegendComponent} from "echarts/componen
 import {CanvasRenderer} from "echarts/renderers";
 import VChart from "vue-echarts";
 import {useAlbumStore} from "@/stores/album_store.js";
-import {useRoute, useRouter} from "vue-router";
+import {useRoute} from "vue-router";
 import {MediaSummary} from "@/models/media_summary.ts";
 
 use([LineChart, GridComponent, TooltipComponent, LegendComponent, CanvasRenderer]);
@@ -314,7 +314,6 @@ onMounted(async () => {
 </script>
 
 <style scoped lang="scss">
-
 .basic-data-container {
   background-color: $fc;
   padding: 0 1rem;
@@ -352,7 +351,5 @@ onMounted(async () => {
       color: #f56c6c;
     }
   }
-
-
 }
 </style>

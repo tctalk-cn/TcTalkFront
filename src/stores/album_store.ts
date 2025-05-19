@@ -223,6 +223,15 @@ export const useAlbumStore = defineStore(
                     const {data} = await useLatestOneYearDayPlayStats(creatorMemberId, albumId);
                     return data;
                 },
+                async queryHotWordsByAlbumId(creatorMemberId: string, albumId: string) {
+                    const {data} = await useQueryHotWordsByAlbumId(creatorMemberId, albumId);
+                    return data;
+                },
+
+                async queryRegionsByAlbumId(creatorMemberId: string, albumId: string){
+                    const {data} = await useQueryRegionsByAlbumId(creatorMemberId, albumId);
+                    return data;
+                }
             },
             // 持久化配置
             persist: {

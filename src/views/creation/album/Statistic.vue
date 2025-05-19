@@ -174,7 +174,7 @@ const goToAlbumDetail = () => {
 
 
           .album-data-title {
-            font-size: 1rem;
+            font-size: $font-size-mx;
             font-weight: bold;
             color: #333;
           }
@@ -190,16 +190,14 @@ const goToAlbumDetail = () => {
 
         .album-data-count {
           display: flex;
-          font-size: 0.8rem !important;
-          color: #999;
-          gap: 0.2rem;
-          margin-bottom: 0.2rem;
+          gap: 1rem;
           margin-top: 0.5rem;
 
           p {
             display: flex;
             align-items: center;
-            margin-right: 0.4rem;
+            font-size: $font-size;
+            color: #666;
 
             span {
               margin-left: 0.2rem;
@@ -212,11 +210,22 @@ const goToAlbumDetail = () => {
     }
 
     .album-data-main {
-      margin-top: 0.2rem;
-      border-radius: 0.4rem;
-      box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
-
+      margin-top: 1rem;
+      border-radius: 0.6rem;
+      background-color: #fff;
+      padding: 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     }
+
+    .van-tabs__wrap {
+      background-color: #fff;
+      border-bottom: 1px solid #eee;
+      .van-tab {
+        font-weight: 500;
+        font-size: 0.9rem;
+      }
+    }
+
   }
 }
 </style>
