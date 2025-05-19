@@ -34,12 +34,35 @@ import {
     useQueryHotWordsByAlbumId,
     useQueryRegionsByAlbumId
 } from "@/api/recommend/recommend_api.ts";
+import {AlbumCreator} from "@/models/album.ts";
+import {useListAllChannels} from "@/api/category/channel_api.ts";
 
 export const useAlbumStore = defineStore(
         "albumStore",
         {
             state: () => ({
                 defaultAvatar: defaultAvatar,
+                name: null,
+                categoryLevel1Id: null,
+                categoryLevel1Name: null,
+                categoryLevel2Id: null,
+                categoryLevel2Name: null,
+                categoryLevel3Id: null,
+                categoryLevel3Name: null,
+                categoryLevel4Id: null,
+                categoryLevel4Name: null,
+                tagIds: [],
+                tagNames: [],
+                attrWithVals: [] as AlbumAlbumAttributeValueCreator[],
+                description: "",
+                sellPoint: "",
+                coverUrl: null,
+                permissions: 0,
+                permissionsVal: "",
+                channelId: null,
+                channelName: null,
+                original: true,
+                intellectualPromise: false,
                 albumInfo: {
                     id: "",
                     name: "",
@@ -228,10 +251,44 @@ export const useAlbumStore = defineStore(
                     return data;
                 },
 
-                async queryRegionsByAlbumId(creatorMemberId: string, albumId: string){
+                async queryRegionsByAlbumId(creatorMemberId: string, albumId: string) {
                     const {data} = await useQueryRegionsByAlbumId(creatorMemberId, albumId);
                     return data;
-                }
+                },
+                // 上传专辑封面
+                async uploadCover(file: File) {
+                    let formData = new FormData();
+                    formData.append('file', file);
+                    try {
+                        const {data} = await useUploadCover(formData);
+                        return data;
+                    } catch (err) {
+                        throw new Error(err);
+                    }
+                },
+                // 枚举全部的频道
+                async listAllChannel() {
+                    const {data} = await useListAllChannels();
+                    return data;
+                },
+                // 修改权限
+                async resetPermission(permissions: number) {
+                    this.permissions = permissions;
+                    if (permissions === 0) {
+                        this.permissionsVal = "公开";
+                    } else {
+                        this.permissionsVal = "仅自己可见";
+                    }
+                },
+
+                /**
+                 * 创建专辑
+                 * @param album 专辑信息
+                 */
+                async createAlbum(album: AlbumCreator) {
+                    const {data} = await useCreateAlbum(album);
+                    return data;
+                },
             },
             // 持久化配置
             persist: {

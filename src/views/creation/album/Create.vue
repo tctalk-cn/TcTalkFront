@@ -268,8 +268,6 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/mixin';
-
 .album_container {
   padding-top: 1.95rem;
   padding-bottom: 3rem;

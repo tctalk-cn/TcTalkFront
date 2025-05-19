@@ -29,4 +29,9 @@ export const Pages = {
     albumStatistic: 'albumStatistic',
     basicData: 'basicData',
     audienceAnalysis: 'audienceAnalysis',
+
+    albumCreate: 'albumCreate',
+    albumSetTitle: 'albumSetTitle',
+    albumSetRemark: 'albumSetRemark',
+    albumSetAttributes: 'albumSetAttributes',
 }

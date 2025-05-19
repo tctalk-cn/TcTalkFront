@@ -121,6 +121,29 @@ const router = createRouter({
                             },
                         ],
                     },
+                    // 创作中心-专辑创作
+                    {
+                        path: '/creative/albumCreate',
+                        name: Pages.albumCreate,
+                        component: () => import("@/views/creation/album/Create.vue"),
+                        children: [
+                            {
+                                path: 'albumSetTitle',
+                                name: Pages.albumSetTitle,
+                                component: () => import("@/views/creation/album/children/SetTitle.vue"),
+                            },
+                            {
+                                path: 'albumSetRemark',
+                                name: Pages.albumSetRemark,
+                                component: () => import("@/views/creation/album/children/SetRemark.vue"),
+                            },
+                            {
+                                path: 'albumSetAttributes',
+                                name: Pages.albumSetAttributes,
+                                component: () => import("@/views/creation/album/children/SetAttributes.vue"),
+                            },
+                        ],
+                    },
                     // 创作中心-专辑数据分析
                     {
                         path: '/creative/albumStatistic',
