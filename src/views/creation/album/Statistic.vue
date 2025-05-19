@@ -11,22 +11,21 @@
           </router-link>
         </div>
         <div class="album-data-info">
-          <div class="album-data-title">声音数据
-            <van-icon name="arrow" size="10"
-                      @click="router.push({path: '/creative/albumDetail', query: {albumId: albumId,albumCreatorMemberId:albumCreatorMemberId}})"/>
+          <div class="album-data-title-bar" @click="goToAlbumDetail">
+            <div class="album-data-title">声音数据</div>
+            <van-icon name="arrow" size="14" color="#999"/>
           </div>
           <div class="album-data-count">
             <p>
               <IconPark :icon="Play" theme="filled" :size="12"/>
-              <span>{{ albumInfo.viewsCount }}</span>
+              <span>{{ albumInfo?.viewsCount }}</span>
             </p>
             <p>
               <IconPark :icon="Comment" theme="filled" :size="12"/>
-              <span>{{ albumInfo.commentCount }}</span>
+              <span>{{ albumInfo?.commentCount }}</span>
             </p>
           </div>
         </div>
-
       </div>
       <div class="album-data-main">
         <!-- 内容 -->
@@ -56,7 +55,8 @@ import IconPark from "@/components/common/IconPark.vue";
 const profileTitle = ref("专辑数据");
 import {useRoute, useRouter} from "vue-router";
 import {useAlbumStore} from "@/stores/album_store.ts";
-import {Album} from "@/models/album.ts";
+import {storeToRefs} from "pinia";
+import {useProfileStore} from "@/stores/member_store.ts";
 
 const {
   queryAlbum
@@ -65,7 +65,7 @@ const route = useRoute();
 const router = useRouter();
 const albumId = route.query.albumId as string;
 const albumCreatorMemberId = route.query.albumCreatorMemberId as string;
-const albumInfo = ref({} as Album);
+const {albumInfo} = storeToRefs(useAlbumStore());
 // 当前活跃按钮
 const currentActivityTab = ref<string>("basicData");
 
@@ -91,7 +91,7 @@ const dataMenus: MediaMenu[] = [
 
 // 初始化加载
 onMounted(async () => {
-  albumInfo.value = await queryAlbum(albumCreatorMemberId, albumId);
+  await queryAlbum(albumCreatorMemberId, albumId);
 });
 
 watch(
@@ -113,7 +113,12 @@ const onTabClick = (tab) => {
   });
 }
 
-
+const goToAlbumDetail = () => {
+  router.push({
+    path: '/creative/albumDetail',
+    query: {albumId, albumCreatorMemberId}
+  });
+}
 </script>
 
 <style scoped lang="scss">
@@ -130,40 +135,57 @@ const onTabClick = (tab) => {
 
     .album-data-header {
       display: flex;
-      align-items: flex-end; /* 让子元素顶部对齐 */
+      align-items: center;
       gap: 1rem; /* 让封面、统计信息、更新时间有间距 */
       background-color: $fc;
-      padding: 0.5rem 1rem;
-      border-radius: 0.4rem;
-      box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+      padding: 0.8rem 1rem;
+      border-radius: 0.6rem;
+      box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.05);
 
       .album-data-cover {
         width: 5rem;
         height: 5rem;
-        border-radius: 0.5rem;
+        border-radius: 0.6rem;
         overflow: hidden;
-        background-color: #e7e7e7;
+        background-color: #f2f2f2;
         background-image: url("@/assets/images/tv.png");
         background-size: 5rem 5rem;
         background-position: 1.5rem 0;
         background-repeat: no-repeat;
+
+        van-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
       }
 
       .album-data-info {
         flex-grow: 1; /* 让它占据中间所有空间 */
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: space-between;
 
-        .album-data-title {
-          margin-left: 0.5rem;
-          font-family: Arial, serif;
-          font-size: 0.8rem !important;
-          color: #999;
-          flex-grow: 1; /* 让标题占满剩余空间 */
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+        .album-data-title-bar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          cursor: pointer;
+
+
+          .album-data-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #333;
+          }
+
+          .van-icon {
+            transition: transform 0.2s;
+          }
+
+          &:hover .van-icon {
+            transform: translateX(2px);
+          }
         }
 
         .album-data-count {
@@ -196,7 +218,5 @@ const onTabClick = (tab) => {
 
     }
   }
-
-
 }
 </style>
