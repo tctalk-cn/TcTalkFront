@@ -16,7 +16,7 @@ import {useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 import {Pages} from "@/router/pages.ts";
 import {onMounted, ref} from "vue";
-import {useAlbumStore} from "@/stores/album.ts";
+import {useAlbumStore} from "@/stores/album_store.ts";
 
 const router = useRouter();
 const showLoading = ref(true);
@@ -30,7 +30,6 @@ const confirm = () => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/mixin';
 
 .album-title-container {
   position: fixed;
@@ -46,7 +45,6 @@ const confirm = () => {
   background-color: #f5f5f5;
 
   .album-title-input {
-    padding-top: 1.95rem !important;
     flex: 1 !important;
 
     .textarea {

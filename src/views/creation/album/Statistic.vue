@@ -124,7 +124,6 @@ const goToAlbumDetail = () => {
 <style scoped lang="scss">
 
 .album-data-container {
-  padding-top: 1.95rem;
   background-color: $bc;
   overflow-y: auto;
 

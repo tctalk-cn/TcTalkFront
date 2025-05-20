@@ -81,7 +81,6 @@ const validator = (val: string) => isValidLength(val);
   bottom: 0;
   z-index: 202;
   background: #f2f2f2;
-  padding-top: 1.95rem;
 }
 
 .nickname-form {

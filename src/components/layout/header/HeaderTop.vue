@@ -57,7 +57,7 @@ function backHome() {
 <style lang="scss" scoped>
 #head_top {
   background-color: $blue;
-  position: fixed;
+  position: sticky;
   z-index: 100;
   left: 0;
   top: 0;

@@ -82,8 +82,6 @@ const addText = (text: string) => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/mixin';
-
 .album-description-container {
   position: fixed;
   top: 0;
@@ -98,7 +96,6 @@ const addText = (text: string) => {
   background-color: #f5f5f5;
 
   .album-description-input {
-    padding-top: 1.95rem !important;
     flex: 0.6;
 
     .textarea {

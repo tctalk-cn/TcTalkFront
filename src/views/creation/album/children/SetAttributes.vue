@@ -247,7 +247,7 @@ import HeaderTop from "@/components/layout/header/HeaderTop.vue";
 import {useRoute, useRouter} from "vue-router";
 import {Pages} from "@/router/pages.ts";
 import {onMounted, ref} from "vue";
-import {useAlbumStore} from "@/stores/album.ts";
+import {useAlbumStore} from "@/stores/album_store.ts";
 import {storeToRefs} from "pinia";
 import AlertTip from "@/components/common/AlertTip.vue";
 import {showToast} from "vant";
@@ -513,8 +513,6 @@ const confirm = () => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/mixin';
-
 .album-tags {
   position: fixed;
   top: 0;
@@ -524,7 +522,6 @@ const confirm = () => {
   right: 0;
   bottom: 0;
   background-color: #f5f5f5;
-  padding-top: 1.95rem;
   overflow-y: auto;
   z-index: 1000;
 

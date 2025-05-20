@@ -272,7 +272,6 @@ const onAlbumShareSelect = (option) => {
 
 <style lang="scss" scoped>
 .album-detail-container {
-  padding-top: 1.95rem;
   padding-bottom: 3rem;
   background-color: #202020;
   height: 100vh;

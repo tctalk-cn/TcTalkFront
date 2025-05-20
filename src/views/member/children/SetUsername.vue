@@ -70,7 +70,6 @@ const submitUsername = () => {
   top: 0; left: 0; right: 0; bottom: 0;
   z-index: 202;
   background: #f2f2f2;
-  padding-top: 1.95rem;
 }
 
 .username-form {

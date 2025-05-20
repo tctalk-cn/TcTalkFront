@@ -117,8 +117,6 @@ const handlePublishClick = () => {
 .center-container {
   display: flex;
   flex-direction: column;
-  padding-top: 1.95rem;
-  height: 100vh; // 视口高度
 
   &__user-info {
     display: flex;

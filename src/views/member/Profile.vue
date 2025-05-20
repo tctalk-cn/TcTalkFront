@@ -242,8 +242,6 @@ onMounted(() => {
   overflow-x: hidden; /* 隐藏水平滚动条 */
 
   .profile-number {
-    padding-top: 1.95rem;
-
     .profile-link {
       display: flex;
       -webkit-box-align: center;

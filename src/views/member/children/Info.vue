@@ -247,7 +247,6 @@ const openBirthday = () => {
   right: 0;
   bottom: 0;
   background-color: #f2f2f2;
-  padding-top: 1.95rem;
 
   &__title {
     padding: .1rem .1rem;

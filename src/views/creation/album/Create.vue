@@ -267,7 +267,6 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .album-create {
-  padding-top: 1.95rem;
   padding-bottom: 3rem;
   background-color: $body-bg;
   font-size: $font-size-sm;
