@@ -1,40 +1,39 @@
 <template>
-  <div class="album_container">
+  <div class="album-create">
     <HeaderTop go-back="true" :head-title="profileTitle"></HeaderTop>
-    <section class="album_content_container">
-      <section class="album_upload_section">
-        <van-uploader
-            v-model="fileList"
-            :after-read="uploadAlbumCover"
-            :max-size="100 * 1024 * 1024"
-            accept="image/*"
-            :preview-image="true"
-            :preview-full-image="true"
-        />
-      </section>
-      <section class="album_info_section">
-        <!--专辑主题-->
-        <header class="album_info_header">
-          <span>专辑主题</span>
-        </header>
-        <router-link :to='{path: "/creative/albumCreate/albumSetTitle"}' class="album_info_title">
-          <span>{{ name || '清晰填写主题，容易获得更多收听' }}</span>
-        </router-link>
-        <!--专辑分类-->
-        <header class="album_info_header" @click="showCategoryDialog = !showCategoryDialog">
-          <span>分类</span>
+    <section class="album-create__upload">
+      <van-uploader
+          v-model="fileList"
+          :after-read="uploadAlbumCover"
+          :max-size="100 * 1024 * 1024"
+          accept="image/*"
+          :preview-image="true"
+          :preview-full-image="true"
+      />
+    </section>
+    <section class="album-create__info">
+      <!--专辑主题-->
+      <header class="album_header">
+        <span>专辑主题</span>
+      </header>
+      <router-link :to='{path: "/creative/albumCreate/albumSetTitle"}' class="album_title">
+        <span>{{ name || '清晰填写主题，容易获得更多收听' }}</span>
+      </router-link>
+      <!--专辑分类-->
+      <header class="album_header" @click="showCategoryDialog = !showCategoryDialog">
+        <span>分类</span>
+        <div class="more_type">
+          <span class="ellipsis">{{ channelName }} <van-icon name="arrow"/></span>
+        </div>
+      </header>
+      <router-link :to='{path: "/creative/albumCreate/albumSetAttributes",query:{channelId:channelId}}'>
+        <header class="album_header">
+          <span>标签</span>
           <div class="more_type">
-            <span class="ellipsis">{{ channelName }} <van-icon name="arrow"/></span>
+            <span class="ellipsis"> <van-icon name="arrow"/></span>
           </div>
         </header>
-        <router-link :to='{path: "/creative/albumCreate/albumSetAttributes",query:{channelId:channelId}}'>
-          <header class="album_info_header">
-            <span>标签</span>
-            <div class="more_type">
-              <span class="ellipsis"> <van-icon name="arrow"/></span>
-            </div>
-          </header>
-          <div class="region_tag">
+        <div class="region_tag">
             <span class="flex flex-wrap gap-1.5">
               <van-tag v-for="(attrWithVal, index) in attrWithVals"
                        :key="index"
@@ -45,55 +44,54 @@
                 {{ attrWithVal.attributeValueName }}
               </van-tag>
              </span>
-          </div>
-        </router-link>
-        <header class="album_info_header">
-          <span>专辑卖点</span>
-          <van-field
-              v-model="sellPoint"
-              placeholder="作品有卖点才有吸引力"
-              clearable
-          />
-        </header>
-        <header class="album_info_header">
-          <span>简介</span>
-        </header>
-        <router-link :to='{path: "/creative/albumCreate/albumSetRemark"}' class="album_remark">
-          <span v-html="formattedDescription||'前150字为外显简介部分，建议将重要信息前置'"></span>
-        </router-link>
-        <header class="album_info_header">
-          <span>创作团队</span>
-          <van-icon name="plus"/>
-        </header>
-        <header class="album_info_header">
-          <span>是否原创</span>
-          <van-switch v-model="original" size="1rem"/>
-        </header>
-        <header class="album_info_header" @click="showPermissions = !showPermissions">
-          <span>设为私密</span>
-          <div class="more_type">
+        </div>
+      </router-link>
+      <header class="album_header">
+        <span>专辑卖点</span>
+        <van-field
+            v-model="sellPoint"
+            placeholder="作品有卖点才有吸引力"
+            clearable
+        />
+      </header>
+      <header class="album_header">
+        <span>简介</span>
+      </header>
+      <router-link :to='{path: "/creative/albumCreate/albumSetRemark"}' class="album_remark">
+        <span v-html="formattedDescription||'前150字为外显简介部分，建议将重要信息前置'"></span>
+      </router-link>
+      <header class="album_header">
+        <span>创作团队</span>
+        <van-icon name="plus"/>
+      </header>
+      <header class="album_header">
+        <span>是否原创</span>
+        <van-switch v-model="original" size="1rem"/>
+      </header>
+      <header class="album_header" @click="showPermissions = !showPermissions">
+        <span>设为私密</span>
+        <div class="more_type">
           <span class="ellipsis">
             {{ permissionsVal || '公开后不可设置私密' }}
           <van-icon name="arrow"/>
           </span>
-          </div>
-        </header>
-        <header class="album_info_header">
-          <span></span>
-          <van-checkbox v-model="intellectualPromise"
-                        shape="square"
-                        bind:change="onChange"
-                        icon-size="0.6rem"
-                        class="album_copyright">
-            我承诺不侵犯任何第三方的知识产权。我已阅读并同意《知识产权承诺》
-          </van-checkbox>
-        </header>
-      </section>
+        </div>
+      </header>
+      <header class="album_header">
+        <span></span>
+        <van-checkbox v-model="intellectualPromise"
+                      shape="square"
+                      bind:change="onChange"
+                      icon-size="0.6rem"
+                      class="album_copyright">
+          我承诺不侵犯任何第三方的知识产权。我已阅读并同意《知识产权承诺》
+        </van-checkbox>
+      </header>
+    </section>
 
-      <section class="album_confirm_upload">
-        <p>预览</p>
-        <p @click="create">创建</p>
-      </section>
+    <section class="album-create__confirm">
+      <p>预览</p>
+      <p @click="create">创建</p>
     </section>
     <loading v-if="showLoading"></loading>
     <alert-tip v-if="showAlert" @closeTip="showAlert = false" :alertText="alertText"></alert-tip>
@@ -101,7 +99,7 @@
       <router-view></router-view>
     </transition>
     <!--选择分类-->
-    <section class="channel_info">
+    <section class="album-create__channel">
       <van-popup v-model:show="showCategoryDialog" round position="bottom" :style="{height:'45%'}">
         <div class="popup-header">
           <span>请选择专辑分类</span>
@@ -268,149 +266,145 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-.album_container {
+.album-create {
   padding-top: 1.95rem;
   padding-bottom: 3rem;
+  background-color: $body-bg;
+  font-size: $font-size-sm;
 
-  .album_content_container {
-    .album_upload_section {
-      padding: 0 0.7rem;
-    }
+  &__upload {
+    padding: 0.6rem 1rem;
+    background-color: #fff;
+    border-bottom: 0.05rem solid #eee;
+  }
 
-    .album_info_section {
-      margin-top: .4rem;
-      padding: 0.2rem .7rem;
+  &__info {
+    margin-top: .6rem;
+    padding: 0.6rem 0.5rem;
+    background-color: #fff;
 
-      .album_info_header {
-        @include fj;
-        line-height: 2rem;
-        align-items: center; // 垂直居中对齐
-        gap: 0.5rem; // 为每个子元素设置相同的间距
+    .album_header {
+      @include fj;
+      line-height: 1.2rem;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 0;
+      border-bottom: 0.025rem solid #f0f0f0;
 
-        span {
-          display: block;
-          white-space: nowrap; // Prevent the title from wrapping
-        }
-
-        span:nth-of-type(1) {
-          @include sc(.7rem, #666);
-        }
-
-        .more_type {
-          span:nth-of-type(1) {
-            @include sc(.6rem, #aaa);
-            width: 10rem;
-            display: inline-block;
-            text-align: right;
-            vertical-align: middle;
-          }
-        }
-      }
-
-      .album_info_title {
-        @include fj;
-        border-top: 0.025rem solid #f5f5f5;
-        min-height: 1rem;
-
-        span {
-          @include sc(.6rem, #aaa);
-        }
-      }
-
-      .album_remark {
-        @include fj;
-        border-top: 0.025rem solid #f5f5f5;
-        min-height: 8rem;
-
-        span {
-          @include sc(.6rem, #aaa);
-        }
-      }
-
-      .album_copyright {
-        @include sc(.6rem, #aaa);
+      span:first-of-type {
+        font-size: $font-size;
         font-weight: 500;
+        color: #333;
+      }
+
+      .more_type {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+
+        span {
+          font-size: 0.7rem;
+          color: #888;
+          max-width: 8rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .van-field {
+        flex: 1;
       }
     }
+
+    .album_title {
+      display: block;
+      padding: 0.7rem 0;
+      border-bottom: 0.025rem solid #f5f5f5;
+      font-size: $font-size-sm;
+      color: #888;
+    }
+
+    .album_remark {
+      display: block;
+      padding: 0.7rem 0;
+      border-bottom: 0.025rem solid #f5f5f5;
+      font-size: $font-size-sm;
+      color: #888;
+    }
+
+    .region_tag {
+      margin: 0.5rem 0 1rem;
+
+      span {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+    }
+
+    .album_copyright {
+      @include sc(.6rem, #aaa);
+      line-height: 1.5;
+      color: #999;
+      padding: 0.4rem 0;
+    }
   }
-}
 
-.album_confirm_upload {
-  display: flex;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 3rem;
-  z-index: 1000;
-
-  p {
-    line-height: 3rem;
-    @include sc(.75rem, #fff);
-  }
-
-  p:nth-of-type(1) {
-    background-color: #3c3c3c;
-    flex: 5;
-    text-align: center;
-  }
-
-  p:nth-of-type(2) {
-    flex: 5;
-    background-color: #56d176;
-    text-align: center;
-  }
-}
-
-.upload_tag {
-  position: relative;
-  margin-top: .2rem;
-
-  div {
+  &__confirm {
     display: flex;
-    padding: 0 0 0 0.8rem;
+    position: fixed;
+    bottom: 0;
     width: 100%;
-    justify-content: flex-start;
+    height: 3.2rem;
+    z-index: 1000;
+    background-color: #fff;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
 
     p {
+      flex: 1;
+      line-height: 3.2rem;
       font-size: 0.8rem;
-      color: #dfe2e8;
-      margin-right: 0.5rem;
-      padding: 0.25rem;
-      border-radius: 0.2rem;
-      background-color: #949495;
+      text-align: center;
+    }
 
-      .van-icon-fire-o {
-        margin-right: 0.2rem;
-      }
+    p:first-child {
+      background-color: #f0f0f0;
+      color: #333;
+    }
+
+    p:last-child {
+      background-color: #56d176;
+      color: #fff;
     }
   }
-}
 
-.channel_info {
-  .custom-popup {
-    padding: 2rem;
-  }
+  &__channel {
+    .popup-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      font-size: 0.9rem;
+      font-weight: bold;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid #eee;
+    }
 
-  .popup-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 0.5rem 0.2rem;
-    border-bottom: 0.1rem solid #ebebeb;
-  }
+    .close-icon {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
 
-  .close-icon {
-    position: absolute;
-    right: 0.8rem;
-    top: 50%;
-    transform: translateY(-50%);
-  }
+    .popup-content {
+      padding: 0.5rem 1rem 1rem;
+    }
 
-  .popup-content {
-    //margin-top: 1rem !important;
+    .van-button {
+      font-size: 0.7rem;
+    }
   }
 }
 
