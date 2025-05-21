@@ -6,7 +6,7 @@
       </template>
     </HeaderTop>
     <section class="album-description-input">
-      <textarea class="w-full textarea" v-model="description" placeholder="请输入简介"></textarea>
+      <textarea class="w-full textarea" v-model="draftAlbumInfo.description" placeholder="请输入简介"></textarea>
     </section>
     <section class="album-description-input-suggest">
       <div class="album-description-input-suggest-top">
@@ -62,11 +62,11 @@ import {useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 import {Pages} from "@/router/pages.ts";
 import {onMounted, ref} from "vue";
-import {useAlbumStore} from "@/stores/album.ts";
+import {useAlbumStore} from "@/stores/album_store.ts";
 
 const router = useRouter();
 const showLoading = ref(true);
-const {description} = storeToRefs(useAlbumStore());
+const {draftAlbumInfo} = storeToRefs(useAlbumStore());
 onMounted(() => {
   showLoading.value = false;
 })
@@ -77,7 +77,7 @@ const confirm = () => {
 // Function to append button text to the textarea
 const addText = (text: string) => {
   // Append the text to the existing content with a newline
-  description.value += (description.value ? "\n" : "") + text;
+  draftAlbumInfo.value.description += (draftAlbumInfo.value.description ? "\n" : "") + text;
 };
 </script>
 

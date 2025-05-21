@@ -17,16 +17,16 @@
         <span>专辑主题</span>
       </header>
       <router-link :to='{path: "/creative/albumCreate/albumSetTitle"}' class="album_title">
-        <span>{{ name || '清晰填写主题，容易获得更多收听' }}</span>
+        <span>{{ draftAlbumInfo.name || '清晰填写主题，容易获得更多收听' }}</span>
       </router-link>
       <!--专辑分类-->
       <header class="album_header" @click="showCategoryDialog = !showCategoryDialog">
         <span>分类</span>
         <div class="more_type">
-          <span class="ellipsis">{{ channelName }} <van-icon name="arrow"/></span>
+          <span class="ellipsis">{{ draftAlbumInfo.channelName }} <van-icon name="arrow"/></span>
         </div>
       </header>
-      <router-link :to='{path: "/creative/albumCreate/albumSetAttributes",query:{channelId:channelId}}'>
+      <router-link :to='{path: "/creative/albumCreate/albumSetAttributes",query:{channelId:draftAlbumInfo.channelId}}'>
         <header class="album_header">
           <span>标签</span>
           <div class="more_type">
@@ -49,7 +49,7 @@
       <header class="album_header">
         <span>专辑卖点</span>
         <van-field
-            v-model="sellPoint"
+            v-model="draftAlbumInfo.sellPoint"
             placeholder="作品有卖点才有吸引力"
             clearable
         />
@@ -66,20 +66,20 @@
       </header>
       <header class="album_header">
         <span>是否原创</span>
-        <van-switch v-model="original" size="1rem"/>
+        <van-switch v-model="draftAlbumInfo.original" size="1rem"/>
       </header>
       <header class="album_header" @click="showPermissions = !showPermissions">
         <span>设为私密</span>
         <div class="more_type">
           <span class="ellipsis">
-            {{ permissionsVal || '公开后不可设置私密' }}
+            {{ draftAlbumInfo.permissionsVal || '公开后不可设置私密' }}
           <van-icon name="arrow"/>
           </span>
         </div>
       </header>
       <header class="album_header">
         <span></span>
-        <van-checkbox v-model="intellectualPromise"
+        <van-checkbox v-model="draftAlbumInfo.intellectualPromise"
                       shape="square"
                       @change="onChange"
                       icon-size="0.6rem"
@@ -155,24 +155,7 @@ import {Pages} from "@/router/pages.ts";
 
 const {uploadCover, listAllChannel, resetPermission, createAlbum} = useAlbumStore();
 const {
-  name,
-  channelId,
-  channelName,
-  coverUrl,
-  categoryLevel1Id,
-  categoryLevel1Name,
-  categoryLevel2Id,
-  categoryLevel2Name,
-  categoryLevel3Id,
-  categoryLevel3Name,
-  categoryLevel4Id,
-  categoryLevel4Name,
-  description,
-  permissions,
-  permissionsVal,
-  sellPoint,
-  original,
-  intellectualPromise,
+  draftAlbumInfo,
   attrWithVals
 } = storeToRefs(useAlbumStore());
 
@@ -199,15 +182,15 @@ const selectChannel = (chooseChannelId: string, chooseChannelName: string) => {
 }
 
 const finishedChannel = () => {
-  channelId.value = selectedChannelId.value;
-  channelName.value = selectedChannelName.value;
+  draftAlbumInfo.value.channelId = selectedChannelId.value;
+  draftAlbumInfo.value.channelName = selectedChannelName.value;
   showCategoryDialog.value = false;
 }
 const formattedDescription = computed(() => {
-  if (description.value == "") {
+  if (draftAlbumInfo.value.description == "") {
     descriptionHtml.value = "编辑30字以上有机会获得新品流量扶持哦";
   }
-  const descriptionVal = description.value;
+  const descriptionVal = draftAlbumInfo.value.description;
   descriptionHtml.value = descriptionVal.replace(/\n/g, '<br>');
   return descriptionHtml.value;
 });
@@ -221,10 +204,10 @@ const uploadAlbumCover = async (file) => {
     message: '上传中...',
     url: null,
   };
-  coverUrl.value = await uploadCover(file.file);
+  draftAlbumInfo.value.coverUrl = await uploadCover(file.file);
   newFile.status = "done";
   newFile.message = "上传完成";
-  newFile.url = coverUrl.value;
+  newFile.url = draftAlbumInfo.value.coverUrl;
   fileList.value.push(newFile);
 };
 
@@ -236,26 +219,26 @@ const changePermission = (permissions: number) => {
 
 // 创建专辑
 const create = async () => {
-  albumCreate.name = name.value;
-  albumCreate.channelId = channelId.value;
-  albumCreate.coverUrl = coverUrl.value;
-  albumCreate.categoryLevel1Id = categoryLevel1Id.value;
-  albumCreate.categoryLevel1Name = categoryLevel1Name.value;
-  albumCreate.categoryLevel2Id = categoryLevel2Id.value;
-  albumCreate.categoryLevel2Name = categoryLevel2Name.value;
-  albumCreate.categoryLevel3Id = categoryLevel3Id.value;
-  albumCreate.categoryLevel3Name = categoryLevel3Name.value;
-  albumCreate.categoryLevel4Id = categoryLevel4Id.value;
-  albumCreate.categoryLevel4Name = categoryLevel4Name.value;
-  albumCreate.description = description.value;
-  albumCreate.sellPoint = sellPoint.value;
-  albumCreate.permissions = permissions.value;
+  albumCreate.name = draftAlbumInfo.value.name;
+  albumCreate.channelId = draftAlbumInfo.value.channelId;
+  albumCreate.coverUrl = draftAlbumInfo.value.coverUrl;
+  albumCreate.categoryLevel1Id = draftAlbumInfo.value.categoryLevel1Id;
+  albumCreate.categoryLevel1Name = draftAlbumInfo.value.categoryLevel1Name;
+  albumCreate.categoryLevel2Id = draftAlbumInfo.value.categoryLevel2Id;
+  albumCreate.categoryLevel2Name = draftAlbumInfo.value.categoryLevel2Name;
+  albumCreate.categoryLevel3Id = draftAlbumInfo.value.categoryLevel3Id;
+  albumCreate.categoryLevel3Name = draftAlbumInfo.value.categoryLevel3Name;
+  albumCreate.categoryLevel4Id = draftAlbumInfo.value.categoryLevel4Id;
+  albumCreate.categoryLevel4Name = draftAlbumInfo.value.categoryLevel4Name;
+  albumCreate.description = draftAlbumInfo.value.description;
+  albumCreate.sellPoint = draftAlbumInfo.value.sellPoint;
+  albumCreate.permissions =draftAlbumInfo.value.permissions;
   albumCreate.company = "";
   albumCreate.copyright = "";
   albumCreate.paid = false;
   albumCreate.onSale = false;
-  albumCreate.original = original.value;
-  albumCreate.intellectualPromise = intellectualPromise.value;
+  albumCreate.original = draftAlbumInfo.value.original;
+  albumCreate.intellectualPromise =draftAlbumInfo.value.intellectualPromise;
   albumCreate.attributeValues = attrWithVals.value;
   await createAlbum(albumCreate);
   await router.push({name: Pages.creativeCenter, replace: true});

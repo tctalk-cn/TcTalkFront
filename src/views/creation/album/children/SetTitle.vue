@@ -2,12 +2,12 @@
   <div class="album-title-container">
     <HeaderTop head-title="标题" go-back='true'>
       <template #actions>
-        <van-icon @click="confirm" :class="{ disabled: !name.trim() }">确认</van-icon>
+        <van-icon @click="confirm" :class="{ disabled: !(draftAlbumInfo.name || '').trim() }">确认</van-icon>
       </template>
     </HeaderTop>
     <section class="album-title-input">
       <van-field
-          v-model="name"
+          v-model="draftAlbumInfo.name"
           type="textarea"
           maxlength="200"
           show-word-limit
@@ -26,9 +26,9 @@ import {useAlbumStore} from "@/stores/album_store.ts";
 import {showToast} from "vant";
 
 const router = useRouter();
-const {name} = storeToRefs(useAlbumStore());
+const {draftAlbumInfo} = storeToRefs(useAlbumStore());
 const confirm = () => {
-  if (!name.value.trim()) {
+  if (!draftAlbumInfo.value.name.trim()) {
     showToast('标题不可以为空');
     return;
   }

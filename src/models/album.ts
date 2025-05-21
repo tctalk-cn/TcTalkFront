@@ -20,6 +20,7 @@ export interface Album {
      * 频道ID
      */
     channelId: string;
+    channelName: string;
     /**
      * 一级分类ID
      */
@@ -175,6 +176,7 @@ export interface Album {
      */
     lastSelected: boolean;
 
+    intellectualPromise: boolean;
     /**
      * 属性值列表
      */
