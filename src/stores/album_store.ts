@@ -42,7 +42,7 @@ export const useAlbumStore = defineStore(
         {
             state: () => ({
                 defaultAvatar: defaultAvatar,
-                name: null,
+                name: "",
                 categoryLevel1Id: null,
                 categoryLevel1Name: null,
                 categoryLevel2Id: null,

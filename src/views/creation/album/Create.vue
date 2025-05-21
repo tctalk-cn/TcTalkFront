@@ -81,7 +81,7 @@
         <span></span>
         <van-checkbox v-model="intellectualPromise"
                       shape="square"
-                      bind:change="onChange"
+                      @change="onChange"
                       icon-size="0.6rem"
                       class="album_copyright">
           我承诺不侵犯任何第三方的知识产权。我已阅读并同意《知识产权承诺》
@@ -263,6 +263,10 @@ const create = async () => {
 onMounted(async () => {
   allChannels.value = await listAllChannel();
 })
+
+const onChange = (val: boolean) => {
+  albumCreate.intellectualPromise = val;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -288,7 +292,7 @@ onMounted(async () => {
       align-items: center;
       gap: 0.5rem;
       padding: 0.6rem 0;
-      border-bottom: 0.025rem solid #f0f0f0;
+      border-bottom: 0.01rem solid #f0f0f0;
 
       span:first-of-type {
         font-size: $font-size;
