@@ -36,6 +36,13 @@ import {
 } from "@/api/recommend/recommend_api.ts";
 import {AlbumCreator} from "@/models/album.ts";
 import {useListAllChannels} from "@/api/category/channel_api.ts";
+import {
+    useGetCategoryAttributesByCategoryId,
+    useGetCategoryAttributesWithValueByCategoryId,
+    useGetCategoryByChannel, useGetChildrenCategoryByChannel,
+    useGetListByAttribute
+} from "@/api/category/category_api.ts";
+import {useListByCategory} from "@/api/category/tag_api.ts";
 
 // album_store.ts
 function createEmptyAlbum(): Album {
@@ -277,6 +284,33 @@ export const useAlbumStore = defineStore(
                  */
                 async createAlbum(album: AlbumCreator) {
                     const {data} = await useCreateAlbum(album);
+                    return data;
+                },
+                // 根据频道ID，父品类ID，获取品类明细
+                async getCategoryByChannel(channelId: string, parentCategoryId: string) {
+                    const {data} = await useGetCategoryByChannel(channelId, parentCategoryId);
+                    return data;
+                },
+
+                async getTagsByCategory(categoryId: string) {
+                    const {data} = await useListByCategory(categoryId);
+                    return data;
+                },
+                async getChildrenCategoryByChannel(channelId: string, parentCategoryId: string) {
+                    const {data} = await useGetChildrenCategoryByChannel(channelId, parentCategoryId, 10000);
+                    return data;
+                },
+                async getCategoryAttributesByCategoryId(categoryId: string) {
+                    const {data} = await useGetCategoryAttributesByCategoryId(categoryId);
+                    return data;
+                },
+                async getListByAttribute(attributeId: string) {
+                    const {data} = await useGetListByAttribute(attributeId);
+                    return data;
+                },
+
+                async getCategoryAttributesWithValueByCategoryId(categoryId: string) {
+                    const {data} = await useGetCategoryAttributesWithValueByCategoryId(categoryId);
                     return data;
                 },
             },

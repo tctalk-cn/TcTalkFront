@@ -44,7 +44,7 @@
       <!--二级分类-->
       <section class="album-category-container" v-if="showCategoryLevel2">
         <div class="album-category-title">
-          <span>{{ categoryLevel1Name }}</span>
+          <span>{{ draftAlbumInfo.categoryLevel1Name }}</span>
           <div class="album-more">
             <span>最多选择一个</span>
           </div>
@@ -68,7 +68,7 @@
       <!--三级分类-->
       <section class="album-category-container" v-if="showCategoryLevel3">
         <div class="album-category-title">
-          <span>{{ categoryLevel2Name }}</span>
+          <span>{{ draftAlbumInfo.categoryLevel2Name }}</span>
           <div class="album-more">
             <span>最多选择一个</span>
           </div>
@@ -92,7 +92,7 @@
       <!--四级分类-->
       <section class="album-category-container" v-if="showCategoryLevel4">
         <div class="album-category-title">
-          <span>{{ categoryLevel3Name }}</span>
+          <span>{{ draftAlbumInfo.categoryLevel3Name }}</span>
           <div class="album-more">
             <span>最多选择一个</span>
           </div>
@@ -263,14 +263,15 @@ const {
   getCategoryAttributesWithValueByCategoryId
 } = useAlbumStore();
 const {
-  categoryLevel1Id,
-  categoryLevel1Name,
-  categoryLevel2Id,
-  categoryLevel2Name,
-  categoryLevel3Id,
-  categoryLevel3Name,
-  categoryLevel4Id,
-  categoryLevel4Name,
+  // categoryLevel1Id,
+  // categoryLevel1Name,
+  // categoryLevel2Id,
+  // categoryLevel2Name,
+  // categoryLevel3Id,
+  // categoryLevel3Name,
+  // categoryLevel4Id,
+  // categoryLevel4Name,
+  draftAlbumInfo,
   tagIds,
   tagNames,
   attrWithVals
@@ -329,8 +330,8 @@ onMounted(async () => {
  * @param chooseCategoryLevel1Name 一级分类名称
  */
 const selectCategoryLevel1 = async (chooseCategoryLevel1Id: string, chooseCategoryLevel1Name: string) => {
-  categoryLevel1Id.value = chooseCategoryLevel1Id;
-  categoryLevel1Name.value = chooseCategoryLevel1Name;
+  draftAlbumInfo.value.categoryLevel1Id = chooseCategoryLevel1Id;
+  draftAlbumInfo.value.categoryLevel1Name = chooseCategoryLevel1Name;
   selectedLevel1CategoryId.value = chooseCategoryLevel1Id;
   // 查找对应的二级分类信息
   let categoryLevel2List = await getCategoryByChannel(route.query.channelId as string, chooseCategoryLevel1Id);
@@ -348,12 +349,12 @@ const selectCategoryLevel1 = async (chooseCategoryLevel1Id: string, chooseCatego
   showTags.value = true;
 
   // 点击一级分类后，需要把此层级下的数据清空
-  categoryLevel2Id.value = null;
-  categoryLevel2Name.value = null;
-  categoryLevel3Id.value = null;
-  categoryLevel3Name.value = null;
-  categoryLevel4Id.value = null;
-  categoryLevel4Name.value = null;
+  draftAlbumInfo.value.categoryLevel2Id = null;
+  draftAlbumInfo.value.categoryLevel2Name = null;
+  draftAlbumInfo.value.categoryLevel3Id = null;
+  draftAlbumInfo.value.categoryLevel3Name = null;
+  draftAlbumInfo.value.categoryLevel4Id = null;
+  draftAlbumInfo.value.categoryLevel4Name = null;
   // 把此级别下展示框隐藏
   showCategoryLevel3.value = false;
   showCategoryLevel4.value = false;
@@ -367,8 +368,8 @@ const selectCategoryLevel1 = async (chooseCategoryLevel1Id: string, chooseCatego
  * @param chooseCategoryLevel2Name 二级分类名称
  */
 const selectCategoryLevel2 = async (chooseCategoryLevel2Id: string, chooseCategoryLevel2Name: string) => {
-  categoryLevel2Id.value = chooseCategoryLevel2Id;
-  categoryLevel2Name.value = chooseCategoryLevel2Name;
+  draftAlbumInfo.value.categoryLevel2Id = chooseCategoryLevel2Id;
+  draftAlbumInfo.value.categoryLevel2Name = chooseCategoryLevel2Name;
   selectedLevel2CategoryId.value = chooseCategoryLevel2Id;
   let categoryLevels = await getChildrenCategoryByChannel(route.query.channelId as string, chooseCategoryLevel2Id);
   if (categoryLevels.length > 0) {
@@ -381,10 +382,10 @@ const selectCategoryLevel2 = async (chooseCategoryLevel2Id: string, chooseCatego
   // 查找分类管来呢的属性
   categoryLevel2AttributeWithValues.value = await getCategoryAttributesWithValueByCategoryId(chooseCategoryLevel2Id);
   // 点击二级分类后，需要把此层级下的数据清空
-  categoryLevel3Id.value = null;
-  categoryLevel3Name.value = null;
-  categoryLevel4Id.value = null;
-  categoryLevel4Name.value = null;
+  draftAlbumInfo.value.categoryLevel3Id = null;
+  draftAlbumInfo.value.categoryLevel3Name = null;
+  draftAlbumInfo.value.categoryLevel4Id = null;
+  draftAlbumInfo.value.categoryLevel4Name = null;
   // 把此级别下展示框隐藏
   showCategoryLevel4.value = false;
 }
@@ -395,8 +396,8 @@ const selectCategoryLevel2 = async (chooseCategoryLevel2Id: string, chooseCatego
  * @param chooseCategoryLevel3Name 三级分类名称
  */
 const selectCategoryLevel3 = async (chooseCategoryLevel3Id: string, chooseCategoryLevel3Name: string) => {
-  categoryLevel3Id.value = chooseCategoryLevel3Id;
-  categoryLevel3Name.value = chooseCategoryLevel3Name;
+  draftAlbumInfo.value.categoryLevel3Id = chooseCategoryLevel3Id;
+  draftAlbumInfo.value.categoryLevel3Name = chooseCategoryLevel3Name;
   selectedLevel3CategoryId.value = chooseCategoryLevel3Id;
   // 查找对应的三级分类信息
   let categoryLevel4List = await getChildrenCategoryByChannel(route.query.channelId as string, chooseCategoryLevel3Id);
@@ -410,8 +411,8 @@ const selectCategoryLevel3 = async (chooseCategoryLevel3Id: string, chooseCatego
   // 查找分类关联的属性信息
   categoryLevel3AttributeWithValues.value = await getCategoryAttributesWithValueByCategoryId(chooseCategoryLevel3Id);
   // 点击三级分类后，需要把此层级下的数据清空
-  categoryLevel4Id.value = null;
-  categoryLevel4Name.value = null;
+  draftAlbumInfo.value.categoryLevel4Id = null;
+  draftAlbumInfo.value.categoryLevel4Name = null;
 }
 
 /**
@@ -420,8 +421,8 @@ const selectCategoryLevel3 = async (chooseCategoryLevel3Id: string, chooseCatego
  * @param chooseCategoryLevel4Name 四级分类名称
  */
 const selectCategoryLevel4 = async (chooseCategoryLevel4Id: string, chooseCategoryLevel4Name: string) => {
-  categoryLevel4Id.value = chooseCategoryLevel4Id;
-  categoryLevel4Name.value = chooseCategoryLevel4Name;
+  draftAlbumInfo.value.categoryLevel4Id = chooseCategoryLevel4Id;
+  draftAlbumInfo.value.categoryLevel4Name = chooseCategoryLevel4Name;
   selectedLevel4CategoryId.value = chooseCategoryLevel4Id;
   categoryLevel4AttributeWithValues.value = await getCategoryAttributesWithValueByCategoryId(chooseCategoryLevel4Id);
   // 四级分类算作标签的一部分
