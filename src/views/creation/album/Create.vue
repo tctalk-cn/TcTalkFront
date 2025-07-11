@@ -72,7 +72,9 @@
         <span>设为私密</span>
         <div class="more_type">
           <span class="ellipsis">
-            {{ draftAlbumInfo.permissionsVal || '公开后不可设置私密' }}
+            {{
+              draftAlbumInfo?.permissions === 0 ? '无限制' : draftAlbumInfo?.permissions === 1 ? '仅自己可见' : '公开后不可设置私密'
+            }}
           <van-icon name="arrow"/>
           </span>
         </div>
@@ -232,13 +234,13 @@ const create = async () => {
   albumCreate.categoryLevel4Name = draftAlbumInfo.value.categoryLevel4Name;
   albumCreate.description = draftAlbumInfo.value.description;
   albumCreate.sellPoint = draftAlbumInfo.value.sellPoint;
-  albumCreate.permissions =draftAlbumInfo.value.permissions;
+  albumCreate.permissions = draftAlbumInfo.value.permissions;
   albumCreate.company = "";
   albumCreate.copyright = "";
   albumCreate.paid = false;
   albumCreate.onSale = false;
   albumCreate.original = draftAlbumInfo.value.original;
-  albumCreate.intellectualPromise =draftAlbumInfo.value.intellectualPromise;
+  albumCreate.intellectualPromise = draftAlbumInfo.value.intellectualPromise;
   albumCreate.attributeValues = attrWithVals.value;
   await createAlbum(albumCreate);
   await router.push({name: Pages.creativeCenter, replace: true});

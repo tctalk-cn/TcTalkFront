@@ -497,10 +497,10 @@ const confirm = () => {
   attrWithVals.value = [];
   // 重新构建
   for (let i = 0; i < selectedAttributeValueIds.value.length; i++) {
-    var attributeValueId = selectedAttributeValueIds.value[i];
-    var attrIdWithName = selectAttributeIdWithNames.get(attributeValueId);
-    var attrIdWithNameArr = attrIdWithName.split(":");
-    var attrVal = {
+    const attributeValueId = selectedAttributeValueIds.value[i];
+    const attrIdWithName = selectAttributeIdWithNames.get(attributeValueId);
+    const attrIdWithNameArr = attrIdWithName.split(":");
+    const attrVal = {
       attributeId: attrIdWithNameArr[0],
       attributeName: attrIdWithNameArr[1],
       attributeValueId: selectedAttributeValueIds.value[i],
