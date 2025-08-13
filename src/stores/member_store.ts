@@ -247,6 +247,18 @@ export const useProfileStore = defineStore(
                 const {data} = await useMemberById(memberId);
                 return data;
             },
+            // 标签页返回的信息处理
+            tagList() {
+                let str = "";
+                if (this.selectedTag) {
+                    str += this.selectedTag + ", ";
+                }
+                // 是否有自定义tag，分开处理
+                if (this.inputTag) {
+                    return str + this.inputTag;
+                }
+                return str.substr(0, str.lastIndexOf(", "));
+            },
         },
         // 持久化配置
         persist: {

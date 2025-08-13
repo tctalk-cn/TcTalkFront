@@ -218,6 +218,12 @@ export const useAlbumStore = defineStore(
                     return data.list;
                 },
 
+                // 查询最近选择的专辑
+                async queryLastSelected() {
+                    const {data} = await useQueryLastSelected();
+                    return data;
+                },
+
                 async similarRecommend(albumCreatorMemberId: string, currentAlbumId: string, pageNum: number, pageSize: number) {
                     const {data} = await useAlbumSimilarRecommend(albumCreatorMemberId, currentAlbumId, pageNum, pageSize);
                     return data.list;
