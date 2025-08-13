@@ -34,4 +34,8 @@ export const Pages = {
     albumSetTitle: 'albumSetTitle',
     albumSetRemark: 'albumSetRemark',
     albumSetAttributes: 'albumSetAttributes',
+
+    videoUpload: 'videoUpload',
+    videoDescription: 'videoDescription',
+    videoSetTitle: 'videoSetTitle',
 }

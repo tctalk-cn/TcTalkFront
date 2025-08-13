@@ -163,6 +163,24 @@ const router = createRouter({
                             }
                         ],
                     },
+                    // 创作中心-视频上传
+                    {
+                        path: '/creative/videoUpload',
+                        name: Pages.videoUpload,
+                        component: () => import("@/views/creation/video/upload/Upload.vue"),
+                        children: [
+                            {
+                                path: 'videoDescription',
+                                name: Pages.videoDescription,
+                                component: () => import("@/views/creation/video/upload/children/VideoDescription.vue"),
+                            },
+                            {
+                                path: 'setTitle',
+                                name: Pages.videoSetTitle,
+                                component: () => import("@/views/creation/video/upload/children/SetTitle.vue"),
+                            },
+                        ],
+                    },
                 ]
             }
         ]
