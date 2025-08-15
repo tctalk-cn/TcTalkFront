@@ -33,7 +33,7 @@ onMounted(() => {
   showLoading.value = false;
 })
 const confirm = () => {
-  if (!title.val()) {
+  if (!title.value) {
     showToast('标题不可以为空');
     return;
   }

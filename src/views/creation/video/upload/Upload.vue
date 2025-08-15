@@ -130,7 +130,7 @@
     </section>
     <section class="confirm_upload">
       <p>暂存</p>
-      <p @click="publish" v-if="mediaId!==''">更新</p>
+      <p @click="publish" v-if="mediaId!==''&& mediaId!=undefined">更新</p>
       <p @click="publish" v-else>发布</p>
     </section>
     <loading v-if="showLoading"></loading>
@@ -407,7 +407,7 @@ onMounted(async () => {
     title.value = mediaLoaded.title;
     videoType.value = mediaLoaded.mediaType;
     videoDescription.value = mediaLoaded.description;
-    resetPermission(mediaLoaded.permissions);
+    await resetPermission(mediaLoaded.permissions);
     fileList.value = [
       {
         url: mediaLoaded.coverUrl,
@@ -470,8 +470,9 @@ const selectAlbum = (choosedAlbumName: string, choosedAlbumId: string) => {
 
 <style lang="scss" scoped>
 .upload-container {
-  padding-top: 1.95rem;
   padding-bottom: 3rem;
+  background-color: $body-bg;
+  font-size: $font-size-sm;
 
   .upload_container_style {
     background-color: #fff;

@@ -37,7 +37,7 @@ import {useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 import {Pages} from "@/router/pages.ts";
 import {onMounted, ref} from "vue";
-import {useVideoStore} from "@/stores/video.ts";
+import {useVideoStore} from "@/stores/video_store.ts";
 
 const router = useRouter();
 const showLoading = ref(true);
@@ -56,7 +56,6 @@ const addText = (text: string) => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/mixin';
 
 .video-description-container {
   position: fixed;
@@ -71,8 +70,9 @@ const addText = (text: string) => {
   flex-direction: column;
   background-color: #f5f5f5;
 
+  font-size: $font-size-sm;
+
   .video-description-input {
-    padding-top: 1.95rem !important;
     flex: 0.6;
 
     .textarea {
@@ -113,19 +113,5 @@ const addText = (text: string) => {
   line-height: 2rem;
 }
 
-.quick_tag {
-  background-color: #fff;
-  margin-top: .4rem;
-  padding: 0 .6rem 1rem;
-}
-
-.determine {
-  background-color: #4cd964;
-  @include sc(.7rem, #fff);
-  text-align: center;
-  margin: 0 .7rem;
-  line-height: 1.8rem;
-  border-radius: 0.2rem;
-}
 
 </style>
