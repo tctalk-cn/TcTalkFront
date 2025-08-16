@@ -67,8 +67,8 @@ export const useVideoStore = defineStore(
                 this.usedAlbumId = '';
             },
             // listComment 列举媒体的评论列表
-            async listComment(mediaCreatorMemberId: string, mediaId: string, toCommentId: string, pageSize: number) {
-                const {data} = await useListComment(mediaCreatorMemberId, mediaId, 1, toCommentId, pageSize);
+            async listComment(mediaCreatorMemberId: string, mediaId: string, mediaType: number, toCommentId: string, pageSize: number) {
+                const {data} = await useListComment(mediaCreatorMemberId, mediaId, mediaType, toCommentId, pageSize);
                 return data;
             },
             // 添加评论

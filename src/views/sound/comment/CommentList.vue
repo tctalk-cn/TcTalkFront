@@ -168,7 +168,7 @@ const refreshing = ref(false);
 const loading = ref(false);
 const finished = ref(false);
 const searchParam = {
-  toCommentId: "0",
+  beginCommentId: "0",
   pageSize: 6,
 };
 // 评论输入
@@ -208,38 +208,29 @@ const publishReplay = async () => {
 
 const loadCommentData = async (type = 'refresh') => {
   if (type === 'refresh') {
-    searchParam.toCommentId = "0";
+    searchParam.beginCommentId = "0";
+    refreshing.value = false;
     // 重置 finished 状态
     finished.value = false;
   }
   // 数据加载
-  const commentList = await listComment(props.mediaCreatorMemberId, props.mediaId, searchParam.toCommentId, searchParam.pageSize);
+  const commentList = await listComment(props.mediaCreatorMemberId, props.mediaId, 3, searchParam.beginCommentId, searchParam.pageSize);
+  if (!commentList || commentList.length === 0) {
+    finished.value = true;  // 确保没有数据时停止加载
+    loading.value = false;
+    return;
+  }
   if (type === 'refresh') {
     mediaComments.value = commentList;
-    // 在数据加载完成后再更新 refreshing 状态
-    refreshing.value = false;
-    if (!commentList || commentList.length < searchParam.pageSize) {
-      finished.value = true;
-    }
-    if (commentList !== null && commentList.length > 0) {
-      searchParam.toCommentId = commentList[commentList.length - 1].id;
-    }
   } else {
-    // 加载更多时，追加到现有的评论列表
-    if (commentList && commentList.length > 0) {
-      mediaComments.value = mediaComments.value.concat(commentList);
-      // 更新分页起点
-      searchParam.toCommentId = commentList[commentList.length - 1].id;
-      // 检查是否加载完全部数据
-      if (commentList.length < searchParam.pageSize) {
-        finished.value = true; // 没有更多数据了
-      }
-    } else {
-      finished.value = true; // 没有更多数据了
-    }
-    // 在数据加载完成后再更新 loading 状态
-    loading.value = false;
+    mediaComments.value = mediaComments.value.concat(commentList);
   }
+
+  searchParam.beginCommentId = commentList[commentList.length - 1].id;
+  if (commentList.length < searchParam.pageSize) {
+    finished.value = true;
+  }
+  loading.value = false;
 };
 
 // 刷新
@@ -283,7 +274,8 @@ const sendComment = () => {
         mediaId: props.mediaId,
         creatorMemberId: props.mediaCreatorMemberId,
         location: '匿名',
-        content: commentInput.value
+        content: commentInput.value,
+        mediaType: 3,
       } as MediaCommentCreator
   ).then((res) => {
     commentInput.value = "";

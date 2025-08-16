@@ -17,6 +17,10 @@ export class MediaCommentCreator {
      * 评论内容
      */
     content: string;
+    /**
+     * 媒体类型：1-专辑，2-音频，3-视频，4-ppt，999-其他
+     */
+    mediaType: number;
 }
 
 export class MediaComment {
