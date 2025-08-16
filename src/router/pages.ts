@@ -38,4 +38,7 @@ export const Pages = {
     videoUpload: 'videoUpload',
     videoDescription: 'videoDescription',
     videoSetTitle: 'videoSetTitle',
+
+    soundDetail: 'soundDetail',
+    mediaComments: 'mediaComments',
 }

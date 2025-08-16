@@ -5,10 +5,11 @@ import {
     useMemberStatisticsInfo, useResetBirthday,
     useResetGender, useResetNickname,
     useResetSignature, useResetUsername, useUploadAvatar,
-    useMemberById
+    useMemberById,useMemberStatisticsInfoById,
+    useAddMemberFollowed, useIsMemberFollowed
 }
     from "@/api/member/member_api.ts";
- 
+
 export const useProfileStore = defineStore(
     "userProfile", {
 
@@ -258,6 +259,28 @@ export const useProfileStore = defineStore(
                     return str + this.inputTag;
                 }
                 return str.substr(0, str.lastIndexOf(", "));
+            },
+            // 获取会员统计信息
+            async getMemberStatisticsById(memberId: string) {
+                const {data} = await useMemberStatisticsInfoById(memberId);
+                return data;
+            },
+            // 判断是否已经关注
+            async isFollowed(followedMemberId: string) {
+                if (followedMemberId === this.mId) {
+                    return true;
+                }
+                const {data} = await useIsMemberFollowed(followedMemberId);
+                return data;
+            },
+            // 判断是不是当前登陆人自身
+            async isSelf(followedMemberId: string) {
+                return followedMemberId === this.memberInfo.id;
+            },
+            // 添加关注
+            async addMemberFollowed(followedMemberId: string) {
+                const {data} = await useAddMemberFollowed(followedMemberId);
+                return data;
             },
         },
         // 持久化配置

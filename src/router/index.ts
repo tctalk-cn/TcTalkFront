@@ -181,6 +181,19 @@ const router = createRouter({
                             },
                         ],
                     },
+                    // 作品明细
+                    {
+                        path: '/sound/soundDetail',
+                        name: Pages.soundDetail,
+                        component: () => import("@/views/sound/SoundDetail.vue"),
+                        children: [
+                            {
+                                path: 'mediaComments',
+                                name: Pages.mediaComments,
+                                component: () => import("@/views/sound/comment/CommentList.vue"),
+                            }
+                        ],
+                    },
                 ]
             }
         ]
