@@ -1,6 +1,7 @@
 import http from "@/utils/http.ts";
 import {Album} from "@/models/album.ts";
 import {CommonPage} from "@/models/common_page.ts";
+import {SearchHotDetail, SearchSuggest} from "@/models/search.ts";
 
 /**
  * 获取童年相关的专辑列表
@@ -312,4 +313,14 @@ export async function useQueryRegionsByAlbumId(creatorMemberId: string, albumId:
         albumId: albumId,
         creatorMemberId: creatorMemberId,
     });
+}
+
+export async function useSearchSuggest(keywords: string) {
+    const {result} = await http.get<{ result: SearchSuggest }>('api/search/suggest', {keywords: keywords})
+    return result
+}
+
+export async function useSearchHotDetail() {
+    const {data} = await http.get<{ data: SearchHotDetail[] }>('api/search/hot/detail')
+    return data
 }

@@ -9,6 +9,7 @@ import {
     useAddMemberFollowed, useIsMemberFollowed
 }
     from "@/api/member/member_api.ts";
+import {useAddSearchLog} from "@/api/member/search_history_api.ts";
 
 export const useProfileStore = defineStore(
     "userProfile", {
@@ -282,6 +283,11 @@ export const useProfileStore = defineStore(
                 const {data} = await useAddMemberFollowed(followedMemberId);
                 return data;
             },
+            // 添加搜索记录
+            async addSearchLog(keyword: string, channelId: string) {
+                const {data} = await useAddSearchLog(keyword, channelId);
+                return data;
+            }
         },
         // 持久化配置
         persist: {
