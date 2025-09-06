@@ -20,6 +20,7 @@
             cover: mediaData.coverUrl,
             duration: mediaData.durationInMs/1000,
             playUrl: mediaData.playUrl,
+            hlsUrl:mediaData.hlsUrl,
             commentCount: mediaData.commentCount,
             shareCount: mediaData.shareCount,
             playCount: mediaData.playCount,

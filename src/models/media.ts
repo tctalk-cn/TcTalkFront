@@ -5,6 +5,7 @@ export interface MediaData {
     id: string;
     coverUrl: string;
     playUrl: string;
+    hlsUrl: string;
     height: number;
     width: number;
     title: string;

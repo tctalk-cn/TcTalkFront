@@ -4,8 +4,8 @@
     <video preload="auto"
            :title="video.title"
            playsinline
+           autoplay
            style="width: 100%; height: 100%;"
-           :src="isLive?'':video.playUrl"
            :style="videoPlayerState.isShowCover?{'display':'none'}:{'display':'block'}"
            ref="videoRef">
       <!-- 字幕文件 -->
@@ -172,11 +172,12 @@
 </template>
 <script setup lang="ts">
 import {storeToRefs} from "pinia";
+import Hls from "hls.js";
 import {useVideoPlayerStore} from "@/stores/video_player.ts";
 import SoundBarrage from "@/views/sound/SoundBarrage.vue";
 import {formatDuration} from "@/utils/string.ts";
 import loading from "@/assets/images/loading.svg";
-import {onBeforeUnmount, onMounted} from "vue";
+import {onBeforeUnmount, onMounted, watch} from "vue";
 import {Plus} from "@icon-park/vue-next";
 import IconPark from "@/components/common/IconPark.vue";
 import {MemberListenHistoryCreator} from "@/models/member_listen_history.ts";
@@ -222,7 +223,8 @@ const props = defineProps<{
     title: string,
     cover: string,
     duration: number,
-    playUrl: string,
+    playUrl: string, // 作废
+    hlsUrl: string,
     commentCount?: number;
     shareCount?: number;
     playCount?: number;
@@ -239,19 +241,70 @@ const props = defineProps<{
 // 定义父组件方法
 const emits = defineEmits(["handleComment", "handleAddAttend", "handlePraised", "handleCollection", "handleShare"]);
 
+
+const initPlayer = () => {
+  const videoDOM = videoRef.value;
+  if (!videoDOM) return;
+
+  if (props.video.hlsUrl && props.video.hlsUrl.endsWith(".m3u8")) {
+    if (Hls.isSupported()) {
+      if (hls) {
+        hls.destroy();
+        hls = null;
+      }
+      hls = new Hls();
+      hls.attachMedia(videoDOM);
+      hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+        console.log("Video attached");
+        hls!.loadSource(props.video.hlsUrl);
+      });
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        console.log("Manifest loaded, start play");
+        safePlay(videoDOM);
+      });
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        console.error("Hls error:", data);
+        if (data.fatal) {
+          switch (data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+              console.error("fatal network error encountered, try to recover");
+              hls.startLoad();
+              break;
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              console.error("fatal media error encountered, try to recover");
+              hls.recoverMediaError();
+              break;
+            default:
+              hls.destroy();
+              break;
+          }
+        }
+      });
+    } else if (videoDOM.canPlayType("application/vnd.apple.mpegurl")) {
+      videoDOM.src = props.video.hlsUrl;
+    }
+  }
+};
+
+watch(
+    () => props.video.hlsUrl,
+    (newUrl) => {
+      if (newUrl) {
+        initPlayer();
+      }
+    },
+    { immediate: true }
+);
+
 // 是否在拖拽中
 let isDragging = false;
+let hls: Hls | null = null;
 onMounted(async () => {
   const barrageComponent = barrageRef;
   const videoDOM = videoRef.value;
   const currentTimeDOM = currentTimeRef.value;
   const progressDOM = progressRef.value;
-  const play = () => {
-    videoPlayerState.value.isShowCover = false;
-    videoPlayerState.value.paused = false;
-    videoPlayerState.value.waiting = false;
-    videoPlayerState.value.barrageSwitch = true;
-  };
+  initPlayer();
   // 调用play方法时触发
   videoDOM.addEventListener("play", play);
 
@@ -337,7 +390,7 @@ onMounted(async () => {
   }
   // 加载播放历史信息
   memberListenHistory.value = await getListenHistory(props.video.mediaId);
-  if (memberListenHistory.value !== null&&memberListenHistory.value!=undefined) {
+  if (memberListenHistory.value !== null && memberListenHistory.value != undefined) {
     const listenHistory = memberListenHistory.value;
     if (listenHistory.mediaListenTo && videoDOM.duration) {
       // 计算拖拽进度比例
@@ -367,9 +420,23 @@ const sendBarrage = async () => {
   showDanMuDialog.value = false;
 }
 
+const safePlay = async (video: HTMLVideoElement) => {
+  try {
+    await video.play();
+  } catch (err) {
+    console.warn("Play failed:", err);
+  }
+};
+
 onBeforeUnmount(() => {
   try {
     if (videoRef.value) {
+      // 解绑
+      videoRef.value.removeEventListener("play", play);
+      videoRef.value.removeEventListener("playing", play);
+      // videoRef.value.removeEventListener("waiting", waitingHandler);
+      // videoRef.value.removeEventListener("timeupdate", timeUpdateHandler);
+      // videoRef.value.removeEventListener("ended", endedHandler)
       // 创建收听历史
       addListenHistory({
         albumId: props.video.albumId,
@@ -380,10 +447,21 @@ onBeforeUnmount(() => {
         mediaTotalDuration: props.video.duration,
       } as MemberListenHistoryCreator);
     }
+    if (hls) {
+      hls.destroy();
+      hls = null;
+    }
   } catch (error) {
     console.error("Error during cleanup:", error);
   }
 })
+
+const play = () => {
+  videoPlayerState.value.isShowCover = false;
+  videoPlayerState.value.paused = false;
+  videoPlayerState.value.waiting = false;
+  videoPlayerState.value.barrageSwitch = true;
+};
 
 
 </script>

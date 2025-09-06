@@ -1803,6 +1803,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hls.js@npm:^1.6.11":
+  version: 1.6.11
+  resolution: "hls.js@npm:1.6.11"
+  checksum: 353b9e8f3fcd41b535e4930b663eb7710a6ccb18bc676f1fdca5c11ab7a00ae3590052139ae68c62a73e1777c2f71236d2feeb7864a87ea7669c9cee088ba5a5
+  languageName: node
+  linkType: hard
+
 "http-cache-semantics@npm:^4.1.1":
   version: 4.2.0
   resolution: "http-cache-semantics@npm:4.2.0"
@@ -2898,6 +2905,7 @@ __metadata:
     date-fns: ^3.6.0
     echarts: ^5.6.0
     element-plus: ^2.8.1
+    hls.js: ^1.6.11
     pinia: ^2.1.7
     pinia-plugin-persistedstate: 3.2.1
     sass: ^1.77.4
