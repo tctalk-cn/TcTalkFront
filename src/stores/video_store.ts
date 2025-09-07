@@ -10,6 +10,7 @@ import {MediaReplayCreator} from "@/models/media_replay.ts";
 import {MediaCommentCreator} from "@/models/media_comment.ts";
 import {VideoDataCreator} from "@/models/video.ts";
 import {useAddReplay} from "@/api/creation/replay_api.ts";
+import {useProxyM3u8} from "../api/creation/video_api.ts";
 
 export const useVideoStore = defineStore(
     "video", {
@@ -98,6 +99,11 @@ export const useVideoStore = defineStore(
             // 评论回复
             async deleteMediaById(mediaId: string) {
                 const {data} = await useDeleteMediaById(mediaId);
+                return data;
+            },
+
+            async proxyM3u8(mediaId: string,creatorMemberId: string) {
+                const {data} = await useProxyM3u8(mediaId,creatorMemberId);
                 return data;
             },
         }

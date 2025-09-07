@@ -44,7 +44,7 @@ export async function useQueryMediaById(creatorMemberId: string, mediaId: string
         code: number,
         message: string,
         data: MediaData,
-    }>("/creation_api/media/creation/queryById", {creatorMemberId: creatorMemberId, mediaId: mediaId});
+    }>("/creation_api/media/creation/getAuthorWorksForViewer", {creatorMemberId: creatorMemberId, mediaId: mediaId});
 }
 
 export async function useIncrPlayCount(mediaId: number) {
@@ -118,4 +118,12 @@ export async function useLatestOneYearDayPlayStats(creatorMemberId: string, albu
         message: string,
         data: MediaSummary,
     }>("/creation_api/media/play/latestYearPlayStats?creatorMemberId=" + creatorMemberId + "&albumId=" + albumId);
+}
+
+export async function useProxyM3u8(mediaId: string, creatorMemberId: string) {
+    return await http.get<{
+        code: number,
+        message: string,
+        data: string,
+    }>("/creation_api/hls/parser/"+mediaId+"/"+creatorMemberId+"/index.m3u8");
 }

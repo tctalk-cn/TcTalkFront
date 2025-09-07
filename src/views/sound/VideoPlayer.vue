@@ -2,6 +2,7 @@
   <div :class="videoPlayerState.fullscreen?'video-player fullscreen':'video-player'">
     <!-- 新增的透明图层 -->
     <video preload="auto"
+           loop
            :title="video.title"
            playsinline
            autoplay
@@ -252,7 +253,30 @@ const initPlayer = () => {
         hls.destroy();
         hls = null;
       }
-      hls = new Hls();
+      hls = new Hls({ // 缓冲配置
+        maxBufferLength: 30,       // 默认 30 秒
+        maxMaxBufferLength: 60,
+        liveSyncDuration: 10,      // 直播才用，点播可以去掉
+        fragLoadingTimeOut: 20000, // 分片加载超时
+        manifestLoadingTimeOut: 20000,
+        enableWorker: true,        // 开启 web worker
+        xhrSetup: (xhr, url) => {
+          // 如果你需要带 cookie 或 token
+          xhr.withCredentials = true;
+          const profileRaw = localStorage.getItem('userProfile');
+          let token = '';
+          if (profileRaw) {
+            try {
+              const profile = JSON.parse(profileRaw);
+              token = profile.token || '';
+            } catch (e) {
+              console.warn('Failed to parse profile from localStorage:', e);
+            }
+          }
+          // 如果你需要加额外 header
+          xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+        }
+      });
       hls.attachMedia(videoDOM);
       hls.on(Hls.Events.MEDIA_ATTACHED, () => {
         console.log("Video attached");
@@ -293,7 +317,7 @@ watch(
         initPlayer();
       }
     },
-    { immediate: true }
+    {immediate: true}
 );
 
 // 是否在拖拽中

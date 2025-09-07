@@ -20,7 +20,7 @@
             cover: mediaData.coverUrl,
             duration: mediaData.durationInMs/1000,
             playUrl: mediaData.playUrl,
-            hlsUrl:mediaData.hlsUrl,
+            hlsUrl: mediaData.fullHlsUrl,
             commentCount: mediaData.commentCount,
             shareCount: mediaData.shareCount,
             playCount: mediaData.playCount,
@@ -134,6 +134,8 @@ const isCollectByCurrentUser = ref<boolean>(false);
 const isCommentDrawerOpen = ref<boolean>(false);
 // 当前活跃按钮
 const currentActivityTab = ref<string>("mediaComments");
+// hls播放的m3u8地址
+const hlsM3u8Url = ref<string>();
 // 媒体交互按钮
 const mediaInteractionMenus = [
   {
