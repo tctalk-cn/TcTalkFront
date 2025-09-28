@@ -44,7 +44,6 @@
 import { Play, Rss, Vip} from '@icon-park/vue-next'
 import IconPark from '@/components/common/IconPark.vue'
 import {useNumberFormat} from '@/utils/number.ts'
-import {formatDate} from '@/utils/date.ts'
 import {useRouter} from 'vue-router'
 import {defineProps} from "vue";
 import {AlbumForRecallResp} from "@/models/album.ts";
