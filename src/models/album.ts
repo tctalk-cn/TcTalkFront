@@ -541,6 +541,22 @@ export class AlbumForRecallResp {
      * 订阅数
      */
     subscriptionCount: string;
+
+    /**
+     * 字幕数
+     */
+    barrageCount: string;
+
+    /**
+     * 喜欢数
+     */
+    likeCount: string;
+
+    /**
+     * 评论数
+     */
+    commentCount: string;
+
     /**
      * 发布时间
      */

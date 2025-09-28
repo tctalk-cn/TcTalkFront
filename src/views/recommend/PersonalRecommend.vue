@@ -1,37 +1,25 @@
 <template>
-  <div class="recently_listen_container">
+  <div class="personal-recommend-container">
     <Title title="你的专属推荐" :show-arrow="true"/>
     <swiper
-        :slidesPerView="3"
+        :slidesPerView="1"
         :spaceBetween="5"
+        :autoHeight="true"
+        :modules="modules"
         @slide-change="onSlideChange">
       <!-- 专属推荐专辑列表 -->
-      <swiper-slide v-for="(item, index) in recommendAlbums" :key="index"
+      <swiper-slide class="swiper-slide"
+                    v-for="(item, index) in recommendAlbums" :key="index"
                     @click="router.push({path:'/sound/soundDetail',query:{mediaId:item.albumId,creatorMemberId:item.creatorMemberId}})">
-        <div class="guess-image-container">
-          <van-image :src="item.coverUrl" :alt="item.albumTitle"/>
-        </div>
-        <div class="guess-album-info-wrapper">
-          <div>
-            <p style="font-weight: bold">{{ item.albumTitle }}</p>
-          </div>
-          <div>
-            <p class="guess-category-wrapper">{{ item.albumTitle }}</p>
-          </div>
-          <div class="count-info">
-            <span class="icon-play"/>
-            <span class="play-count">{{ item.viewsCount }}</span>
-            <span class="icon-barrage"/>
-            <span class="barrage-count">{{ item.subscriptionCount }}</span>
-          </div>
-          <div class="guess-owner-wrapper">
-            <span class="guess-icon-up"></span>
-            <span class="owner">{{ item.creatorNickname }}</span>
-          </div>
-          <div class="action-buttons">
-            <van-button hairline round size="mini" @click="more(item.albumId)">...</van-button>
-          </div>
-        </div>
+        <AlbumCard
+            :album="item"
+            :showPlayCount="true"
+            :showCommentCount="true"
+            :showBarrageCount="true"
+            :showLikeCount="true"
+            :showViewsCount="true"
+            :showSubscriptionCount="true"
+        />
       </swiper-slide>
       <!-- 专辑订阅 -->
       <!-- Next button, only visible when the last slide is reached -->
@@ -46,11 +34,7 @@
 <script setup lang="ts">
 import Title from "@/components/common/Title.vue";
 import {useRouter} from "vue-router";
-import {useRecommendStore} from "@/stores/recommend_store.ts";
 import {onMounted, ref} from "vue";
-import {MemberListenHistory} from "@/models/member_listen_history.ts";
-import {AlbumSubscription} from "@/models/album_subscription.ts";
-import ListenPlay from "@/components/common/ListenPlay.vue";
 // 引入 Swiper 组件
 import {Swiper, SwiperSlide} from 'swiper/vue'
 // 引入 Swiper 样式
@@ -58,8 +42,15 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
+
+// import required modules
+import {Pagination} from 'swiper/modules';
+
+const modules = ref([Pagination]);
+
 import {useRecallStore} from "@/stores/recall_store.ts";
 import {AlbumForRecallResp} from "@/models/album.ts";
+import AlbumCard from "@/components/common/AlbumCard.vue";
 
 const router = useRouter();
 
@@ -84,37 +75,19 @@ const onSlideChange = (event) => {
 </script>
 
 <style lang="scss">
-.recently_listen_container {
-  width: 100%; /* 父容器自适应宽度 */
+.personal-recommend-container {
+  background-color: #fff;
+  overflow-y: auto;
   padding: 0 0.5rem; /* 添加适当的内边距 */
-}
+  border-radius: 0.8rem;
+  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+  scrollbar-width: thin; /* 对 Firefox 设置窄滚动条 */
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* 滚动条颜色 */
+  height: 15rem;
 
-
-.more-listen-button-container {
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 100%; /* 确保容器高度和 swiper 一致 */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1; /* 确保按钮在 Swiper 上方 */
-  background-color: rgba(0, 0, 0, 0.4); /* 给按钮容器添加透明背景色 */
-
-  .more-listen-next-button {
-    background-color: rgba(201, 201, 201, 0.8); /* 给按钮添加透明背景色 */
-    color: #FFFFFF;
-    width: 0.5rem; /* 控制按钮宽度 */
-    border-radius: 0.8rem;
-    cursor: pointer;
-    text-align: center;
-    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
+  .swiper-slide {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.9; /* 使按钮稍微透明 */
+    align-items: stretch;
   }
 }
-
 </style>
