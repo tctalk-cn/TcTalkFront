@@ -17,6 +17,13 @@
           <p v-if="album.paid">
             <IconPark :icon="Vip" theme="filled" :size="12" fill="#f5a623"/>
             <span>VIP</span>
+            <van-icon name="fire-o" color="#ee0a24" />
+          </p>
+          <!-- 分类标签 -->
+          <p v-if="album.categoryLevel1Name" class="album-card__tag">
+            <van-tag plain round color="#fff7e6" text-color="#fa8c16">
+              {{ album.categoryLevel1Name }}
+            </van-tag>
           </p>
           <p v-if="showViewsCount" @click="navigateToDetail">
             <IconPark :icon="Play" theme="filled" :size="12"/>
