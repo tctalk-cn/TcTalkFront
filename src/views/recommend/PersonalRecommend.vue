@@ -8,18 +8,20 @@
         :modules="modules"
         @slide-change="onSlideChange">
       <!-- 专属推荐专辑列表 -->
-      <swiper-slide class="swiper-slide"
-                    v-for="(item, index) in recommendAlbums" :key="index"
-                    @click="router.push({path:'/sound/soundDetail',query:{mediaId:item.albumId,creatorMemberId:item.creatorMemberId}})">
-        <AlbumCard
-            :album="item"
-            :showPlayCount="true"
-            :showCommentCount="true"
-            :showBarrageCount="true"
-            :showLikeCount="true"
-            :showViewsCount="true"
-            :showSubscriptionCount="true"
-        />
+      <swiper-slide
+          v-for="(group, groupIndex) in groupedAlbums"
+          :key="groupIndex"
+          class="swiper-slide">
+
+        <div class="album-card-group">
+          <AlbumCard
+              v-for="(item) in group"
+              :key="item.albumId"
+              :album="item"
+              :showViewsCount="true"
+              :showSubscriptionCount="true"
+          />
+        </div>
       </swiper-slide>
       <!-- 专辑订阅 -->
       <!-- Next button, only visible when the last slide is reached -->
@@ -34,7 +36,7 @@
 <script setup lang="ts">
 import Title from "@/components/common/Title.vue";
 import {useRouter} from "vue-router";
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 // 引入 Swiper 组件
 import {Swiper, SwiperSlide} from 'swiper/vue'
 // 引入 Swiper 样式
@@ -52,11 +54,18 @@ import {useRecallStore} from "@/stores/recall_store.ts";
 import {AlbumForRecallResp} from "@/models/album.ts";
 import AlbumCard from "@/components/common/AlbumCard.vue";
 
-const router = useRouter();
-
 const {recommendForUserTopK} = useRecallStore();
 const recommendAlbums = ref<AlbumForRecallResp[]>([]);
 const isLastSlide = ref(false);
+
+// 每页显示 3 个
+const groupedAlbums = computed(() => {
+  const result: AlbumForRecallResp[][] = [];
+  for (let i = 0; i < recommendAlbums.value.length; i += 3) {
+    result.push(recommendAlbums.value.slice(i, i + 3));
+  }
+  return result;
+});
 onMounted(async () => {
   recommendAlbums.value = await recommendForUserTopK(9);
 });
@@ -83,11 +92,21 @@ const onSlideChange = (event) => {
   box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
   scrollbar-width: thin; /* 对 Firefox 设置窄滚动条 */
   scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* 滚动条颜色 */
-  height: 15rem;
 
   .swiper-slide {
     display: flex;
     align-items: stretch;
   }
+
+  .album-card-column {
+    display: flex;
+    flex-direction: column; /* 垂直排列 */
+    gap: 0.5rem;           /* 卡片间距 */
+  }
+
+  .album-card-column AlbumCard {
+    width: 100%; /* 卡片宽度撑满父容器 */
+  }
+
 }
 </style>

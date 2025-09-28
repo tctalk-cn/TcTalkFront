@@ -11,38 +11,30 @@
       </router-link>
       <div class="album-card__info">
         <div class="album-card__title">{{ album.albumTitle }}</div>
+        <div class="album-card__desc" v-if="album.albumDesc">{{ album.albumDesc }}</div>
         <div class="album-card__stats">
+          <!-- VIP 图标 -->
+          <p v-if="album.paid">
+            <IconPark :icon="Vip" theme="filled" :size="12" fill="#f5a623"/>
+            <span>VIP</span>
+          </p>
           <p v-if="showViewsCount" @click="navigateToDetail">
             <IconPark :icon="Play" theme="filled" :size="12"/>
             <span>{{ useNumberFormat(Number(album.viewsCount) || 0) }}</span>
-          </p>
-          <p v-if="showCommentCount">
-            <IconPark :icon="Comment" theme="filled" :size="12"/>
-            <span>{{ album.commentCount }}</span>
-          </p>
-          <p v-if="showLikeCount">
-            <IconPark :icon="Like" theme="filled" :size="12"/>
-            <span>{{ album.likeCount }}</span>
           </p>
           <p v-if="showSubscriptionCount">
             <IconPark :icon="Rss" theme="filled" :size="12"/>
             <span>{{ album.subscriptionCount }}</span>
           </p>
-          <p v-if="showBarrageCount">
-            <IconPark :icon="AlarmClock" theme="filled" :size="12"/>
-            <span>{{ album.barrageCount }}</span>
-          </p>
         </div>
       </div>
-
-      <div class="album-card__update-time">{{ formatDateTime(album.publishTime) }}</div>
     </div>
 
   </div>
 </template>
 
 <script setup lang="ts">
-import {AlarmClock, Comment, Like, Play, Rss} from '@icon-park/vue-next'
+import { Play, Rss, Vip} from '@icon-park/vue-next'
 import IconPark from '@/components/common/IconPark.vue'
 import {useNumberFormat} from '@/utils/number.ts'
 import {formatDate} from '@/utils/date.ts'
@@ -54,30 +46,10 @@ const router = useRouter()
 
 const props = defineProps<{
   album: AlbumForRecallResp,
-  showPlayCount: Boolean,
-  showCommentCount: Boolean,
-  showBarrageCount: Boolean,
-  showLikeCount: Boolean,
   showViewsCount: Boolean,
   showSubscriptionCount: Boolean,
 }>();
 
-
-const formatDateTime = (time?: string) => {
-  if (!time) return 'N/A'
-  const now = Date.now()
-  const updated = new Date(time).getTime()
-  const diffMin = (now - updated) / 60000
-  const diffHour = diffMin / 60
-  const diffDay = diffHour / 24
-
-  if (diffMin < 1) return '刚刚更新'
-  if (diffMin < 60) return `${Math.floor(diffMin)}分钟前更新`
-  if (diffHour < 24) return `${Math.floor(diffHour)}小时前更新`
-  if (diffDay < 30) return `${Math.floor(diffDay)}天前更新`
-
-  return formatDate(updated, 'yyyy-MM-dd')
-}
 
 const navigateToDetail = () => {
   router.push({
@@ -92,35 +64,43 @@ const navigateToDetail = () => {
 .album-card {
   display: flex;
   flex-direction: column;
+  border-radius: 0.6rem;
+  box-shadow: 0 0.1rem 0.2rem rgba(0,0,0,0.05);
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
   min-height: 8rem; /* 或者比封面高度稍高一点 */
   background: $fc;
-  border-radius: 0.4rem;
-  box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  padding-bottom: 0.5rem;
 
   &__header {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 0.2rem;
   }
 
   &__cover {
-    width: 7rem;
-    height: 7rem;
-    border-radius: 0.2rem;
+    width: 6rem;
+    height: 6rem;
+    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.1);
+    border-radius: 0.3rem;
     flex-shrink: 0; /* 防止 flex 布局压缩封面 */
     overflow: hidden;
     background: #e7e7e7 url('@/assets/images/tv.png') no-repeat 1.5rem 0 / 4rem 4rem;
+
+    transition: transform 0.2s;
+    &:hover {
+      transform: scale(1.05);
+    }
   }
+
 
   &__info {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding-left: 0.5rem;
   }
 
   &__title {
@@ -130,31 +110,46 @@ const navigateToDetail = () => {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-weight: 600;
+    color: #222;
+  }
+
+  &__desc {
+    margin-left: 0.5rem;
+    margin-top: 0.2rem;
+    font-size: $font-size-sm;
+    color: #666;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 限制显示2行 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+    max-height: 2.8em; /* 控制两行的总高度 */
   }
 
   &__stats {
     display: flex;
     gap: 0.2rem;
-    font-size: $font-size;
+    font-size: $font-size-xs;
     color: #999;
-    margin: auto 0 0.8rem 0.5rem;
+    margin: 0.5rem 0 0.8rem 0.5rem; /* 上方间距增加到0.5rem */
 
     p {
       display: flex;
       align-items: center;
       margin-right: 0.4rem;
+      background: #f5f5f5;
+      padding: 0.1rem 0.3rem;
+      border-radius: 0.3rem;
+      color: #555;
 
       span {
         margin-left: 0.2rem;
       }
     }
+
   }
 
-  &__update-time {
-    font-size: $font-size;
-    color: #999;
-    flex-shrink: 0;
-    margin-left: 1rem;
-  }
 }
 </style>

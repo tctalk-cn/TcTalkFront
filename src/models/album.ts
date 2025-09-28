@@ -501,6 +501,11 @@ export class AlbumForRecallResp {
      * 专辑名称
      */
     albumTitle: string;
+
+    /**
+     * 专辑描述
+     */
+    albumDesc: string;
     /**
      * 企业
      */
