@@ -1,9 +1,8 @@
 <template>
   <div class="album-card">
-
     <div class="album-card__header">
       <router-link class="album-card__cover"
-                   :to="{ path: '/creative/albumDetail', query: { albumId: album.albumId, } }">
+                   :to="{ path: '/album/albumDetail', query: { albumId: album.albumId,albumCreatorMemberId:album.creatorMemberId } }">
         <van-image
             :src="album.coverUrl"
             :alt="album.albumTitle"

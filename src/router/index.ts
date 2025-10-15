@@ -194,6 +194,39 @@ const router = createRouter({
                             },
                         ],
                     },
+                    // 作品中心-专辑明细
+                    {
+                        path: '/album/albumDetail',
+                        name: Pages.albumDetail,
+                        component: () => import("@/views/album/AlbumDetail.vue"),
+                        redirect: {name: Pages.albumVideoList},
+                        children: [
+                            {
+                                path: 'albumVideoList',
+                                name: Pages.albumVideoList,
+                                component: () => import("@/views/album/detail/MediaList.vue"),
+                                meta: {menu: Pages.albumVideoList},
+                            },
+                            {
+                                path: 'albumCommentList',
+                                name: Pages.albumCommentList,
+                                component: () => import("@/views/album/detail/CommentList.vue"),
+                                meta: {menu: Pages.albumCommentList},
+                            },
+                            {
+                                path: 'albumSimilarRecommendList',
+                                name: Pages.albumSimilarRecommendList,
+                                component: () => import("@/views/album/detail/SimilarRecommendList.vue"),
+                                meta: {menu: Pages.albumSimilarRecommendList},
+                            },
+                            {
+                                path: 'albumShowList',
+                                name: Pages.albumShowList,
+                                component: () => import("@/views/album/detail/ShowList.vue"),
+                                meta: {menu: Pages.albumShowList},
+                            },
+                        ],
+                    },
                 ]
 
             }
