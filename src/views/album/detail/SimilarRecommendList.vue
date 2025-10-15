@@ -27,12 +27,12 @@
   >
     <van-grid :column-num="3" :border="true"
               style="--van-grid-item-content-background: transparent; --van-grid-item-content-padding: 0.2rem;">
-      <van-grid-item v-for="(item) in similarRecommendAlbums" :key="item.id">
+      <van-grid-item v-for="(item) in similarRecommendAlbums" :key="item.albumId">
         <router-link class="similar-album-info"
                      :to='{path: "/creative/albumDetail",
-                     query: {albumId: item.id,albumCreatorMemberId:item.creatorMemberId}}'>
+                     query: {albumId: item.albumId,albumCreatorMemberId:item.creatorMemberId}}'>
           <div class="similar-cover-image-container">
-            <van-image :src="item.coverUrl" :alt="item.name"/>
+            <van-image :src="item.coverUrl" :alt="item.albumTitle"/>
           </div>
           <div class="similar-album-info-wrapper">
             <div class="similar-album-title">
@@ -103,7 +103,6 @@ const loadRecommendAlbumData = async (type = 'refresh') => {
     } else {
       similarRecommendAlbums.value = similarRecommendAlbums.value.concat(albums);
     }
-
     // 判断是否还有更多数据
     if (!albums || albums.length < searchParam.pageSize) {
       finished.value = true; // 数据已全部加载完毕
