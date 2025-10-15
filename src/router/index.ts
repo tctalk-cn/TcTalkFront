@@ -214,10 +214,10 @@ const router = createRouter({
                                 meta: {menu: Pages.albumCommentList},
                             },
                             {
-                                path: 'albumSimilarRecommendList',
-                                name: Pages.albumSimilarRecommendList,
+                                path: 'albumSimilarRecommendListForRecall',
+                                name: Pages.albumSimilarRecommendListForRecall,
                                 component: () => import("@/views/album/detail/SimilarRecommendList.vue"),
-                                meta: {menu: Pages.albumSimilarRecommendList},
+                                meta: {menu: Pages.albumSimilarRecommendListForRecall},
                             },
                             {
                                 path: 'albumShowList',

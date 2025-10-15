@@ -195,7 +195,7 @@ const mediaMenus: MenuItem[] = [
   {
     id: 4,
     label: '找相似',
-    name: 'albumSimilarRecommendList',
+    name: 'albumSimilarRecommendListForRecall',
   },
   {
     id: 5,

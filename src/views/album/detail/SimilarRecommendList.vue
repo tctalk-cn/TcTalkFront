@@ -36,7 +36,7 @@
           </div>
           <div class="similar-album-info-wrapper">
             <div class="similar-album-title">
-              <van-text-ellipsis rows="2" :content="formatAlbumTitle(item)"/>
+              <van-text-ellipsis rows="2" :content="formatAlbumTitle2(item)"/>
             </div>
           </div>
         </router-link>
@@ -49,10 +49,10 @@ import Title from "@/components/common/Title.vue";
 import {useAlbumStore} from "@/stores/album_store.js";
 import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
-import {Album} from "@/models/album.js";
+import {Album, AlbumForRecallResp} from "@/models/album.js";
 
 const {listStreamerOtherAlbums, similarRecommend} = useAlbumStore();
-const similarRecommendAlbums = ref([] as Album[]);
+const similarRecommendAlbums = ref([] as AlbumForRecallResp[]);
 
 const route = useRoute();
 const albumId = route.query.albumId as string;
@@ -74,6 +74,13 @@ onMounted(async () => {
 const formatAlbumTitle = (album: Album) => {
   const prefix = album.paid ? '' : '【免费】';
   return `${prefix} ${album.name ?? ''}`;
+};
+
+
+// 定义动态拼接函数
+const formatAlbumTitle2 = (album: AlbumForRecallResp) => {
+  const prefix = album.paid ? '' : '【免费】';
+  return `${prefix} ${album.albumTitle ?? ''}`;
 };
 
 

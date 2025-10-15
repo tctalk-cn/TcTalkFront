@@ -26,6 +26,11 @@ export const Pages = {
     albumShowList: "albumShowList",
     albumSimilarRecommendList: 'albumSimilarRecommendList',
 
+    albumVideoListForRecall: 'albumVideoListForRecall',
+    albumCommentListForRecall: 'albumCommentListForRecall',
+    albumShowListForRecall: "albumShowListForRecall",
+    albumSimilarRecommendListForRecall: 'albumSimilarRecommendListForRecall',
+
     albumStatistic: 'albumStatistic',
     basicData: 'basicData',
     audienceAnalysis: 'audienceAnalysis',

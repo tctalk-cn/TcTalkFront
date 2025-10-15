@@ -30,7 +30,6 @@ import {useAddStreamerComment, useQueryStreamerComment} from "@/api/creation/str
 import {useAddComment} from "@/api/creation/comment_api.ts";
 import defaultAvatar from '@/assets/images/avatar_default.png';
 import {
-    useAlbumSimilarRecommend,
     useQueryHotWordsByAlbumId,
     useQueryRegionsByAlbumId
 } from "@/api/recommend/recommend_api.ts";
@@ -43,6 +42,7 @@ import {
     useGetListByAttribute
 } from "@/api/category/category_api.ts";
 import {useListByCategory} from "@/api/category/tag_api.ts";
+import {useAlbumSimilarRecommend} from "@/api/recall/recall_for_album_api.ts";
 
 // album_store.ts
 function createEmptyAlbum(): Album {

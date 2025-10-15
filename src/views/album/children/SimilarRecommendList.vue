@@ -12,7 +12,7 @@
         </div>
         <div class="similar-album-info-wrapper">
           <div class="similar-album-title">
-            <van-text-ellipsis rows="2" :content="formatAlbumTitle(item)"/>
+            <van-text-ellipsis rows="2" :content="formatAlbumTitle2(item)"/>
           </div>
         </div>
       </router-link>
@@ -27,12 +27,12 @@
   >
     <van-grid :column-num="3" :border="true"
               style="--van-grid-item-content-background: transparent; --van-grid-item-content-padding: 0.2rem;">
-      <van-grid-item v-for="(item) in similarRecommendAlbums" :key="item.id">
+      <van-grid-item v-for="(item) in similarRecommendAlbums" :key="item.albumId">
         <router-link class="similar-album-info"
                      :to='{path: "/creative/albumDetail",
-                     query: {albumId: item.id,albumCreatorMemberId:item.creatorMemberId}}'>
+                     query: {albumId: item.albumId,albumCreatorMemberId:item.creatorMemberId}}'>
           <div class="similar-cover-image-container">
-            <van-image :src="item.coverUrl" :alt="item.name"/>
+            <van-image :src="item.coverUrl" :alt="item.albumTitle"/>
           </div>
           <div class="similar-album-info-wrapper">
             <div class="similar-album-title">
@@ -49,10 +49,10 @@ import Title from "@/components/common/Title.vue";
 import {useAlbumStore} from "@/stores/album_store.ts";
 import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
-import {Album} from "@/models/album.ts";
+import {Album, AlbumForRecallResp} from "@/models/album.ts";
 
 const {listStreamerOtherAlbums, similarRecommend} = useAlbumStore();
-const similarRecommendAlbums = ref([] as Album[]);
+const similarRecommendAlbums = ref([] as AlbumForRecallResp[]);
 
 const route = useRoute();
 const albumId = route.query.albumId as string;
@@ -71,10 +71,19 @@ onMounted(async () => {
 
 
 // 定义动态拼接函数
-const formatAlbumTitle = (album: Album) => {
+const formatAlbumTitle = (album: AlbumForRecallResp) => {
+  console.info("---------formatAlbumTitle--------");
+  console.info(album.albumTitle);
+  const prefix = album.paid ? '' : '【免费】';
+  return `${prefix} ${album.albumTitle ?? ''}`;
+};
+
+// 定义动态拼接函数
+const formatAlbumTitle2 = (album: Album) => {
   const prefix = album.paid ? '' : '【免费】';
   return `${prefix} ${album.name ?? ''}`;
 };
+
 
 
 // 加载专辑数据
