@@ -26,3 +26,14 @@ export async function useAlbumSimilarRecommend(albumCreatorMemberId: string, cur
         pageSize: pageSize
     });
 }
+
+/**
+ * 突然爆火欢搜索
+ */
+export async function useSuddenPopularRecommend(topK: number) {
+    return await http.get<{
+        code: number;
+        message: string;
+        data: AlbumForRecallResp[];
+    }>("/recall_api/album/recall/suddenPopularRecommendTopK/" + topK);
+}

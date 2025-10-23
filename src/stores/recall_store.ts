@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {useRecommendForUser} from "../api/recall/recall_for_album_api.ts";
+import {useRecommendForUser,useSuddenPopularRecommend} from "@/api/recall/recall_for_album_api.ts";
 
 /**
  * player store
@@ -13,6 +13,10 @@ export const useRecallStore = defineStore({
     actions: {
         async recommendForUserTopK(topK: number) {
             const {data} = await useRecommendForUser(topK);
+            return data;
+        },
+        async suddenPopularRecommend(topK: number) {
+            const {data} = await useSuddenPopularRecommend(topK);
             return data;
         }
     }
