@@ -70,7 +70,6 @@ const isNew = (createTime: string): boolean => {
 <style lang="scss">
 .children_friend_container {
   width: 100%; /* 父容器自适应宽度 */
-  padding: 0 0.5rem; /* 添加适当的内边距 */
 
   .children_friend_album {
     display: flex;

@@ -99,9 +99,6 @@ onMounted(() => {
 <style lang="scss" scoped>
 .ranking_container {
   width: 100%; /* 父容器自适应宽度 */
-  padding: 0 0.5rem; /* 添加适当的内边距 */
-  margin-top: 1rem;
-
   .ranking_swiper {
     width: 100%;
     height: 100%;

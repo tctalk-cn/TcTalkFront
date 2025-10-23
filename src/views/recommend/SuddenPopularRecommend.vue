@@ -1,6 +1,6 @@
 <template>
-  <div class="personal-recommend-container">
-    <Title title="你的专属推荐" :show-arrow="true"/>
+  <div class="sudden-popular-recommend-container">
+    <Title title="突然爆火" :show-arrow="true"/>
     <swiper
         :slidesPerView="1"
         :spaceBetween="5"
@@ -24,7 +24,6 @@
         </div>
       </swiper-slide>
       <!-- 专辑订阅 -->
-      <!-- Next button, only visible when the last slide is reached -->
       <div v-if="isLastSlide" class="more-listen-button-container">
         <div class="more-listen-next-button">
           <van-icon name="arrow" size="12" @click=""/>
@@ -54,7 +53,7 @@ import {useRecallStore} from "@/stores/recall_store.ts";
 import {AlbumForRecallResp} from "@/models/album.ts";
 import AlbumCard from "@/components/common/AlbumCard.vue";
 
-const {recommendForUserTopK} = useRecallStore();
+const {suddenPopularRecommend} = useRecallStore();
 const recommendAlbums = ref<AlbumForRecallResp[]>([]);
 const isLastSlide = ref(false);
 
@@ -67,7 +66,7 @@ const groupedAlbums = computed(() => {
   return result;
 });
 onMounted(async () => {
-  recommendAlbums.value = await recommendForUserTopK(9);
+  recommendAlbums.value = await suddenPopularRecommend(9);
 });
 
 // 当 slide 发生变化时，更新 isLastSlide 状态
@@ -84,7 +83,7 @@ const onSlideChange = (event) => {
 </script>
 
 <style lang="scss">
-.personal-recommend-container {
+.sudden-popular-recommend-container {
   background-color: #fff;
   overflow-y: auto;
   border-radius: 0.8rem;
