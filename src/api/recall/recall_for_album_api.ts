@@ -37,3 +37,16 @@ export async function useSuddenPopularRecommend(topK: number) {
         data: AlbumForRecallResp[];
     }>("/recall_api/album/recall/suddenPopularRecommendTopK/" + topK);
 }
+
+/**
+ * 突然爆火搜索
+ */
+export async function useGuessYouLikeRecommend(topK: number, excludeAlbums: Array<string>) {
+    return await http.get<{
+        code: number;
+        message: string;
+        data: AlbumForRecallResp[];
+    }>("/recall_api/album/recall/guessYouLikeRecommend/" + topK, {
+        excludeAlbums: excludeAlbums,
+    });
+}

@@ -12,6 +12,8 @@
     <SuddenPopularRecommend/>
     <!--猜你喜欢-->
     <GuessYouLike/>
+    <!--为你推荐-->
+    <RecommendForU/>
     <!-- 回到顶部按钮 -->
     <van-back-top/>
   </div>
@@ -23,6 +25,7 @@ import Ranking from "@/views/recommend/Ranking.vue";
 import GuessYouLike from "@/views/recommend/GuessYouLike.vue";
 import PersonalRecommend from "@/views/recommend/PersonalRecommend.vue";
 import SuddenPopularRecommend from "@/views/recommend/SuddenPopularRecommend.vue";
+import RecommendForU from "@/views/recommend/RecommendForU.vue";
 </script>
 
 <style lang="scss">
