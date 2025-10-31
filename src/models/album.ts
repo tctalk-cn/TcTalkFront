@@ -275,6 +275,26 @@ export class AlbumCreator {
     intellectualPromise: boolean;
 
     /**
+     * 声音类型（男声, 女声, 童声, 磁性, 温柔）
+     */
+    voiceType: string;
+
+    /**
+     * 时长类型(短篇, 中篇, 长篇)
+     */
+    durationType: string;
+
+    /**
+     * 更新频率(连载, 完结, 每日更新)
+     */
+    updatePreference: string;
+
+    /**
+     * 内容类型(有声书, 播客, 新闻, 相声)
+     */
+    contentType: string;
+
+    /**
      * 属性值列表
      */
     attributeValues: AlbumAlbumAttributeValueCreator[];
@@ -486,6 +506,41 @@ export interface Album {
     lastSelected: boolean;
 
     intellectualPromise: boolean;
+
+    /**
+     * 声音类型（男声, 女声, 童声, 磁性, 温柔）
+     */
+    voiceType: string;
+
+    /**
+     * 声音类型-文本（男声, 女声, 童声, 磁性, 温柔）
+     */
+    voiceTypeText: string;
+
+    /**
+     * 时长类型(短篇, 中篇, 长篇)
+     */
+    durationType: string;
+
+    /**
+     * 时长类型-文本(短篇, 中篇, 长篇)
+     */
+    durationTypeText: string;
+
+    /**
+     * 更新频率(连载, 完结, 每日更新)
+     */
+    updateFrequencyType: string;
+
+    /**
+     * 文本信息
+     */
+    updateFrequencyTypeText:string;
+    /**
+     * 内容类型(有声书, 播客, 新闻, 相声)
+     */
+    contentType: string;
+
     /**
      * 属性值列表
      */
@@ -574,6 +629,19 @@ export class AlbumForRecallResp {
      * 创建人昵称
      */
     creatorNickname: string;
+    /**
+     * 声音类型（男声, 女声, 童声, 磁性, 温柔）
+     */
+    voiceTypes: string;
+    /**
+     * 时长类型(短篇, 中篇, 长篇)
+     */
+    durationType: string;
+    /**
+     * 更新频率(连载, 完结, 每日更新)
+     */
+    updateFrequencyType: string;
+
 }
 
 

@@ -46,7 +46,7 @@ import {
     FloatingPanel,
     DropdownMenu,
     DropdownItem,
-    Slider, Switch, Progress
+    Slider, Switch, Progress, Picker
 } from 'vant';
 
 import 'vant/lib/index.css';
@@ -166,5 +166,7 @@ app.use(Slider);
 app.use(Switch);
 // Progress 进度条
 app.use(Progress);
+// 选择框
+app.use(Picker);
 
 app.mount('#app');

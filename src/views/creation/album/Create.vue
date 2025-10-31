@@ -60,6 +60,24 @@
       <router-link :to='{path: "/creative/albumCreate/albumSetRemark"}' class="album_remark">
         <span v-html="formattedDescription||'前150字为外显简介部分，建议将重要信息前置'"></span>
       </router-link>
+      <header class="album_header" @click="showUpdateVoicePicker = true">
+        <span>声音类型</span>
+        <div class="more_type">
+          <span class="ellipsis">{{ draftAlbumInfo.voiceTypeText || '请选择' }} <van-icon name="arrow"/></span>
+        </div>
+      </header>
+      <header class="album_header" @click="showUpdateDurationPicker = true">
+        <span>时长类型</span>
+        <div class="more_type">
+          <span class="ellipsis">{{ draftAlbumInfo.durationTypeText || '请选择' }} <van-icon name="arrow"/></span>
+        </div>
+      </header>
+      <header class="album_header" @click="showUpdatePicker = true">
+        <span>更新频率</span>
+        <div class="more_type">
+          <span class="ellipsis">{{ draftAlbumInfo.updateFrequencyTypeText || '请选择' }} <van-icon name="arrow"/></span>
+        </div>
+      </header>
       <header class="album_header">
         <span>创作团队</span>
         <van-icon name="plus"/>
@@ -142,6 +160,33 @@
         </van-button>
       </van-popup>
     </section>
+    <!--更新频率选择-->
+    <van-popup v-model:show="showUpdatePicker" position="bottom" round :style="{height: '40%'}">
+      <van-picker
+          v-model="selectedUpdatePreference"
+          :columns="updatePreferenceOptions"
+          @confirm="onUpdatePreferenceConfirm"
+          @cancel="showUpdatePicker = false"
+      />
+    </van-popup>
+    <!--声音类型选择-->
+    <van-popup v-model:show="showUpdateVoicePicker" position="bottom" round :style="{height: '40%'}">
+      <van-picker
+          v-model="selectedVoiceType"
+          :columns="voiceTypeOptions"
+          @confirm="onUpdateVoiceTypeConfirm"
+          @cancel="showUpdateVoicePicker = false"
+      />
+    </van-popup>
+    <!--时长类型选择-->
+    <van-popup v-model:show="showUpdateDurationPicker" position="bottom" round :style="{height: '40%'}">
+      <van-picker
+          v-model="selectedDurationType"
+          :columns="durationTypeOptions"
+          @confirm="onUpdateDurationTypeConfirm"
+          @cancel="showUpdateDurationPicker = false"
+      />
+    </van-popup>
   </div>
 </template>
 <script setup lang="ts">
@@ -175,6 +220,43 @@ const allChannels = ref([]);
 const selectedChannelId = ref(null);
 // 选择的频道名称
 const selectedChannelName = ref(null);
+// 更新类型
+const updatePreferenceOptions = [
+  {text: '连载', value: 'serial'},
+  {text: '完结', value: 'finished'},
+  {text: '每日更新', value: 'daily'}
+];
+const showUpdatePicker = ref(false);
+const selectedUpdatePreference = ref([draftAlbumInfo.value.updateFrequencyType]);
+// 声音类型
+const voiceTypeOptions = [
+  {text: '男声', value: 'male'},
+  {text: '女声', value: 'female'},
+  {text: '童声', value: 'child'},
+  {text: '磁性', value: 'magnetic'},
+  {text: '温柔', value: 'gentle'},
+  {text: '成熟', value: 'mature'},
+  {text: '清亮', value: 'clear'},
+  {text: '低沉', value: 'deep'},
+  {text: '活泼', value: 'lively'},
+  {text: '沙哑', value: 'hoarse'},
+  {text: '甜美', value: 'sweet'},
+  {text: '稳重', value: 'steady'},
+  {text: '其他', value: 'other'},
+];
+const showUpdateVoicePicker = ref(false);
+const selectedVoiceType = ref([draftAlbumInfo.value.voiceType]);
+// 时长类型
+const durationTypeOptions = [
+  {text: '超短篇', value: 'micro'},
+  {text: '短篇', value: 'short'},
+  {text: '中篇', value: 'medium'},
+  {text: '长篇', value: 'long'},
+  {text: '连载长篇', value: 'serialLong'},
+  {text: '其他', value: 'other'},
+];
+const showUpdateDurationPicker = ref(false);
+const selectedDurationType = ref([draftAlbumInfo.value.durationType]);
 // 专辑描述的HTML文本
 const descriptionHtml = ref("");
 const router = useRouter();
@@ -219,6 +301,29 @@ const changePermission = (permissions: number) => {
   resetPermission(permissions);
 }
 
+const onUpdatePreferenceConfirm = ({selectedValues}) => {
+  draftAlbumInfo.value.updateFrequencyType = selectedValues.join(','); // 保存选择结果
+  // Header 或页面展示中文
+  const selected = updatePreferenceOptions.find(item => item.value === draftAlbumInfo.value.updateFrequencyType);
+  draftAlbumInfo.value.updateFrequencyTypeText = selected?.text || '';
+  showUpdatePicker.value = false; // 关闭 Picker
+};
+
+const onUpdateVoiceTypeConfirm = ({selectedValues}) => {
+  draftAlbumInfo.value.voiceType = selectedValues.join(','); // 保存选择结果
+  // Header 或页面展示中文
+  const selected = voiceTypeOptions.find(item => item.value === draftAlbumInfo.value.voiceType);
+  draftAlbumInfo.value.voiceTypeText = selected?.text || '';
+  showUpdateVoicePicker.value = false; // 关闭 Picker
+}
+
+const onUpdateDurationTypeConfirm = ({selectedValues}) => {
+  draftAlbumInfo.value.durationType = selectedValues.join(','); // 保存选择结果
+  // Header 或页面展示中文
+  const selected = durationTypeOptions.find(item => item.value === draftAlbumInfo.value.durationType);
+  draftAlbumInfo.value.durationTypeText = selected?.text || '';
+  showUpdateDurationPicker.value = false; // 关闭 Picker
+}
 // 创建专辑
 const create = async () => {
   albumCreate.name = draftAlbumInfo.value.name;
@@ -234,6 +339,10 @@ const create = async () => {
   albumCreate.categoryLevel4Name = draftAlbumInfo.value.categoryLevel4Name;
   albumCreate.description = draftAlbumInfo.value.description;
   albumCreate.sellPoint = draftAlbumInfo.value.sellPoint;
+  albumCreate.voiceType=draftAlbumInfo.value.voiceType;
+  albumCreate.durationType=draftAlbumInfo.value.durationType;
+  albumCreate.updateFrequencyType=draftAlbumInfo.value.updateFrequencyType;
+  albumCreate.contentType="audiobook";
   albumCreate.permissions = draftAlbumInfo.value.permissions;
   albumCreate.company = "";
   albumCreate.copyright = "";

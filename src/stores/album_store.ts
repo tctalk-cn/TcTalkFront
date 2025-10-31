@@ -89,6 +89,13 @@ function createEmptyAlbum(): Album {
         poorPercent: 0.0,
         lastSelected: true,
         intellectualPromise: false,
+        voiceType: '',
+        voiceTypeText:'',
+        durationType: '',
+        durationTypeText:'',
+        updateFrequencyType: '', // 最终字符串
+        updateFrequencyTypeText:'',
+        contentType: '',
         attributeValues: [] as AlbumAlbumAttributeValueCreator[],
     };
 }
