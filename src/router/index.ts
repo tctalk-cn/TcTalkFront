@@ -104,7 +104,7 @@ const router = createRouter({
                     // 创作中心-专辑明细
                     {
                         path: '/creative/albumDetail',
-                        name: Pages.albumDetail,
+                        name: Pages.albumCreativeDetail,
                         component: () => import("@/views/creation/album/detail/AlbumDetail.vue"),
                         redirect: {name: Pages.albumVideoList},
                         children: [

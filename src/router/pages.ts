@@ -20,6 +20,7 @@ export const Pages = {
     creativeCenter: 'creativeCenter',
     myIndex: 'myIndex',
     myAlbum: 'myAlbum',
+    albumCreativeDetail: 'albumCreativeDetail',
     albumDetail: 'albumDetail',
     albumVideoList: 'albumVideoList',
     albumCommentList: 'albumCommentList',

@@ -100,7 +100,7 @@ const formatDateTime = (time?: string) => {
 
 const navigateToDetail = () => {
   router.push({
-    path: '/creative/albumDetail',
+    path: '/creative/albumCreativeDetail',
     query: {albumId: props.id, albumCreatorMemberId: props.albumCreatorMemberId}
   })
 }
