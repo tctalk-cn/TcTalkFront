@@ -3,7 +3,7 @@
     <div class="album-card__header">
       <router-link
           class="album-card__cover"
-          :to="{ path: '/creative/albumDetail', query: { albumId: id, albumCreatorMemberId } }"
+          :to="{ path: '/creative/albumCreativeDetail', query: { albumId: id, albumCreatorMemberId } }"
       >
         <van-image :src="coverUrl" :alt="name"/>
       </router-link>

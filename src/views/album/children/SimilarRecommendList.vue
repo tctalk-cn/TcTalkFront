@@ -69,11 +69,8 @@ onMounted(async () => {
   streamerOtherAlbums.value = await listStreamerOtherAlbums(albumCreatorMemberId, albumId);
 });
 
-
 // 定义动态拼接函数
 const formatAlbumTitle = (album: AlbumForRecallResp) => {
-  console.info("---------formatAlbumTitle--------");
-  console.info(album.albumTitle);
   const prefix = album.paid ? '' : '【免费】';
   return `${prefix} ${album.albumTitle ?? ''}`;
 };

@@ -182,25 +182,20 @@ const mediaMenus: MenuItem[] = [
   {
     id: 1,
     label: '节目',
-    name: 'albumShowList',
+    name: 'albumCreativeShowList',
   },
   {
     id: 2,
     label: '视频',
-    name: 'albumVideoList',
+    name: 'albumCreativeVideoList',
   },
   {
     id: 3,
     label: '评价',
-    name: 'albumCommentList',
+    name: 'albumCreativeCommentList',
   },
   {
     id: 4,
-    label: '找相似',
-    name: 'albumSimilarRecommendList',
-  },
-  {
-    id: 5,
     label: '更多',
     name: 'more',
     icon: 'more-o',
