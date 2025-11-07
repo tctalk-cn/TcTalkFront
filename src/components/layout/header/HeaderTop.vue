@@ -47,9 +47,13 @@ const router = useRouter();
 function backHome() {
   if (props?.goBackUrl) {
     router.push({path: props?.goBackUrl});
-    return;
+  } else if (window.history.length > 1) {
+    //  如果没有指定，则返回上一个历史页面（防止空栈报错）
+    router.back();
+  } else {
+    //  如果用户直接从外部打开当前页（没有上一个页面）
+    router.push("/");
   }
-  router.back();
 }
 
 </script>

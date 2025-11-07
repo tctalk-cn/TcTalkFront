@@ -1,6 +1,6 @@
 <template>
   <div class="album-detail-container">
-    <HeaderTop go-back="true" :head-title="headerTitle" go-back-url="/creative/center/myAlbum">
+    <HeaderTop go-back="true" :head-title="headerTitle" >
       <!-- 其他插槽内容... -->
       <template #actions>
         <van-icon class="action-button" name="more-o" @click="showAlbumShare=true"/>
