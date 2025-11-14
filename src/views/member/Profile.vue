@@ -27,6 +27,8 @@
               <IconPark :icon="Right" theme="filled" fill="#fff" class="mr-1" :size="20"/>
           </span>
         </router-link>
+        <!--会员产品方案-->
+        <PlanCategorySection/>
       </section>
       <!-- 统计数据 -->
       <section class="info-data">
@@ -39,6 +41,7 @@
           </li>
         </ul>
       </section>
+
       <!-- 常用服务 -->
       <ServiceSection title="常用服务" :items="navItems" :length="navItems.length"
                       @item-click="handleRecentlyUseClick"/>
@@ -69,6 +72,7 @@ import IconPark from "@/components/common/IconPark.vue";
 import {useRouter} from "vue-router";
 import ServiceSection from "@/views/member/components/ServiceSection.vue";
 import ActionList from "@/views/member/components/ActionList.vue";
+import PlanCategorySection from "@/views/member/components/PlanCategorySection.vue";
 
 const {getMemberStatistics} = useProfileStore();
 const {memberInfo, memberStatisticsInfo} = storeToRefs(useProfileStore());
@@ -242,6 +246,8 @@ onMounted(() => {
   overflow-x: hidden; /* 隐藏水平滚动条 */
 
   .profile-number {
+    background: $blue;  // 整个 section 蓝色
+    padding: 0.6rem 0.6rem 0.2rem; // 底部留给卡片
     .profile-link {
       display: flex;
       -webkit-box-align: center;

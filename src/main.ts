@@ -10,7 +10,6 @@ import {createPinia} from 'pinia';
 import piniaPersistedstate from 'pinia-plugin-persistedstate'
 
 import ElementPlus from 'element-plus';
-import {ElIcon} from 'element-plus';
 
 import 'element-plus/dist/index.css';
 // 引入所有图标
