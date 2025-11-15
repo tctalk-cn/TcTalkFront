@@ -11,20 +11,21 @@
             modifier: 1,
             slideShadows: true
             }">
-      <swiper-slide v-for="(item, index) in categories"
+      <swiper-slide v-for="(item, index) in planCategories"
                     class="plan-item"
                     :key="index"
                     @click="goDetail(item)">
-        <div class="plan-type">{{ item.type }}</div>
+        <div class="plan-type">{{ item.categoryName }}</div>
         <div class="plan-desc">
-          {{ item.description }}
+          {{ item.bestPlanPromotionLabel }}
+          <van-icon name="arrow" size="12"/>
         </div>
       </swiper-slide>
     </swiper>
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {ref, onMounted} from 'vue';
 import {useRouter} from 'vue-router';
 import {Swiper, SwiperSlide} from "swiper/vue";
@@ -33,6 +34,11 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
+import {MemberPlanCategory} from "@/models/member_plan_category.ts";
+import {useProfileStore} from "@/stores/member_store.ts";
+
+const {listEnabledPlanCategory} = useProfileStore();
+
 const router = useRouter();
 
 const categories = ref([
@@ -43,10 +49,13 @@ const categories = ref([
 ]);
 
 const swiperWidth = ref(0);
+// 会员计划分类
+const planCategories = ref<MemberPlanCategory[]>();
 
-onMounted(() => {
+onMounted(async () => {
   // 保证屏幕展示2个slide
   swiperWidth.value = window.innerWidth * 0.48;
+  planCategories.value = await listEnabledPlanCategory();
 });
 
 const goDetail = (item) => {

@@ -5,11 +5,12 @@ import {
     useMemberStatisticsInfo, useResetBirthday,
     useResetGender, useResetNickname,
     useResetSignature, useResetUsername, useUploadAvatar,
-    useMemberById,useMemberStatisticsInfoById,
+    useMemberById, useMemberStatisticsInfoById,
     useAddMemberFollowed, useIsMemberFollowed
 }
     from "@/api/member/member_api.ts";
 import {useAddSearchLog} from "@/api/member/search_history_api.ts";
+import {useListEnabledPlanCategory} from "@/api/member/member_plan_api.ts";
 
 export const useProfileStore = defineStore(
     "userProfile", {
@@ -287,7 +288,12 @@ export const useProfileStore = defineStore(
             async addSearchLog(keyword: string, channelId: string) {
                 const {data} = await useAddSearchLog(keyword, channelId);
                 return data;
-            }
+            },
+            // 列举全量的会员产品方案
+            async listEnabledPlanCategory() {
+                const {data} = await useListEnabledPlanCategory();
+                return data;
+            },
         },
         // 持久化配置
         persist: {
