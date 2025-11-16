@@ -80,7 +80,6 @@ const router = createRouter({
                                 name: Pages.profileSetPassword,
                                 component: () => import("@/views/member/children/SetPassword.vue"),
                             },
-
                         ]
                     },
                     // 创作中心
@@ -223,7 +222,53 @@ const router = createRouter({
                     },
                 ]
 
-            }
+            },
+            //会员付费产品方案
+            {
+                path: '/member/planCategory/:id',
+                name: Pages.planCategory,
+                component: () => import("@/views/member/plans/PlanCategory.vue"),
+                redirect: {name: Pages.vipPlatinumDetail},
+                children: [
+                    {
+                        path: 'vipPlatinumDetail',
+                        name: Pages.vipPlatinumDetail,
+                        component: () => import("@/views/member/plans/VipPlatinumDetail.vue"),
+                        meta: {menu: Pages.planCategory},
+                    },
+                    {
+                        path: 'vipDetail',
+                        name: Pages.vipDetail,
+                        component: () => import("@/views/member/plans/VipDetail.vue"),
+                        meta: {menu: Pages.planCategory},
+                    },
+                    {
+                        path: 'sVipDetail',
+                        name: Pages.sVipDetail,
+                        component: () => import("@/views/member/plans/SVipDetail.vue"),
+                        meta: {menu: Pages.planCategory},
+                    },
+                    {
+                        path: 'courseDetail',
+                        name: Pages.courseDetail,
+                        component: () => import("@/views/member/plans/CourseDetail.vue"),
+                        meta: {menu: Pages.planCategory},
+                    },
+                    {
+                        path: 'familyDetail',
+                        name: Pages.familyDetail,
+                        component: () => import("@/views/member/plans/FamilyDetail.vue"),
+                        meta: {menu: Pages.planCategory},
+                    },
+                    {
+                        path: 'kidsDetail',
+                        name: Pages.kidsDetail,
+                        component: () => import("@/views/member/plans/KidsDetail.vue"),
+                        meta: {menu: Pages.planCategory},
+                    },
+
+                ],
+            },
         ]
     }
 )

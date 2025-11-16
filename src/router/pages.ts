@@ -16,6 +16,13 @@ export const Pages = {
     profileSetSignature: 'profileSetSignature',
     profileSetPhone: 'profileSetPhone',
     profileSetPassword: 'profileSetPassword',
+    planCategory: 'planCategory',
+    vipPlatinumDetail:'vipPlatinumDetail',
+    courseDetail:'courseDetail',
+    familyDetail:'familyDetail',
+    kidsDetail:'kidsDetail',
+    sVipDetail:'sVipDetail',
+    vipDetail:'vipDetail',
 
     creativeCenter: 'creativeCenter',
     myIndex: 'myIndex',

@@ -36,17 +36,11 @@ import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import {MemberPlanCategory} from "@/models/member_plan_category.ts";
 import {useProfileStore} from "@/stores/member_store.ts";
+import {Pages} from "@/router/pages.ts";
 
 const {listEnabledPlanCategory} = useProfileStore();
 
 const router = useRouter();
-
-const categories = ref([
-  {id: 1, type: 'VIP会员', description: '享受基础权益'},
-  {id: 2, type: 'VIP儿童', description: '儿童专属权益'},
-  {id: 3, type: 'VIP白金', description: '高级权益套餐'},
-  {id: 4, type: 'SVIP', description: '顶级会员服务'},
-]);
 
 const swiperWidth = ref(0);
 // 会员计划分类
@@ -59,7 +53,12 @@ onMounted(async () => {
 });
 
 const goDetail = (item) => {
-  router.push(`/member/plan/${item.id}`);
+  router.push({
+    name: Pages.planCategory,
+    params: {
+      id: item.id
+    }
+  });
 };
 </script>
 

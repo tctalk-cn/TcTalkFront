@@ -7,14 +7,23 @@ export interface MemberPlanCategory {
      * 分类编码
      */
     categoryCode: string;
+
+    /**
+     * 分类描述
+     */
+    categoryDesc: string;
     /**
      * 分类名称
      */
     categoryName: string;
     /**
-     * 分类描述
+     * 前端路径
      */
-    categoryDesc: string;
+    pagePath: string;
+    /**
+     * 图标
+     */
+    icon: string;
     /**
      * 展示顺序
      */
