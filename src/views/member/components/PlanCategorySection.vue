@@ -57,6 +57,9 @@ const goDetail = (item) => {
     name: Pages.planCategory,
     params: {
       id: item.id
+    },
+    query:{
+      categoryCode:item.categoryCode,
     }
   });
 };

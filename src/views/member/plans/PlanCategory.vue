@@ -53,16 +53,40 @@ const onTabClick = (tab) => {
   const cat = categories.value.find(c => c.categoryCode === tab.name);
   if (cat?.pagePath) {
     activeTab.value = cat.categoryCode;
-    router.push(cat.pagePath);
+    // push 时传递 categoryCode
+    router.replace({
+      path: cat.pagePath,
+      query: { categoryCode: cat.categoryCode }
+    });
   }
 };
 
 onMounted(async () => {
   categories.value = await listEnabledPlanCategory();
   if (!categories.value.length) return;
-  activeTab.value = categories.value[0].categoryCode;
-  router.replace(categories.value[0].pagePath);
+
+  // 1 优先从 query 读取 categoryCode
+  const queryCategoryCode = router.currentRoute.value.query.categoryCode;
+  const matchedCat = categories.value.find(c => c.categoryCode === queryCategoryCode);
+
+  if (matchedCat) {
+    activeTab.value = matchedCat.categoryCode;
+    // 保持 URL 与 tab 对齐
+    router.replace({
+      path: matchedCat.pagePath,
+      query: { categoryCode: matchedCat.categoryCode }
+    });
+  } else {
+    // 2 没有 query，则默认第一个
+    const defaultCat = categories.value[0];
+    activeTab.value = defaultCat.categoryCode;
+    router.replace({
+      path: defaultCat.pagePath,
+      query: { categoryCode: defaultCat.categoryCode }
+    });
+  }
 });
+
 </script>
 
 <style lang="scss" scoped>

@@ -10,7 +10,7 @@ import {
 }
     from "@/api/member/member_api.ts";
 import {useAddSearchLog} from "@/api/member/search_history_api.ts";
-import {useListEnabledPlanCategory} from "@/api/member/member_plan_api.ts";
+import {useListEnabledPlanCategory,useListEnabledPlans} from "@/api/member/member_plan_api.ts";
 
 export const useProfileStore = defineStore(
     "userProfile", {
@@ -292,6 +292,11 @@ export const useProfileStore = defineStore(
             // 列举全量的会员产品方案
             async listEnabledPlanCategory() {
                 const {data} = await useListEnabledPlanCategory();
+                return data;
+            },
+            // 按照分类码查询会员付费方案
+            async listEnabledPlans(categoryCode:string) {
+                const {data} = await useListEnabledPlans(categoryCode);
                 return data;
             },
         },
