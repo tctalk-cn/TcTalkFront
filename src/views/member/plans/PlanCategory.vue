@@ -1,72 +1,58 @@
 <template>
   <div class="plan-category-container">
-    <HeaderTop head-title="开通VIP会员" go-back="true" />
-
-    <div class="plan-category-container__tabs">
+    <!-- HeaderTop -->
+    <HeaderTop head-title="开通VIP会员" go-back="true"/>
+    <!-- Tabs 外层加一个 wrapper -->
+    <div class="tabs-wrapper">
+      <!-- Tabs -->
       <van-tabs
           v-model:active="activeTab"
           swipeable
           animated
           sticky
-          color="#2B7CFF"
-          title-active-color="#2B7CFF"
           lazy-render
+          type="line"
           @clickTab="onTabClick"
       >
         <van-tab
             v-for="cat in categories"
-            :title="cat.categoryName"
             :name="cat.categoryCode"
             :key="cat.categoryCode"
         >
           <template #title>
-            <van-icon v-if="cat.icon" :name="cat.icon" />
-            <div v-else>{{ cat.categoryName }}</div>
+            <div class="tab-card" :class="{ 'tab-active': activeTab === cat.categoryCode }">
+              <div class="tab-name">{{ cat.categoryName }}</div>
+              <div class="tab-desc">{{ cat.categoryDesc }}</div>
+            </div>
           </template>
         </van-tab>
       </van-tabs>
     </div>
 
-    <!-- 正确的位置：tabs 外面 -->
+    <!-- Tab 内容 -->
     <div class="plan-category-container__content">
-      <RouterView />
+      <RouterView/>
     </div>
   </div>
 </template>
 
-
 <script setup lang="ts">
-import {ref, onMounted, watch} from 'vue';
-import {useRoute, useRouter} from 'vue-router';
+import {ref, onMounted} from 'vue';
+import {useRouter} from 'vue-router';
 import {useProfileStore} from "@/stores/member_store.js";
-import HeaderTop from "@/components/layout/header/HeaderTop.vue"; // 你的展示组件
+import HeaderTop from "@/components/layout/header/HeaderTop.vue";
 
-const route = useRoute();
 const router = useRouter();
-
 const {listEnabledPlanCategory} = useProfileStore();
-// 所有分类
-const categories = ref([]);
 
-// 当前 tab 的 name（即 categoryCode）
+const categories = ref([]);
 const activeTab = ref('');
 
-// 获取路由中的 id
-const id = route.params.id as string;
-
-watch(
-    () => route.path,
-    () => {
-      const match = categories.value.find(c => c.pagePath === route.path);
-      if (match) {
-        activeTab.value = match.categoryCode;
-      }
-    }
-);
-
+// 点击 Tab
 const onTabClick = (tab) => {
   const cat = categories.value.find(c => c.categoryCode === tab.name);
   if (cat?.pagePath) {
+    activeTab.value = cat.categoryCode;
     router.push(cat.pagePath);
   }
 };
@@ -74,51 +60,71 @@ const onTabClick = (tab) => {
 onMounted(async () => {
   categories.value = await listEnabledPlanCategory();
   if (!categories.value.length) return;
-
-  // 根据路由 id 决定 tab
-  const matchedById = categories.value.find(c => c.id === route.params.id);
-
-  if (matchedById) {
-    activeTab.value = matchedById.categoryCode;
-    router.replace(matchedById.pagePath);
-    return;
-  }
-
-  // 根据当前 path 匹配
-  const matchedByPath = categories.value.find(c => c.pagePath === route.path);
-  if (matchedByPath) {
-    activeTab.value = matchedByPath.categoryCode;
-    return;
-  }
-
-  // 默认
   activeTab.value = categories.value[0].categoryCode;
   router.replace(categories.value[0].pagePath);
 });
-
-
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .plan-category-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 9999;
   display: flex;
   flex-direction: column;
-  background-color: #f5f5f5;
+  height: 100vh;
+  background-color: $bc;
 
-  &__tabs {
-    margin-bottom: 0.5rem;
+  /* Tabs 样式 */
+  :deep(.van-tabs__nav) {
+    display: flex;
+    gap: 0; /* 去掉默认间隙 */
   }
 
+  :deep(.van-tab) {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .tabs-wrapper {
+    padding-top: 0.5rem; /* HeaderTop 和 Tabs 之间的间距 */
+    background-color: #fff; /* 保持白色背景 */
+    padding-bottom: 0.2rem; /* 让tab线条有呼吸感 */
+  }
+
+  .tab-card {
+    padding: 0.5rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #333;
+  }
+
+  .tab-card .tab-name {
+    font-weight: 700;
+    font-size: $font-size-mx;
+  }
+
+  .tab-card .tab-desc {
+    font-size: $font-size-sm;
+    color: #666;
+    margin-top: 0.1rem;
+  }
+
+  /* 选中效果 */
+  .tab-active {
+    color: $blue;
+  }
+
+  :deep(.van-tabs__line) {
+    background: $blue !important;
+    height: 0.2rem !important;
+    border-radius: 0.1rem;
+  }
+
+  /* 内容区域 */
   &__content {
-    padding: 0 0.5rem;
+    flex: 1;
+    background-color: #f7faff;
+    overflow-y: auto;
+    padding: 0.5rem;
   }
 }
 </style>
