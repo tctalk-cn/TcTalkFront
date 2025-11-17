@@ -1,6 +1,8 @@
 <template>
   <div class="vip-detail-container">
+    <!-- 会员卡片轮播 -->
     <swiper
+        ref="swiperRef"
         :slides-per-view="2"
         :space-between="10"
         effect="coverflow"
@@ -36,8 +38,8 @@
           </div>
 
           <!-- 促销标签 -->
-          <div v-if="plan.memberPlan.promotionLabel" class="promotion-label">
-            {{ plan.memberPlan.promotionLabel }}
+          <div v-if="plan.memberPlan.promotionLabelDesc" class="promotion-label">
+            {{ plan.memberPlan.promotionLabelDesc }}
           </div>
 
           <!-- 说明 -->
@@ -48,7 +50,6 @@
 
     <!-- 底部协议 + 开通 -->
     <div class="vip-footer">
-      <!-- checkbox 单独一行 -->
       <div class="agreement-wrapper">
         <label class="agreement">
           <input type="checkbox" v-model="checkedAgreement"/>
@@ -56,7 +57,6 @@
         </label>
       </div>
 
-      <!-- 按钮单独一行 -->
       <div class="button-wrapper">
         <van-button
             type="primary"
@@ -68,11 +68,17 @@
         </van-button>
       </div>
     </div>
+
+    <!-- 会员权益对比表 -->
+    <MemberBenefitsCompare
+        :memberPlans="memberPlans"
+        :activeIndex="activeIndex"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted} from 'vue';
+import {ref, onMounted, computed} from 'vue';
 import {useProfileStore} from '@/stores/member_store.js';
 import {useRoute} from 'vue-router';
 import {Swiper, SwiperSlide} from 'swiper/vue';
@@ -82,11 +88,12 @@ import 'swiper/css/pagination';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/autoplay';
 import {Button as VanButton} from 'vant';
+import MemberBenefitsCompare from "@/views/member/plans/MemberBenefitsCompare.vue";
 
 const route = useRoute();
 const {listEnabledPlans} = useProfileStore();
 const swiperRef = ref<any>(null);
-const activeIndex = ref(0); // 当前选中卡片
+const activeIndex = ref(0);
 
 const categoryCode = route.query.categoryCode as string;
 const memberPlans = ref<any[]>([]);
@@ -96,6 +103,24 @@ onMounted(async () => {
   memberPlans.value = await listEnabledPlans(categoryCode);
 });
 
+// 生成所有可能的权益集合
+const allBenefits = computed(() => {
+  const benefitMap = new Map<string, any>();
+  memberPlans.value.forEach(plan => {
+    plan.benefits.forEach(b => {
+      if (!benefitMap.has(b.benefitCode)) {
+        benefitMap.set(b.benefitCode, b);
+      }
+    });
+  });
+  return Array.from(benefitMap.values());
+});
+
+// 判断某个 plan 是否包含某个权益
+const planHasBenefit = (plan: any, benefit: any) => {
+  return plan.benefits.some((b: any) => b.benefitCode === benefit.benefitCode);
+};
+
 const onSubscribe = () => {
   if (!checkedAgreement.value) return;
   console.log('开通会员', categoryCode);
@@ -103,9 +128,8 @@ const onSubscribe = () => {
 
 const onCardClick = (index: number) => {
   activeIndex.value = index;
-  // 同步 Swiper 的当前 slide
   if (swiperRef.value && swiperRef.value.swiper) {
-    swiperRef.value.swiper.slideToLoop(index); // 使用 slideToLoop 支持 loop 模式
+    swiperRef.value.swiper.slideToLoop(index);
   }
 };
 </script>
@@ -113,31 +137,33 @@ const onCardClick = (index: number) => {
 <style scoped lang="scss">
 .vip-detail-container {
   padding: 0.5rem;
+  height: 100vh;
+  overflow-y: auto;
 
   .plan-item {
     display: flex;
     justify-content: center;
 
     .card {
-      width: 220px;
-      height: 220px;
+      width: 16rem;
+      height: 16rem;
       background: linear-gradient(135deg, #2B7CFF, #63A8FF);
       color: #fff;
-      border-radius: 12px;
-      padding: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      border-radius: 1rem;
+      padding: 1rem;
+      box-shadow: 0 0.3rem 0.8rem rgba(0, 0, 0, 0.15);
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 0.5rem;
 
       &.card-active {
-        background: linear-gradient(135deg, #2B7CFF, #63A8FF); /* 高亮颜色 */
-        transform: scale(1.05); /* 放大效果 */
+        background: linear-gradient(135deg, #2B7CFF, #63A8FF);
+        transform: scale(1.05);
         box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
       }
 
       &:not(.card-active) {
-        background: linear-gradient(135deg, #a0cfff, #83b8ff); /* 未选中颜色淡化 */
+        background: linear-gradient(135deg, #a0cfff, #83b8ff);
         transform: scale(0.95);
         opacity: 0.8;
       }
@@ -147,56 +173,36 @@ const onCardClick = (index: number) => {
         justify-content: space-between;
         align-items: center;
 
-        .plan-name {
-          font-size: 14px;
-          font-weight: bold;
-        }
-
+        .plan-name { font-size: 1.2rem; font-weight: bold; }
         .plan-type {
-          font-size: 8px;
+          font-size: 0.6rem;
           background: rgba(255, 255, 255, 0.2);
-          padding: 2px 6px;
-          border-radius: 12px;
+          padding: 0.1rem 0.5rem;
+          border-radius: 0.8rem;
         }
       }
 
       .card-prices {
         display: flex;
         flex-direction: column;
-        gap: 2px;
+        gap:0.1rem;
 
-        .promotion-price {
-          font-size: 18px;
-          font-weight: bold;
-        }
-
-        .original-price {
-          font-size: 12px;
-          text-decoration: line-through;
-          color: rgba(255, 255, 255, 0.6);
-        }
-
-        .renew-price {
-          font-size: 12px;
-          color: rgba(255, 255, 255, 0.8);
-        }
+        .promotion-price { font-size: $font-size-lg; font-weight: bold; }
+        .original-price { font-size: $font-size; text-decoration: line-through; color: rgba(255,255,255,0.6); }
+        .renew-price { font-size: $font-size; color: rgba(255,255,255,0.8); }
       }
 
       .promotion-label {
         display: inline-block;
         background: #ffe7b0;
         color: #ff9500;
-        font-size: 11px;
-        padding: 2px 6px;
-        border-radius: 6px;
-        margin-top: auto; /* 推到卡片底部 */
+        font-size: $font-size;
+        padding: 0.1rem 0.5rem;
+        border-radius: 0.5rem;
+        margin-top: auto;
       }
 
-      .plan-desc {
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.9);
-        margin-top: 4px;
-      }
+      .plan-desc { font-size: $font-size; color: rgba(255,255,255,0.9); margin-top: 4px; }
     }
   }
 
@@ -209,22 +215,15 @@ const onCardClick = (index: number) => {
       .agreement {
         display: flex;
         align-items: center;
-        font-size: 12px;
+        font-size: $font-size;
         color: #666;
 
-        input[type="checkbox"] {
-          margin-right: 6px;
-          width: 16px;
-          height: 16px;
-        }
+        input[type="checkbox"] { margin-right: 0.5rem; width: 0.8rem; height: 0.8rem; }
       }
     }
 
-    .button-wrapper {
-      .van-button {
-        border-radius: 8px;
-      }
-    }
+    .button-wrapper .van-button { border-radius: 8px; }
   }
+
 }
 </style>
