@@ -14,8 +14,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="benefit in allBenefits" :key="benefit.benefitCode"
-          :class="{ 'active-row': activeIndexRow === benefit.benefitCode }">
+      <tr v-for="benefit in allBenefits" :key="benefit.benefitCode">
         <td>{{ benefit.benefitName }}</td>
         <td v-for="(plan, index) in memberPlans" :key="index"
             :class="{ 'active-column': index === activeIndex }">

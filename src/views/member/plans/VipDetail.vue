@@ -74,6 +74,8 @@
         :memberPlans="memberPlans"
         :activeIndex="activeIndex"
     />
+    <!--帮助中心-->
+    <HelpCenter/>
   </div>
 </template>
 
@@ -89,6 +91,7 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/autoplay';
 import {Button as VanButton} from 'vant';
 import MemberBenefitsCompare from "@/views/member/plans/MemberBenefitsCompare.vue";
+import HelpCenter from "@/views/member/plans/HelpCenter.vue";
 
 const route = useRoute();
 const {listEnabledPlans} = useProfileStore();
