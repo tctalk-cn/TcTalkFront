@@ -89,7 +89,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/autoplay';
-import {Button as VanButton} from 'vant';
+import {Button as VanButton, Toast} from 'vant';
 import MemberBenefitsCompare from "@/views/member/plans/MemberBenefitsCompare.vue";
 import HelpCenter from "@/views/member/plans/HelpCenter.vue";
 
