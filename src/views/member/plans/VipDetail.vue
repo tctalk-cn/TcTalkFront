@@ -127,6 +127,11 @@ const planHasBenefit = (plan: any, benefit: any) => {
 const onSubscribe = () => {
   if (!checkedAgreement.value) return;
   console.log('开通会员', categoryCode);
+  try {
+    // 1.调用后端接口
+  } catch (err) {
+    Toast.fail('网络异常，请稍后重试');
+  }
 };
 
 const onCardClick = (index: number) => {
@@ -176,7 +181,11 @@ const onCardClick = (index: number) => {
         justify-content: space-between;
         align-items: center;
 
-        .plan-name { font-size: 1.2rem; font-weight: bold; }
+        .plan-name {
+          font-size: 1.2rem;
+          font-weight: bold;
+        }
+
         .plan-type {
           font-size: 0.6rem;
           background: rgba(255, 255, 255, 0.2);
@@ -188,11 +197,23 @@ const onCardClick = (index: number) => {
       .card-prices {
         display: flex;
         flex-direction: column;
-        gap:0.1rem;
+        gap: 0.1rem;
 
-        .promotion-price { font-size: $font-size-lg; font-weight: bold; }
-        .original-price { font-size: $font-size; text-decoration: line-through; color: rgba(255,255,255,0.6); }
-        .renew-price { font-size: $font-size; color: rgba(255,255,255,0.8); }
+        .promotion-price {
+          font-size: $font-size-lg;
+          font-weight: bold;
+        }
+
+        .original-price {
+          font-size: $font-size;
+          text-decoration: line-through;
+          color: rgba(255, 255, 255, 0.6);
+        }
+
+        .renew-price {
+          font-size: $font-size;
+          color: rgba(255, 255, 255, 0.8);
+        }
       }
 
       .promotion-label {
@@ -205,7 +226,11 @@ const onCardClick = (index: number) => {
         margin-top: auto;
       }
 
-      .plan-desc { font-size: $font-size; color: rgba(255,255,255,0.9); margin-top: 4px; }
+      .plan-desc {
+        font-size: $font-size;
+        color: rgba(255, 255, 255, 0.9);
+        margin-top: 4px;
+      }
     }
   }
 
@@ -221,11 +246,17 @@ const onCardClick = (index: number) => {
         font-size: $font-size;
         color: #666;
 
-        input[type="checkbox"] { margin-right: 0.5rem; width: 0.8rem; height: 0.8rem; }
+        input[type="checkbox"] {
+          margin-right: 0.5rem;
+          width: 0.8rem;
+          height: 0.8rem;
+        }
       }
     }
 
-    .button-wrapper .van-button { border-radius: 8px; }
+    .button-wrapper .van-button {
+      border-radius: 8px;
+    }
   }
 
 }
