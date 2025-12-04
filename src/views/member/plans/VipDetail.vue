@@ -82,55 +82,72 @@
 <script setup lang="ts">
 import {ref, onMounted, computed} from 'vue';
 import {useProfileStore} from '@/stores/member_store.js';
-import {useRoute} from 'vue-router';
+import {useRoute, useRouter} from 'vue-router';
 import {Swiper, SwiperSlide} from 'swiper/vue';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/autoplay';
-import {Button as VanButton, Toast} from 'vant';
+import {Button as VanButton, showToast, Toast} from 'vant';
 import MemberBenefitsCompare from "@/views/member/plans/MemberBenefitsCompare.vue";
 import HelpCenter from "@/views/member/plans/HelpCenter.vue";
+import {useOrderStore} from "@/stores/order_store.ts";
 
 const route = useRoute();
 const {listEnabledPlans} = useProfileStore();
+const {createVipOrder} = useOrderStore();
+
 const swiperRef = ref<any>(null);
 const activeIndex = ref(0);
 
 const categoryCode = route.query.categoryCode as string;
 const memberPlans = ref<any[]>([]);
 const checkedAgreement = ref(false);
-
+const router = useRouter();
 onMounted(async () => {
   memberPlans.value = await listEnabledPlans(categoryCode);
 });
+// 计算选中的plan
+const selectedPlan = computed(() => memberPlans.value[activeIndex.value]);
 
-// 生成所有可能的权益集合
-const allBenefits = computed(() => {
-  const benefitMap = new Map<string, any>();
-  memberPlans.value.forEach(plan => {
-    plan.benefits.forEach(b => {
-      if (!benefitMap.has(b.benefitCode)) {
-        benefitMap.set(b.benefitCode, b);
-      }
-    });
-  });
-  return Array.from(benefitMap.values());
-});
-
-// 判断某个 plan 是否包含某个权益
-const planHasBenefit = (plan: any, benefit: any) => {
-  return plan.benefits.some((b: any) => b.benefitCode === benefit.benefitCode);
-};
-
-const onSubscribe = () => {
+const onSubscribe = async () => {
   if (!checkedAgreement.value) return;
-  console.log('开通会员', categoryCode);
+  // 安全校验：未加载完成
+  if (!selectedPlan.value?.memberPlan?.id) {
+    Toast.fail("请选择会员方案");
+    return;
+  }
   try {
-    // 1.调用后端接口
+    // 选中的方案信息
+    const planId = selectedPlan.value.memberPlan.id;
+    const creatorMemberId = selectedPlan.value.memberPlan.createBy;
+    // 调用后端接口
+    const res = await createVipOrder({
+      creatorMemberId,
+      planId,
+    });
+
+    if (!res?.code || res?.code !== "200") {
+      showToast(res?.message || "创建订单失败");
+      return;
+    }
+    // 拿到订单号
+    const orderId = res.data.id;
+    const orderNo = res.data.orderNo;
+
+    // 跳转到订单确认/支付页
+    await router.push({
+      path: "/vipOrder/confirm",
+      query: {
+        orderId: orderId,
+        orderNo: orderNo,
+      },
+    });
+
   } catch (err) {
-    Toast.fail('网络异常，请稍后重试');
+    console.info(err);
+    showToast('网络异常，请稍后重试');
   }
 };
 

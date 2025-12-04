@@ -73,7 +73,6 @@ import {useRouter} from "vue-router";
 import ServiceSection from "@/views/member/components/ServiceSection.vue";
 import ActionList from "@/views/member/components/ActionList.vue";
 import PlanCategorySection from "@/views/member/components/PlanCategorySection.vue";
-import {MemberPlanCategory} from "@/models/member_plan_category.ts";
 
 const {getMemberStatistics} = useProfileStore();
 const {memberInfo, memberStatisticsInfo} = storeToRefs(useProfileStore());

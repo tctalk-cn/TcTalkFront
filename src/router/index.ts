@@ -269,6 +269,14 @@ const router = createRouter({
 
                 ],
             },
+            // VIP订单中心
+            {
+                path: '/vipOrder/confirm',
+                name: Pages.vipOrderConfirm,
+                component: () => import("@/views/order/VipOrderConfirm.vue"),
+                children: [],
+            },
+
         ]
     }
 )

@@ -33,7 +33,7 @@
             @click="payMethod = 'WECHAT'"
         >
           <template #right-icon>
-            <van-icon name="wechat" />
+            <van-icon name="wechat"/>
           </template>
         </van-cell>
 
@@ -44,7 +44,7 @@
             @click="payMethod = 'ALIPAY'"
         >
           <template #right-icon>
-            <van-icon name="alipay" />
+            <van-icon name="alipay"/>
           </template>
         </van-cell>
       </van-cell-group>
@@ -59,7 +59,7 @@
     <!-- 同意协议 -->
     <div class="agreement-wrapper">
       <label>
-        <input type="checkbox" v-model="agree" />
+        <input type="checkbox" v-model="agree"/>
         我已阅读并同意《会员服务协议》
       </label>
     </div>
@@ -86,7 +86,7 @@ import {useProfileStore} from '@/stores/member_store.js';
 
 const route = useRoute();
 const router = useRouter();
-const { listEnabledPlans } = useProfileStore();
+const {listEnabledPlans} = useProfileStore();
 
 // --- 页面状态 ---
 const plan = ref<any>({});
@@ -95,10 +95,13 @@ const payMethod = ref<'WECHAT' | 'ALIPAY'>('WECHAT');
 
 // 加载用户选择的会员方案
 onMounted(async () => {
-  const categoryCode = route.query.categoryCode as string;
+  const orderId = route.query.orderId as string;
+  const orderNo = route.query.orderNo as string;
+  console.info(orderId);
+  console.info(orderNo);
   const index = Number(route.query.index || 0);
 
-  const plans = await listEnabledPlans(categoryCode);
+  const plans = await listEnabledPlans(orderId);
   if (!plans || plans.length === 0) {
     Toast("没有可用的会员方案");
     return;
@@ -147,7 +150,7 @@ const onSubmitOrder = () => {
     margin: 12px;
     padding: 16px;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 
     .product-title {
       font-size: 18px;
@@ -164,6 +167,7 @@ const onSubmitOrder = () => {
         color: #ff4444;
         font-weight: bold;
       }
+
       .price-origin {
         font-size: 14px;
         text-decoration: line-through;

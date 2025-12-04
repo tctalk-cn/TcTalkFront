@@ -57,4 +57,6 @@ export const Pages = {
 
     soundDetail: 'soundDetail',
     mediaComments: 'mediaComments',
+
+    vipOrderConfirm:'vipOrderConfirm',
 }
