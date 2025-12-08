@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {CreateVipOrderParams} from "@/models/order.ts";
-import {useCreateVipOrder} from "@/api/order/order_api.ts";
+import {useCreateVipOrder, useFindVipOrderDetail} from "@/api/order/order_api.ts";
 
 export const useOrderStore = defineStore(
     "orderStore",
@@ -11,8 +11,13 @@ export const useOrderStore = defineStore(
 
             // 创建会员类型订单
             async createVipOrder(params: CreateVipOrderParams) {
-                 return await useCreateVipOrder(params);
+                return await useCreateVipOrder(params);
             },
+
+            // 查询订单
+            async findVipOrderDetail(orderId: string, orderNo: string) {
+                return await useFindVipOrderDetail(orderId, orderNo);
+            }
         },
     }
 );

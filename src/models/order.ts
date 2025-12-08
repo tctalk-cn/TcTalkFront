@@ -10,150 +10,290 @@ export class CreateVipOrderParams {
     planId: string;
 }
 
-export class OrderDTO{
+export class OrderDTO {
     /**
      * 订单ID
      */
-    id:string;
+    id: string;
 
     /**
      * 唯一订单号
      */
-    orderNo:string;
+    orderNo: string;
 
     /**
      * 用户ID
      */
-   memberId:string;
+    memberId: string;
 
     /**
      * 订单类型：vip, album, reward等
      */
-     orderType:string;
+    orderType: string;
 
     /**
      * 订单总金额
      */
-     amountTotal:string;
+    amountTotal: string;
 
     /**
      * 优惠金额
      */
-     amountDiscount:string;
+    amountDiscount: string;
 
     /**
      * 实际支付金额
      */
-     amountPaid:string;
+    amountPaid: string;
 
     /**
      * 优惠券抵扣
      */
-     couponAmount:string;
+    couponAmount: string;
 
     /**
      * 订单状态：创建、待支付、支付中、支付成功、支付失败、取消
      */
-     orderStatus:number;
+    orderStatus: number;
 
     /**
      * 未支付订单过期时间（如15分钟）
      */
-    expireTime:string;
+    expireTime: string;
 
     /**
      * 支付状态：0未支付，1已支付，2已退款
      */
-     paymentStatus:number;
+    paymentStatus: number;
 
     /**
      * 支付方式：wechat, alipay
      */
-    paymentMethod:string;
+    paymentMethod: string;
 
     /**
      * 支付时间
      */
-     paymentTime:string;
+    paymentTime: string;
 
     /**
      * 币种类型
      */
-     currencyType:string;
+    currencyType: string;
 
 
     /**
      * 版本号
      */
-     version:string;
+    version: string;
 
     /**
      * sku
      */
-      items:Array<OrderItemDTO>;
+    items: Array<OrderItemDTO>;
 }
 
 export class OrderItemDTO {
     /**
      * 关联 oms_product_sku.id
      */
-     skuId:string;
+    skuId: string;
 
     /**
      * 快照SKU编码
      */
-    skuCode:string;
+    skuCode: string;
 
     /**
      * 快照商品类型
      */
-     productType:string;
+    productType: string;
 
     /**
      * 业务表ID，如album.id / vip_plan.id
      */
-    bizId:string;
+    bizId: string;
 
     /**
      * 购买数量
      */
-   quantity:number;
+    quantity: number;
 
     /**
      * 下单价格
      */
-     price:string;
+    price: string;
 
 
     /**
      * sku名称
      */
-    skuName:string;
+    skuName: string;
 
     /**
      * 原价（快照）
      */
-    originalPrice:string;
+    originalPrice: string;
 
     /**
      * 分摊优惠金额
      */
-     discountAmount:string;
+    discountAmount: string;
 
     /**
      * 分摊券抵扣金额
      */
-   couponAmount:string;
+    couponAmount: string;
 
     /**
      * 分摊促销金额
      */
-    promotionAmount:string;
+    promotionAmount: string;
 
     /**
      * SKU 最终支付金额（已分摊）
      */
-     payAmount:string;
+    payAmount: string;
 
-    skuImgUrl:string;
+    skuImgUrl: string;
+}
+
+export class OrderVipExtDTO {
+    /**
+     * 订单ID
+     */
+    orderId: string;
+
+    /**
+     * 唯一订单号
+     */
+    orderNo: string;
+
+    /**
+     * VIP计划ID
+     */
+    vipId: string;
+
+    /**
+     * 购买时长（月）
+     */
+    duration: number;
+
+    /**
+     * 开始时间
+     */
+    startTime: string;
+
+    /**
+     * 结束时间
+     */
+    endTime: string;
+
+    /**
+     * 优惠标签，用于在类型层级展示，如 双11限时优惠
+     */
+    promotionLabel: string;
+
+    /**
+     * 优惠标签描述，前端可以展示多条促销信息
+     */
+    promotionLabelDesc: string;
+}
+
+export class VipOrderDTO {
+    /**
+     * 订单ID
+     */
+    id: string;
+
+    /**
+     * 唯一订单号
+     */
+    orderNo: string;
+
+    /**
+     * 产品名称
+     */
+    productName: string;
+
+    /**
+     * 产品描述
+     */
+    productDesc: string;
+
+    /**
+     * 用户ID
+     */
+    memberId: string;
+
+    /**
+     * 订单类型：vip, album, reward等
+     */
+    orderType: string;
+
+    /**
+     * 订单总金额
+     */
+    amountTotal: string;
+
+    /**
+     * 优惠金额
+     */
+    amountDiscount: string;
+
+    /**
+     * 实际支付金额
+     */
+    amountPaid: string;
+
+    /**
+     * 优惠券抵扣
+     */
+    couponAmount: string;
+
+    /**
+     * 订单状态：创建、待支付、支付中、支付成功、支付失败、取消
+     */
+    orderStatus: number;
+
+    /**
+     * 未支付订单过期时间（如15分钟）
+     */
+    expireTime: string;
+
+    /**
+     * 支付状态：0未支付，1已支付，2已退款
+     */
+    paymentStatus: number;
+
+    /**
+     * 支付方式：wechat, alipay
+     */
+    paymentMethod: string;
+
+    /**
+     * 支付时间
+     */
+    paymentTime: string;
+
+    /**
+     * 币种类型
+     */
+    currencyType: string;
+
+
+    /**
+     * 版本号
+     */
+    version: string;
+
+    /**
+     * sku
+     */
+    orderItemDTO: OrderItemDTO;
+
+    /**
+     * vip信息
+     */
+    orderVipExtDTO: OrderVipExtDTO;
 }

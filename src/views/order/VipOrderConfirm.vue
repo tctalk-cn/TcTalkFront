@@ -1,5 +1,5 @@
 <template>
-  <div class="order-confirm-container">
+  <div v-if="orderForConfirm" class="order-confirm-container">
     <!-- 顶部栏 -->
     <van-nav-bar
         title="确认订单"
@@ -9,17 +9,17 @@
 
     <!-- 商品信息 -->
     <div class="product-card">
-      <div class="product-title">{{ plan.planName }}</div>
+      <div class="product-title">{{ orderForConfirm.orderItemDTO?.skuName }}</div>
       <div class="product-info">
-        <div class="price-now">¥ {{ plan.promotionPrice }}</div>
-        <div class="price-origin">原价 ¥ {{ plan.originalPrice }}</div>
+        <div class="price-now">¥ {{ orderForConfirm.orderItemDTO?.promotionAmount }}</div>
+        <div class="price-origin">原价 ¥ {{ orderForConfirm.orderItemDTO?.originalPrice }}</div>
       </div>
-      <div class="product-desc">{{ plan.planDescription }}</div>
+      <div class="product-desc">{{ orderForConfirm.productDesc }}</div>
     </div>
 
     <!-- 优惠信息 -->
-    <div v-if="plan.promotionLabelDesc" class="promo-card">
-      <van-tag type="warning">{{ plan.promotionLabelDesc }}</van-tag>
+    <div v-if="orderForConfirm.orderVipExtDTO" class="promo-card">
+      <van-tag type="warning">{{ orderForConfirm.orderVipExtDTO.promotionLabelDesc }}</van-tag>
     </div>
 
     <!-- 支付方式 -->
@@ -53,7 +53,7 @@
     <!-- 合计 -->
     <div class="total-section">
       <div class="total-text">应付金额：</div>
-      <div class="total-price">¥ {{ plan.promotionPrice }}</div>
+      <div class="total-price">¥ {{ orderForConfirm.amountPaid }}</div>
     </div>
 
     <!-- 同意协议 -->
@@ -81,15 +81,17 @@
 <script setup lang="ts">
 import {ref, onMounted} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
-import {Toast} from 'vant';
-import {useProfileStore} from '@/stores/member_store.js';
+import {showToast, Toast} from 'vant';
+import {useOrderStore} from "@/stores/order_store.ts";
+import {VipOrderDTO} from "@/models/order.ts";
 
 const route = useRoute();
 const router = useRouter();
-const {listEnabledPlans} = useProfileStore();
+const {findVipOrderDetail} = useOrderStore();
 
 // --- 页面状态 ---
 const plan = ref<any>({});
+const orderForConfirm = ref<VipOrderDTO>(null);
 const agree = ref(false);
 const payMethod = ref<'WECHAT' | 'ALIPAY'>('WECHAT');
 
@@ -97,16 +99,14 @@ const payMethod = ref<'WECHAT' | 'ALIPAY'>('WECHAT');
 onMounted(async () => {
   const orderId = route.query.orderId as string;
   const orderNo = route.query.orderNo as string;
-  console.info(orderId);
-  console.info(orderNo);
-  const index = Number(route.query.index || 0);
+  // 调用后端接口
+  const res = await findVipOrderDetail(orderId, orderNo);
 
-  const plans = await listEnabledPlans(orderId);
-  if (!plans || plans.length === 0) {
-    Toast("没有可用的会员方案");
+  if (!res?.code || res?.code !== "200") {
+    showToast(res?.message || "获取订单明细失败");
     return;
   }
-  plan.value = plans[index].memberPlan;
+  orderForConfirm.value = res.data;
 });
 
 // 返回

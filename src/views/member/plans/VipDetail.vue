@@ -107,7 +107,7 @@ const checkedAgreement = ref(false);
 const router = useRouter();
 onMounted(async () => {
   memberPlans.value = await listEnabledPlans(categoryCode);
-});
+})
 // 计算选中的plan
 const selectedPlan = computed(() => memberPlans.value[activeIndex.value]);
 
