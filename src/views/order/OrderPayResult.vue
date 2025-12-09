@@ -43,8 +43,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { Toast } from 'vant';
-
 const route = useRoute();
 const router = useRouter();
 

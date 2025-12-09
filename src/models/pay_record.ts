@@ -55,3 +55,12 @@ export class PayParams {
      */
     requestId: string;
 }
+
+/**
+ * 支付返回
+ */
+export class PayResponse {
+    paymentRecordId: string;
+    payUrl: string;
+    internalPaySuccess: boolean;
+}

@@ -17,12 +17,12 @@ export const Pages = {
     profileSetPhone: 'profileSetPhone',
     profileSetPassword: 'profileSetPassword',
     planCategory: 'planCategory',
-    vipPlatinumDetail:'vipPlatinumDetail',
-    courseDetail:'courseDetail',
-    familyDetail:'familyDetail',
-    kidsDetail:'kidsDetail',
-    sVipDetail:'sVipDetail',
-    vipDetail:'vipDetail',
+    vipPlatinumDetail: 'vipPlatinumDetail',
+    courseDetail: 'courseDetail',
+    familyDetail: 'familyDetail',
+    kidsDetail: 'kidsDetail',
+    sVipDetail: 'sVipDetail',
+    vipDetail: 'vipDetail',
 
     creativeCenter: 'creativeCenter',
     myIndex: 'myIndex',
@@ -58,6 +58,7 @@ export const Pages = {
     soundDetail: 'soundDetail',
     mediaComments: 'mediaComments',
 
-    vipOrderConfirm:'vipOrderConfirm',
-    vipProtocol:'vipProtocol',
+    vipOrderConfirm: 'vipOrderConfirm',
+    vipProtocol: 'vipProtocol',
+    paymentResult: 'paymentResult',
 }

@@ -283,7 +283,13 @@ const router = createRouter({
                 component: () => import("@/views/order/components/MemberProtocol.vue"),
                 children: [],
             },
-
+            // 支付结果查看页
+            {
+                path: '/pay/paymentResult',
+                name: Pages.paymentResult,
+                component: () => import("@/views/order/OrderPayResult.vue"),
+                children: [],
+            },
         ]
     }
 )

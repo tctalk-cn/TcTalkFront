@@ -223,14 +223,23 @@ const onSubmitOrder = async () => {
       submitting.value = false;
       return;
     }
-    // 跳转支付页
-    router.push({
-      path: '/order/pay',
-      query: {
-        requestId,
-        payMethod: payMethod.value,
-      },
-    });
+
+    const payResponse = ret.data;
+    if (payResponse.internalPaySuccess) {
+      // 内部支付成功，刷新页面或跳转到支付结果页
+      await router.push(`/order/paySuccess?recordId=${payResponse.paymentRecordId}`);
+    } else if (payResponse.payUrl) {
+      // 外部支付，跳转第三方支付
+      window.open(payResponse.payUrl, "_blank");
+      // 自身跳转到支付状态页，轮询支付结果
+      await router.replace({
+        path: '/pay/paymentResult',
+        query: {
+          paymentRecordId: payResponse.paymentRecordId,
+          orderId: orderForConfirm.value.id
+        }
+      });
+    }
 
   } finally {
     submitting.value = false;
