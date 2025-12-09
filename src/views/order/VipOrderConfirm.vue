@@ -116,22 +116,23 @@
 <script setup lang="ts">
 import {ref, onMounted, onUnmounted} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
-import {showToast, Toast} from 'vant';
+import {closeToast, showLoadingToast, showToast, Toast} from 'vant';
 import {useOrderStore} from "@/stores/order_store.ts";
 import {VipOrderDTO} from "@/models/order.ts";
 import AutoRenewNotice from "@/views/order/components/AutoRenewNotice.vue";
 import BenefitList from "@/views/order/components/BenefitList.vue";
 import defaultCover from '@/assets/images/goods_default.png';
+import {usePayStore} from "@/stores/pay_store.ts";
 
 const route = useRoute();
 const router = useRouter();
 const {findVipOrderDetail} = useOrderStore();
+const {generateRequestId, createAndPay} = usePayStore();
 const showAutoRenew = ref(false);
-const plan = ref<any>({});
 const orderForConfirm = ref<VipOrderDTO>(null);
 const agree = ref(false);
 const payMethod = ref<'WECHAT' | 'ALIPAY'>('WECHAT');
-
+const submitting = ref(false);
 // 倒计时
 const remainingSeconds = ref(0);
 const countdownText = ref('');
@@ -178,24 +179,65 @@ onUnmounted(() => {
 function updateCountdown() {
   const minutes = Math.floor(remainingSeconds.value / 60);
   const seconds = remainingSeconds.value % 60;
-  countdownText.value = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+  countdownText.value = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
 const onBack = () => router.back();
 
-const onSubmitOrder = () => {
-  if (!agree.value) return;
-  Toast.loading("创建订单中...");
-  setTimeout(() => {
-    Toast.clear();
+const onSubmitOrder = async () => {
+  if (!agree.value || submitting.value) {
+    return;
+  }
+
+  // 显示加载
+  const loading = showLoadingToast({
+    message: "创建订单中...",
+    forbidClick: true,  // 避免乱点
+    duration: 0         // 不自动关闭
+  });
+  try {
+    // 生成支付请求
+    // 生成支付请求
+    const res = await generateRequestId({
+      orderId: orderForConfirm.value.id,
+      orderNo: orderForConfirm.value.orderNo,
+      channelCode: payMethod.value,
+      bizType: 'PAY'
+    });
+    if (res?.code !== '200') {
+      showToast(res?.message || '生成支付请求失败');
+      submitting.value = false;
+      return;
+    }
+    const requestId = res.data;
+
+    const ret = await createAndPay({
+      orderId: orderForConfirm.value.id,
+      orderNo: orderForConfirm.value.orderNo,
+      channelCode: payMethod.value,
+      requestId: requestId,
+      clientType: 'APP',
+      bizType: 'PAY',
+    });
+    if (ret?.code !== '200') {
+      showToast(res?.message || '创建支付单失败');
+      submitting.value = false;
+      return;
+    }
+    // 跳转支付页
     router.push({
-      path: "/order/pay",
+      path: '/order/pay',
       query: {
-        planId: plan.value.planId,
+        requestId,
         payMethod: payMethod.value,
       },
     });
-  }, 800);
+
+  } finally {
+    submitting.value = false;
+    // 关闭 loading
+    closeToast();
+  }
 };
 </script>
 
@@ -219,7 +261,7 @@ const onSubmitOrder = () => {
     margin: 12px;
     padding: 16px;
     border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
 
   /* 商品卡片 */
@@ -229,22 +271,76 @@ const onSubmitOrder = () => {
       justify-content: space-between;
       align-items: center;
       margin-bottom: 8px;
-      .product-title { font-size: 18px; font-weight: bold; }
-      .expire-countdown { font-size: 14px; color: #ff4444; font-weight: bold; }
+
+      .product-title {
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .expire-countdown {
+        font-size: 14px;
+        color: #ff4444;
+        font-weight: bold;
+      }
     }
-    .product-cover-wrapper { margin: 8px 0; }
-    .product-cover { width: 100%; max-height: 180px; object-fit: cover; border-radius: 12px; }
-    .product-info { display: flex; gap: 12px; font-size: 16px; margin: 8px 0;
-      .price-now { color: #ff4444; font-weight: bold; }
-      .price-origin { color: #999; text-decoration: line-through; }
+
+    .product-cover-wrapper {
+      margin: 8px 0;
     }
-    .promo-tag { background: #ffece8; color: #ff4444; font-size: 12px; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-bottom: 8px; }
-    .product-desc { font-size: 14px; color: #555; }
+
+    .product-cover {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .product-info {
+      display: flex;
+      gap: 12px;
+      font-size: 16px;
+      margin: 8px 0;
+
+      .price-now {
+        color: #ff4444;
+        font-weight: bold;
+      }
+
+      .price-origin {
+        color: #999;
+        text-decoration: line-through;
+      }
+    }
+
+    .promo-tag {
+      background: #ffece8;
+      color: #ff4444;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .product-desc {
+      font-size: 14px;
+      color: #555;
+    }
   }
 
-  .duration-card { display: flex; justify-content: space-between; align-items: center; font-size: 16px; }
+  .duration-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+  }
 
-  .benefit-list { margin: 12px; padding: 12px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+  .benefit-list {
+    margin: 12px;
+    padding: 12px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
 
   /* 底部支付 */
   .bottom-pay {
@@ -255,10 +351,16 @@ const onSubmitOrder = () => {
     background: #fff;
     padding: 0.5rem;
     border-radius: 0.5rem 0.5rem 0 0;
-    box-shadow: 0 -0.1rem 0.6rem rgba(0,0,0,0.1);
+    box-shadow: 0 -0.1rem 0.6rem rgba(0, 0, 0, 0.1);
 
-    .card { margin: 6px 0; padding: 10px; }
-    .submit-wrapper { margin-top: 6px; }
+    .card {
+      margin: 6px 0;
+      padding: 10px;
+    }
+
+    .submit-wrapper {
+      margin-top: 6px;
+    }
   }
 
   .agreement-wrapper {
@@ -269,9 +371,9 @@ const onSubmitOrder = () => {
     justify-content: flex-start;
 
     .agree-checkbox {
-      --icon-size: 8px;     // 勾选框大小
+      --icon-size: 8px; // 勾选框大小
       --icon-color: #ff4444; // 勾选颜色
-      font-size: 14px;       // 文本大小
+      font-size: 14px; // 文本大小
       line-height: 1.5;
       margin-right: 6px;
     }
@@ -283,7 +385,9 @@ const onSubmitOrder = () => {
   }
 
 
-  .van-cell.active { background-color: #fff7f6 !important; }
+  .van-cell.active {
+    background-color: #fff7f6 !important;
+  }
 
 }
 </style>
