@@ -89,11 +89,14 @@
       </div>
 
       <!-- 协议 -->
+      <!-- 协议 + 勾选 -->
       <div class="agreement-wrapper">
-        <span @click="router.push('/protocol')" class="agreement-link">
-          《会员服务协议》
-        </span>
+        <van-checkbox v-model="agree" shape="round" class="agree-checkbox">
+          <span>我已阅读并同意</span>
+        </van-checkbox>
+        <span @click="router.push('/protocol')" class="agreement-link">《会员服务协议》</span>
       </div>
+
 
       <!-- 提交订单按钮 -->
       <div class="submit-wrapper">
@@ -260,9 +263,27 @@ const onSubmitOrder = () => {
     .submit-wrapper { margin-top: 6px; }
   }
 
-  .agreement-wrapper { margin: 8px 16px; text-align: right; font-size: 14px;
-    .agreement-link { color: #1677FF; cursor: pointer; }
+  .agreement-wrapper {
+    margin: 8px 16px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    .agree-checkbox {
+      --icon-size: 8px;     // 勾选框大小
+      --icon-color: #ff4444; // 勾选颜色
+      font-size: 14px;       // 文本大小
+      line-height: 1.5;
+      margin-right: 6px;
+    }
+
+    .agreement-link {
+      color: #1677FF;
+      cursor: pointer;
+    }
   }
+
 
   .van-cell.active { background-color: #fff7f6 !important; }
 
