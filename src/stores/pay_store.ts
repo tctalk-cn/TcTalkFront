@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {useGenerateRequestId,useCreateAndPay} from "@/api/order/pay_api.ts";
+import {useGenerateRequestId,useCreateAndPay,useFindPayment} from "@/api/order/pay_api.ts";
 import {GeneratePayRequestParams,PayParams} from "@/models/pay_record.ts";
 
 export const usePayStore = defineStore(
@@ -17,6 +17,12 @@ export const usePayStore = defineStore(
             async createAndPay(params: PayParams) {
                 return await useCreateAndPay(params);
             },
+
+            // 生成支付单
+            async findPayment(paymentRecordId: string) {
+                return await useFindPayment(paymentRecordId);
+            },
+
         },
     }
 );

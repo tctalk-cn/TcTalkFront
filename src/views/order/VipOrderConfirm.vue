@@ -240,7 +240,6 @@ const onSubmitOrder = async () => {
         path: '/pay/paymentResult',
         query: {
           paymentRecordId: payResponse.paymentRecordId,
-          orderId: orderForConfirm.value.id
         }
       });
     }

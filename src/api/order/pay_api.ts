@@ -1,5 +1,5 @@
 import http from "@/utils/http.ts";
-import {GeneratePayRequestParams, PayParams,PayResponse} from "@/models/pay_record.ts";
+import {GeneratePayRequestParams, PayParams, PayResponse, PaymentRecord} from "@/models/pay_record.ts";
 
 
 /**
@@ -22,4 +22,15 @@ export async function useCreateAndPay(params: PayParams) {
         message: string,
         data: PayResponse
     }>("/oms_api/pay/createAndPay/", params);
+}
+
+/**
+ * 查询支付记录
+ */
+export async function useFindPayment(paymentRecordId: string) {
+    return await http.post<{
+        code: string,
+        message: string,
+        data: PaymentRecord
+    }>("/oms_api/pay/findPayment/" + paymentRecordId);
 }
