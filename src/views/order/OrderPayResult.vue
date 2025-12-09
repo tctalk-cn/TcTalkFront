@@ -96,12 +96,25 @@ const fetchPayment = async () => {
   }
 
   paymentRecord.value = res.data;
+  const statusCode = paymentRecord.value.tradeStatus;
+  status.value = mapPaymentStatus(statusCode);
 
-  switch (paymentRecord.value.tradeStatus) {
-    case 2: status.value = 'success'; stopPolling(); break;
-    case 0:
-    case 1: status.value = 'pending'; startPolling(); break;
-    default: status.value = 'fail'; stopPolling(); break;
+  if (status.value === 'success' || status.value === 'fail') {
+    stopPolling();
+  } else {
+    startPolling();
+  }
+};
+
+const mapPaymentStatus = (statusCode: number): 'success' | 'fail' | 'pending' => {
+  switch (statusCode) {
+    case 2: // PAID
+      return 'success';
+    case 3: // FAILED
+    case 4: // CLOSED
+      return 'fail';
+    default: // UNPAID(0), INTERNAL_DEDUCTING(10), INTERNAL_DEDUCTED(11), EXTERNAL_PAYING(20), MANUAL_PROCESSING(50)
+      return 'pending';
   }
 };
 
@@ -123,7 +136,7 @@ const startPolling = () => {
       status.value = 'fail';
       stopPolling();
     }
-  }, 3000);
+  }, 1000);
 };
 
 const stopPolling = () => {
