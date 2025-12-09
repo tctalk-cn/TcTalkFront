@@ -1,59 +1,64 @@
 <template>
-  <div class="pay-result-container">
+  <div class="pay-result-page">
+    <!-- 顶部 NavBar -->
     <van-nav-bar
         title="支付结果"
         left-arrow
+        fixed
+        placeholder
         @click-left="onBack"
     />
 
-    <!-- 顶部状态 -->
-    <div class="status-area">
-      <div v-if="status === 'success'" class="success-wrapper">
-        <div class="circle-bg"></div>
-        <svg class="checkmark" viewBox="0 0 52 52">
-          <circle class="check-circle" cx="26" cy="26" r="25" />
-          <path class="check" fill="none" d="M14 27l7 7 17-17"/>
-        </svg>
-        <div class="status-text">支付成功</div>
-      </div>
+    <div class="content">
+      <!-- 顶部状态 -->
+      <div class="status-area">
+        <div v-if="status === 'success'" class="success-wrapper">
+          <div class="circle-bg"></div>
+          <svg class="checkmark" viewBox="0 0 52 52">
+            <circle class="check-circle" cx="26" cy="26" r="25" />
+            <path class="check" fill="none" d="M14 27l7 7 17-17"/>
+          </svg>
+          <div class="status-text">支付成功</div>
+        </div>
 
-      <div v-else-if="status === 'fail'" class="fail-wrapper">
-        <van-icon name="cross" size="64px" color="#ff4444" />
-        <div class="status-text">支付失败</div>
-      </div>
+        <div v-else-if="status === 'fail'" class="fail-wrapper">
+          <van-icon name="cross" size="64px" color="#ff4444" />
+          <div class="status-text">支付失败</div>
+        </div>
 
-      <div v-else class="pending-wrapper">
-        <van-loading size="32px" color="#ff9900" />
-        <div class="status-text">支付中...</div>
-      </div>
-    </div>
-
-    <!-- 支付明细 -->
-    <div class="result-card" v-if="paymentRecord">
-      <div class="order-info">
-        <div>商品: {{ paymentRecord.subject }}</div>
-        <div>金额: ¥ {{ paymentRecord.amount }}</div>
-        <div>订单号: {{ paymentRecord.orderNo }}</div>
-        <div v-if="paymentRecord.paymentTime">支付时间: {{ formattedPaymentTime }}</div>
-        <div v-if="status === 'fail' && paymentRecord.errorMessage" class="fail-info">
-          支付失败原因: {{ paymentRecord.errorMessage }}
+        <div v-else class="pending-wrapper">
+          <van-loading size="32px" color="#ff9900" />
+          <div class="status-text">支付中...</div>
         </div>
       </div>
 
-      <div class="button-group">
-        <van-button
-            type="primary"
-            block
-            @click="onGoMember"
-            v-if="status === 'success'"
-        >查看会员权益</van-button>
+      <!-- 支付明细 -->
+      <div class="result-card" v-if="paymentRecord">
+        <div class="order-info">
+          <div>商品: {{ paymentRecord.subject }}</div>
+          <div>金额: ¥ {{ paymentRecord.amount }}</div>
+          <div>订单号: {{ paymentRecord.orderNo }}</div>
+          <div v-if="paymentRecord.paymentTime">支付时间: {{ formattedPaymentTime }}</div>
+          <div v-if="status === 'fail' && paymentRecord.errorMessage" class="fail-info">
+            支付失败原因: {{ paymentRecord.errorMessage }}
+          </div>
+        </div>
 
-        <van-button
-            type="default"
-            block
-            @click="onRetry"
-            v-if="status === 'fail'"
-        >重新支付</van-button>
+        <div class="button-group">
+          <van-button
+              type="primary"
+              block
+              @click="onGoMember"
+              v-if="status === 'success'"
+          >查看会员权益</van-button>
+
+          <van-button
+              type="default"
+              block
+              @click="onRetry"
+              v-if="status === 'fail'"
+          >重新支付</van-button>
+        </div>
       </div>
     </div>
   </div>
@@ -138,16 +143,19 @@ const onRetry = () => router.replace('/order/pay' + window.location.search);
 </script>
 
 <style scoped lang="scss">
-.pay-result-container {
+.pay-result-page {
   background: #f8f8f8;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
+  .content {
+    margin-top: 60px; /* 保留 NavBar 高度 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
   .status-area {
-    margin-top: 24px;
-    margin-bottom: 40px; // 增加底部间距
+    margin-bottom: 40px;
     text-align: center;
     padding:1rem;
 
@@ -155,6 +163,7 @@ const onRetry = () => router.replace('/order/pay' + window.location.search);
       font-size: 22px;
       font-weight: bold;
       margin-top: 12px;
+      word-break: break-word;
     }
 
     .success-wrapper {
@@ -167,7 +176,7 @@ const onRetry = () => router.replace('/order/pay' + window.location.search);
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        background: linear-gradient(135deg, #4cd964, #2ed1b6);
+        background: #4cd964;
         box-shadow: 0 10px 20px rgba(0,0,0,0.15);
         animation: pulse 1.5s infinite;
       }
@@ -204,19 +213,28 @@ const onRetry = () => router.replace('/order/pay' + window.location.search);
   }
 
   .result-card {
-    margin: 0 12px 40px; // 卡片与顶部状态保持间距
+    margin: 0 12px 60px;
     background: #fff;
     padding: 24px;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    width: 90%;
-    text-align: center;
+    width: 95%;
+    max-width: 500px;
+    text-align: left;
 
     .order-info {
       font-size: 16px;
       color: #555;
       margin: 12px 0;
       line-height: 1.6;
+
+      div {
+        word-break: break-word;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        margin-bottom: 8px;
+      }
 
       .fail-info { color: #ff4444; }
     }
