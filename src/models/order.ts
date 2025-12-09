@@ -158,6 +158,13 @@ export class OrderItemDTO {
     skuImgUrl: string;
 }
 
+export class MemberBenefit {
+    benefitCode: string;
+    benefitName: string;
+    benefitType: string;
+    benefitDesc: string;
+}
+
 export class OrderVipExtDTO {
     /**
      * 订单ID
@@ -200,21 +207,29 @@ export class OrderVipExtDTO {
     promotionLabelDesc: string;
 
     /**
-     * 计费模式：one_time（一次性）/ auto_renew（自动续费）
+     * 计费模式：ONCE一次性/RECURRING自动续费/TRIAL试用/INTRO首月优惠
      */
-    billingMode: 'one_time' | 'auto_renew';
+    billingMode: string;
 
     /**
-     * 续费提示文案
-     * 如：“连续包月首月 ¥9.9，次月起 ¥12”
+     * 订阅须知/自动续费说明等 JSON 数组
      */
-    renewHitDesc: string;
+    noticesJson: string;
 
     /**
-     * 风控提示、购买说明
-     * 如 ["购买成功后不支持退款", "服务立即生效"]
+     * 会员权益JSON
      */
-    notices: string[];
+    benefits: MemberBenefit[];
+
+    /**
+     * 续费价
+     */
+    renewPrice: string;
+
+    /**
+     * 自动续费状态
+     */
+    autoRenewStatus: boolean;
 }
 
 export class VipOrderDTO {
