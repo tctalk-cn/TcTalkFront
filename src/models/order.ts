@@ -297,7 +297,7 @@ export class VipOrderDTO {
     /**
      * 下单时间（时间戳）
      */
-    createTime: number;
+    createTime: string;
 
     /**
      * 未支付订单过期时间（如15分钟）
