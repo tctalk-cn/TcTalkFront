@@ -9,7 +9,7 @@
 
     <!-- 商品信息 -->
     <div class="product-card">
-      <div class="product-title">{{ orderForConfirm.orderItemDTO?.skuName }}</div>
+      <div class="product-title">{{ orderForConfirm.productName }}</div>
       <div class="product-info">
         <div class="price-now">¥ {{ orderForConfirm.orderItemDTO?.promotionAmount }}</div>
         <div class="price-origin">原价 ¥ {{ orderForConfirm.orderItemDTO?.originalPrice }}</div>
@@ -53,7 +53,7 @@
     <!-- 合计 -->
     <div class="total-section">
       <div class="total-text">应付金额：</div>
-      <div class="total-price">¥ {{ orderForConfirm.amountPaid }}</div>
+      <div class="total-price">¥ {{ orderForConfirm.amountPayable }}</div>
     </div>
 
     <!-- 同意协议 -->

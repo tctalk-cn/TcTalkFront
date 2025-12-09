@@ -198,6 +198,23 @@ export class OrderVipExtDTO {
      * 优惠标签描述，前端可以展示多条促销信息
      */
     promotionLabelDesc: string;
+
+    /**
+     * 计费模式：one_time（一次性）/ auto_renew（自动续费）
+     */
+    billingMode: 'one_time' | 'auto_renew';
+
+    /**
+     * 续费提示文案
+     * 如：“连续包月首月 ¥9.9，次月起 ¥12”
+     */
+    renewHitDesc: string;
+
+    /**
+     * 风控提示、购买说明
+     * 如 ["购买成功后不支持退款", "服务立即生效"]
+     */
+    notices: string[];
 }
 
 export class VipOrderDTO {
@@ -227,6 +244,12 @@ export class VipOrderDTO {
     memberId: string;
 
     /**
+     * 购买账号展示（脱敏）
+     * 如：137****5678
+     */
+    accountDisplay: string;
+
+    /**
      * 订单类型：vip, album, reward等
      */
     orderType: string;
@@ -242,9 +265,9 @@ export class VipOrderDTO {
     amountDiscount: string;
 
     /**
-     * 实际支付金额
+     * 实际待支付金额（最终价）
      */
-    amountPaid: string;
+    amountPayable: string;
 
     /**
      * 优惠券抵扣
@@ -257,9 +280,19 @@ export class VipOrderDTO {
     orderStatus: number;
 
     /**
+     * 下单时间（时间戳）
+     */
+    createTime: number;
+
+    /**
      * 未支付订单过期时间（如15分钟）
      */
     expireTime: string;
+
+    /**
+     * 展示倒计时（精确秒）
+     */
+    expireSeconds: number;
 
     /**
      * 支付状态：0未支付，1已支付，2已退款
