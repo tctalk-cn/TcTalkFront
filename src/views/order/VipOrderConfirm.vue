@@ -59,17 +59,6 @@
         <div class="section-title">支付方式</div>
         <van-cell-group>
           <van-cell
-              title="微信支付"
-              clickable
-              :class="{ active: payMethod === 'WECHAT' }"
-              @click="payMethod = 'WECHAT'"
-          >
-            <template #right-icon>
-              <van-icon name="wechat" color="#1AAD19"/>
-            </template>
-          </van-cell>
-
-          <van-cell
               title="支付宝"
               clickable
               :class="{ active: payMethod === 'ALIPAY' }"
@@ -77,6 +66,16 @@
           >
             <template #right-icon>
               <van-icon name="alipay" color="#1677FF"/>
+            </template>
+          </van-cell>
+          <van-cell
+              title="微信支付"
+              clickable
+              :class="{ active: payMethod === 'WECHAT' }"
+              @click="payMethod = 'WECHAT'"
+          >
+            <template #right-icon>
+              <van-icon name="wechat" color="#1AAD19"/>
             </template>
           </van-cell>
         </van-cell-group>
@@ -131,7 +130,7 @@ const {generateRequestId, createAndPay} = usePayStore();
 const showAutoRenew = ref(false);
 const orderForConfirm = ref<VipOrderDTO>(null);
 const agree = ref(false);
-const payMethod = ref<'WECHAT' | 'ALIPAY'>('WECHAT');
+const payMethod = ref<'WECHAT' | 'ALIPAY'>('ALIPAY');
 const submitting = ref(false);
 // 倒计时
 const remainingSeconds = ref(0);
