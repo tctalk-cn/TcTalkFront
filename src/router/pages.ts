@@ -59,4 +59,5 @@ export const Pages = {
     mediaComments: 'mediaComments',
 
     vipOrderConfirm:'vipOrderConfirm',
+    vipProtocol:'vipProtocol',
 }

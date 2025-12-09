@@ -276,6 +276,13 @@ const router = createRouter({
                 component: () => import("@/views/order/VipOrderConfirm.vue"),
                 children: [],
             },
+            // 会员协议
+            {
+                path: '/vipOrder/protocol',
+                name: Pages.vipProtocol,
+                component: () => import("@/views/order/components/MemberProtocol.vue"),
+                children: [],
+            },
 
         ]
     }

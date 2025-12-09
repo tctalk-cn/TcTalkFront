@@ -88,15 +88,13 @@
         <div class="total-price">¥ {{ orderForConfirm.amountPayable }}</div>
       </div>
 
-      <!-- 协议 -->
       <!-- 协议 + 勾选 -->
       <div class="agreement-wrapper">
         <van-checkbox v-model="agree" shape="round" class="agree-checkbox">
           <span>我已阅读并同意</span>
+          <span @click.stop="router.push('/vipOrder/protocol')" class="agreement-link">《会员服务协议》</span>
         </van-checkbox>
-        <span @click="router.push('/protocol')" class="agreement-link">《会员服务协议》</span>
       </div>
-
 
       <!-- 提交订单按钮 -->
       <div class="submit-wrapper">
