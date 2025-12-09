@@ -215,7 +215,7 @@ const onSubmitOrder = async () => {
       orderNo: orderForConfirm.value.orderNo,
       channelCode: payMethod.value,
       requestId: requestId,
-      clientType: 'APP',
+      clientType: 'H5',
       bizType: 'PAY',
     });
     if (ret?.code !== '200') {
@@ -229,8 +229,12 @@ const onSubmitOrder = async () => {
       // 内部支付成功，刷新页面或跳转到支付结果页
       await router.push(`/order/paySuccess?recordId=${payResponse.paymentRecordId}`);
     } else if (payResponse.payUrl) {
-      // 外部支付，跳转第三方支付
-      window.open(payResponse.payUrl, "_blank");
+      // 新窗口打开支付页面
+      const payWindow = window.open("", "_blank");
+      if (payWindow) {
+        payWindow.document.write(payResponse.payUrl);
+        payWindow.document.close();
+      }
       // 自身跳转到支付状态页，轮询支付结果
       await router.replace({
         path: '/pay/paymentResult',
