@@ -115,7 +115,7 @@
 <script setup lang="ts">
 import {ref, onMounted, onUnmounted} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
-import {closeToast, showLoadingToast, showToast, Toast} from 'vant';
+import {closeToast, showLoadingToast, showToast} from 'vant';
 import {useOrderStore} from "@/stores/order_store.ts";
 import {VipOrderDTO} from "@/models/order.ts";
 import AutoRenewNotice from "@/views/order/components/AutoRenewNotice.vue";

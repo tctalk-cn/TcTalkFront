@@ -23,6 +23,26 @@ export class OrderDTO {
     orderNo: string;
 
     /**
+     * 图片链接
+     */
+   orderImgUrl:string;
+
+    /**
+     * SKU数量
+     */
+   skuCount:number;
+
+    /**
+     * 产品名称
+     */
+   productName:string;
+
+    /**
+     * 产品描述
+     */
+    productDesc:string;
+
+    /**
      * 用户ID
      */
     memberId: string;

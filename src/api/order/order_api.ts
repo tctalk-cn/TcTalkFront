@@ -24,4 +24,15 @@ export async function useFindVipOrderDetail(orderId: string, orderNo: string) {
     }>("/oms_api/order/findVipOrderDetail/" + orderId + "/" + orderNo);
 }
 
+/**
+ * 查询用户订单
+ */
+export async function useLoadOrders(beginOrderId: string, pageSize: number){
+    return await http.get<{
+        code: string,
+        message: string,
+        data: OrderDTO[],
+    }>("/oms_api/order/loadOrders", {beginOrderId: beginOrderId, pageSize: pageSize});
+}
+
 
