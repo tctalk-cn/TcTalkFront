@@ -83,6 +83,11 @@ export class OrderDTO {
     expireTime: string;
 
     /**
+     * 更新时间
+     */
+    updateTime:string;
+
+    /**
      * 支付状态：0未支付，1已支付，2已退款
      */
     paymentStatus: number;
