@@ -11,6 +11,9 @@
           :key="order.id"
           :order="order"
           @pay="handlePay"
+          @comment="handleComment"
+          @detail="handleDetail"
+          @update-status=""
       />
       <van-empty v-if="orderList.length === 0" description="暂无订单"/>
     </van-list>
@@ -78,6 +81,23 @@ const onRefresh = () => {
   refreshing.value = true;
   loadOrderData();
 }
+
+// 处理支付接口
+const handlePay=()=>{
+
+}
+
+// 处理评价
+const handleComment=()=>{
+
+}
+
+// 处理明细
+const handleDetail=()=>{
+
+}
+
+
 
 </script>
 

@@ -45,7 +45,8 @@ import {
     FloatingPanel,
     DropdownMenu,
     DropdownItem,
-    Slider, Switch, Progress, Picker
+    Slider, Switch, Progress, Picker,
+    Empty
 } from 'vant';
 
 import 'vant/lib/index.css';
@@ -130,6 +131,7 @@ app.use(Sidebar).use(SidebarItem);
 app.use(PullRefresh);
 // 列表组件
 app.use(List);
+app.use(Empty);
 app.use(ActionBar);
 app.use(ActionBarIcon);
 app.use(ActionBarButton);
