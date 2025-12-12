@@ -214,7 +214,7 @@ const recommendServiceItems = ref([
 ]);
 // 下面是"我的订单"、"积分商城"、"会员卡"等列表
 const actionList = ref([
-  {to: '/order', icon: markRaw(Order), text: '我的订单', isLink: true, isSvg: true},
+  {to: '/orderCenter/orders', icon: markRaw(Order), text: '我的订单', isLink: true, isSvg: true},
   {to: '/shop', icon: markRaw(SixPoints), text: '积分商城', isLink: true, isSvg: true},
   {to: '/vipcard', icon: markRaw(Vip), text: '会员卡', isLink: true, isSvg: true},
   {to: '/service', icon: markRaw(Application), text: '服务中心', isLink: true, isSvg: true},

@@ -61,4 +61,7 @@ export const Pages = {
     vipOrderConfirm: 'vipOrderConfirm',
     vipProtocol: 'vipProtocol',
     paymentResult: 'paymentResult',
+    orders:'orders',
+    allOrders:'allOrders',
+    pendingPaymentOrders:'pendingPaymentOrders',
 }
