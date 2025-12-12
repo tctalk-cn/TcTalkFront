@@ -181,7 +181,7 @@ function updateCountdown() {
   countdownText.value = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
-const onBack = () => router.back();
+const onBack = () => router.push("/orderCenter/orders");
 
 const onSubmitOrder = async () => {
   if (!agree.value || submitting.value) {

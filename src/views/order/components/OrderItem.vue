@@ -8,7 +8,8 @@
       </div>
 
       <!-- 倒计时 / 时间展示 -->
-      <span v-if="statusTimeText" class="order-time" :class="{warning: isWarning,flashing: flashing}">
+      <span v-if="statusTimeText" class="order-time"
+            :class="{warning: isWarning&& !isOrderCompleted,flashing: flashing&& !isOrderCompleted,}">
         {{ statusTimeText }}
       </span>
     </div>
@@ -37,21 +38,24 @@
             size="small"
             type="primary"
             @click="$emit('pay', order)"
-        >去支付</van-button>
+        >去支付
+        </van-button>
 
         <van-button
             v-if="showCommentBtn"
             size="small"
             type="default"
             @click="$emit('comment', order)"
-        >评价</van-button>
+        >评价
+        </van-button>
 
         <van-button
             v-if="showDetailBtn"
             size="small"
             type="default"
             @click="$emit('detail', order)"
-        >查看详情</van-button>
+        >查看详情
+        </van-button>
       </div>
     </div>
   </div>
@@ -59,9 +63,9 @@
 
 <script setup lang="ts">
 import defaultCover from "@/assets/images/vip.png";
-import type { OrderDTO } from "@/models/order.ts";
-import { computed } from "vue";
-import { useOrderCountdown } from "@/views/order/components/useOrderCountdown.ts";
+import type {OrderDTO} from "@/models/order.ts";
+import {computed} from "vue";
+import {useOrderCountdown} from "@/views/order/components/useOrderCountdown.ts";
 
 const props = defineProps<{ order: OrderDTO }>();
 const emit = defineEmits(["pay", "comment", "detail", "update-status"]);
@@ -91,7 +95,13 @@ const PaymentStatusMap: Record<number, string> = {
 };
 
 // composable → 只负责倒计时
-const { countdownText, flashing,isWarning } = useOrderCountdown(props.order, emit);
+const {countdownText, flashing, isWarning} = useOrderCountdown(props.order, emit);
+
+const isOrderCompleted = computed(() => {
+  // 订单完成条件：支付成功 / 交易完结
+  const { orderStatus, paymentStatus } = props.order;
+  return paymentStatus === 2 || orderStatus === 3 || orderStatus === 8;
+})
 
 // ================== 状态文本 ===================
 const statusText = computed(() => {
@@ -103,7 +113,7 @@ const statusText = computed(() => {
 
 // ================== 时间文本逻辑（唯一版本） ===================
 const statusTimeText = computed(() => {
-  const { orderStatus, paymentStatus, paymentTime, updateTime, expireTime } = props.order;
+  const {orderStatus, paymentStatus, paymentTime, updateTime, expireTime} = props.order;
   const now = new Date();
 
   // 支付成功
@@ -132,7 +142,7 @@ const statusTimeText = computed(() => {
 
 // ================== 按钮逻辑 ===================
 const showPayBtn = computed(() => {
-  const { orderStatus, paymentStatus, expireTime } = props.order;
+  const {orderStatus, paymentStatus, expireTime} = props.order;
 
   const notExpired = expireTime && new Date(expireTime) > new Date();
   const orderStatusCanPay = [0, 1, 4];
@@ -197,13 +207,17 @@ const showDetailBtn = computed(() => true);
     }
 
     @keyframes flash {
-      50% { opacity: 0.2; }
+      50% {
+        opacity: 0.2;
+      }
     }
 
   }
 
   @keyframes flash {
-    50% { opacity: 0.2; }
+    50% {
+      opacity: 0.2;
+    }
   }
 
   .order-body {

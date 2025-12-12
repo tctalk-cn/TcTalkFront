@@ -10,7 +10,7 @@
           v-for="order in orderList"
           :key="order.id"
           :order="order"
-          @pay="handlePay"
+          @pay="handlePay(order)"
           @comment="handleComment"
           @detail="handleDetail"
           @update-status=""
@@ -83,20 +83,28 @@ const onRefresh = () => {
 }
 
 // 处理支付接口
-const handlePay=()=>{
-
+const handlePay = (order: OrderDTO) => {
+  if (order.orderType === 'VIP') {
+    // 跳转到订单确认/支付页
+    router.push({
+      path: "/vipOrder/confirm",
+      query: {
+        orderId: order.id,
+        orderNo: order.orderNo,
+      },
+    });
+  }
 }
 
 // 处理评价
-const handleComment=()=>{
+const handleComment = () => {
 
 }
 
 // 处理明细
-const handleDetail=()=>{
+const handleDetail = () => {
 
 }
-
 
 
 </script>
