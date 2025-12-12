@@ -294,21 +294,21 @@ const router = createRouter({
             // 订单列表
             {
                 path: '/orderCenter/orders',
-                name: Pages.orderList,
+                name: Pages.orderCenter,
                 component: () => import("@/views/member/orders/Orders.vue"),
                 redirect: {name: Pages.allOrders},
                 children: [
                     {
                         path: 'allOrders',
                         name: Pages.allOrders,
-                        component: () => import("@/views/member/orders/components/AllOrders.vue"),
-                        meta: {menu: Pages.orderList},
+                        component: () => import("@/views/member/orders/children/AllOrders.vue"),
+                        meta: {menu: Pages.orderCenter},
                     },
                     {
                         path: 'pendingPaymentOrders',
                         name: Pages.pendingPaymentOrders,
-                        component: () => import("@/views/member/orders/components/PendingPaymentOrders.vue"),
-                        meta: {menu: Pages.orderList},
+                        component: () => import("@/views/member/orders/children/PendingPaymentOrders.vue"),
+                        meta: {menu: Pages.orderCenter},
                     },
                 ],
             },

@@ -6,41 +6,23 @@
         finished-text="没有更多了"
         @load="loadOrderData('load')"
     >
-      <div v-for="(item) in orderList"
-           :key="item.id"
-           :title="item.name">
-        <AlbumItem
-            :id="item.id"
-            :name="item.name"
-            :cover-url="item.coverUrl"
-            :album-creator-member-id="item.creatorMemberId"
-            :creator-nickname="item.creatorNickname"
-            :show-play-count="true"
-            :play-count="item.viewsCount"
-            :show-comment-count="true"
-            :comment-count="item.commentCount"
-            :show-like-count="true"
-            :like-count="item.recommendCount"
-            :show-subscription-count="true"
-            :subscription-count="item.subscriptionCount"
-            :update-time="item.updateTime"
-            :on-view-data="() => {router.push({path:'/creative/albumStatistic',query: {albumId: item.id,albumCreatorMemberId:item.creatorMemberId}})}"
-            :on-edit="()=>{}"
-            :on-more="() => {}"
-            :on-share="()=>{}"
-        />
-        <van-divider/>
-      </div>
+      <OrderItem
+          v-for="order in orderList"
+          :key="order.id"
+          :order="order"
+          @pay="handlePay"
+      />
+      <van-empty v-if="orderList.length === 0" description="暂无订单"/>
     </van-list>
   </van-pull-refresh>
 </template>
 <script setup lang="ts">
 import {ref} from "vue";
 import {useRouter} from "vue-router";
-import AlbumItem from "@/views/creation/album/components/AlbumItem.vue";
 import {useOrderStore} from "@/stores/order_store.ts";
 import {OrderDTO} from "@/models/order.ts";
 import {showToast} from "vant";
+import OrderItem from "@/views/member/orders/components/OrderItem.vue";
 
 const router = useRouter();
 const {loadOrders} = useOrderStore();
