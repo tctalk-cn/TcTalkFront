@@ -30,31 +30,42 @@
 
 <script setup lang="ts">
 import HeaderTop from "@/components/layout/header/HeaderTop.vue";
-import { ref, watch,} from "vue";
-import {useRoute, useRouter} from "vue-router";
+import { ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
 const orderTitle = ref("我的订单");
 
-const orderTabs = [
-  {id: 1, label: '全部', name: 'allOrders'},
-  {id: 2, label: '待付款', name: 'pendingPaymentOrders'},
-  {id: 3, label: '待分享', name: 'pendingShareOrders'},
-  {id: 4, label: '评价', name: 'remarkOrders'},
+// 明确 Tab 类型
+interface OrderTab {
+  id: number;
+  label: string;
+  name: string; // 对应路由 name
+}
+
+const orderTabs: OrderTab[] = [
+  { id: 1, label: '全部', name: 'allOrders' },
+  { id: 2, label: '待付款', name: 'pendingPaymentOrders' },
+  { id: 3, label: '待分享', name: 'pendingShareOrders' },
+  { id: 4, label: '评价', name: 'remarkOrders' },
 ];
 
-const currentTab = ref(route.meta.menu ?? 'allOrders');
+// 初始化当前 Tab，兜底为 'allOrders'
+const currentTab = ref<string>(route.meta.menu as string || 'allOrders');
 
+// 监听路由变化（如通过浏览器前进/后退）
 watch(() => route.meta.menu, (menu) => {
-  currentTab.value = menu ?? 'allOrders';
+  if (menu) {
+    currentTab.value = menu as string;
+  }
 });
 
-const onTabClick = (tab: any) => {
+// 点击 Tab 切换路由
+const onTabClick = (tab: { name: string }) => {
   currentTab.value = tab.name;
-  router.push({name: tab.name});
+  router.push({ name: tab.name }).catch(() => {}); // 避免重复导航警告
 };
-
 </script>
 
 <style scoped lang="scss">

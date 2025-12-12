@@ -150,7 +150,7 @@ onMounted(() => {
   fetchPayment();
 });
 
-const onBack = () => router.back();
+const onBack = () => router.push("/orderCenter/orders");
 const onGoMember = () => router.push('/member');
 const onRetry = () => router.replace('/order/pay' + window.location.search);
 </script>
