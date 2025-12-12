@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import OrderItem from "@/views/member/orders/components/OrderItem.vue";
+import OrderItem from "@/views/order/components/OrderItem.vue";
 
 const orders = ref<any[]>([]);
 

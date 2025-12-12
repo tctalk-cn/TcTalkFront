@@ -295,19 +295,19 @@ const router = createRouter({
             {
                 path: '/orderCenter/orders',
                 name: Pages.orderCenter,
-                component: () => import("@/views/member/orders/Orders.vue"),
+                component: () => import("@/views/order/Orders.vue"),
                 redirect: {name: Pages.allOrders},
                 children: [
                     {
                         path: 'allOrders',
                         name: Pages.allOrders,
-                        component: () => import("@/views/member/orders/children/AllOrders.vue"),
+                        component: () => import("@/views/order/children/AllOrders.vue"),
                         meta: {menu: Pages.orderCenter},
                     },
                     {
                         path: 'pendingPaymentOrders',
                         name: Pages.pendingPaymentOrders,
-                        component: () => import("@/views/member/orders/children/PendingPaymentOrders.vue"),
+                        component: () => import("@/views/order/children/PendingPaymentOrders.vue"),
                         meta: {menu: Pages.orderCenter},
                     },
                 ],

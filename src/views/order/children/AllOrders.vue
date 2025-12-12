@@ -22,7 +22,7 @@ import {useRouter} from "vue-router";
 import {useOrderStore} from "@/stores/order_store.ts";
 import {OrderDTO} from "@/models/order.ts";
 import {showToast} from "vant";
-import OrderItem from "@/views/member/orders/components/OrderItem.vue";
+import OrderItem from "@/views/order/components/OrderItem.vue";
 
 const router = useRouter();
 const {loadOrders} = useOrderStore();
