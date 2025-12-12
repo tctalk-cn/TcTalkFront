@@ -1,35 +1,33 @@
 <template>
   <header id='head_top'>
-    <slot name='logo'></slot>
-    <slot name='search'></slot>
-    <slot name="head-menu"></slot>
-    <section class="head_goback" v-if="goBack">
-      <van-icon name="arrow-left" size="20px" color="#fff" @click="backHome" style="z-index: 100"/>
-    </section>
-    <router-link :to="memberInfo&&memberInfo.id? '/profile':'/login'" v-if='signinUp' class="head_login">
-      <svg class="user_avatar" v-if="memberInfo">
-        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user"></use>
-      </svg>
-      <span class="login_span" v-else><router-link to="/login">登录</router-link>|<router-link
-          to="/register">注册</router-link></span>
-    </router-link>
-    <section class="title_head ellipsis" v-if="headTitle">
-      <span class="title_text">{{ headTitle }}</span>
-      <div class="actions">
-        <slot name="actions">
-        </slot>
-      </div>
+    <section class="head-left">
+      <section class="head_goback" v-if="goBack">
+        <van-icon name="arrow-left" size="20px" color="#fff" @click="backHome"/>
+      </section>
+      <slot name='logo'></slot>
     </section>
 
-    <slot name="edit"></slot>
-    <slot name="msite-title"></slot>
-    <slot name="changecity"></slot>
-    <!-- 更改登录方式 -->
-    <div class="change-login" v-if="$slots.changeLogin">
-      <slot name="changeLogin"></slot>
-    </div>
+    <section class="head-center">
+      <span class="title_text" v-if="headTitle">{{ headTitle }}</span>
+    </section>
+
+    <section class="head-right">
+      <div class="header-search-wrapper" v-if="$slots.search">
+        <slot name='search'></slot>
+      </div>
+      <div class="actions-wrapper" v-if="$slots.actions">
+        <slot name='actions'></slot>
+      </div>
+      <router-link :to="memberInfo?.id ? '/profile':'/login'" v-if='signinUp' class="head_login">
+        <svg class="user_avatar" v-if="memberInfo">
+          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user"></use>
+        </svg>
+        <span class="login_span" v-else>登录|注册</span>
+      </router-link>
+    </section>
   </header>
 </template>
+
 <script setup lang="ts">
 import {useProfileStore} from "@/stores/member_store.ts";
 import {useRouter} from "vue-router";
@@ -48,70 +46,92 @@ function backHome() {
   if (props?.goBackUrl) {
     router.push({path: props?.goBackUrl});
   } else if (window.history.length > 1) {
-    //  如果没有指定，则返回上一个历史页面（防止空栈报错）
     router.back();
   } else {
-    //  如果用户直接从外部打开当前页（没有上一个页面）
     router.push("/");
   }
 }
-
 </script>
 
 <style lang="scss" scoped>
 #head_top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background-color: $blue;
+  height: 1.95rem;
+  padding: 0 0.5rem;
   position: sticky;
-  z-index: 100;
-  left: 0;
   top: 0;
-  @include wh(100%, 1.95rem);
+  z-index: 100;
 
-  .head_goback {
-    left: 0.4rem;
-    @include wh(0.6rem, 1rem);
-    line-height: 2.2rem;
-    margin-left: .4rem;
+  .head-left, .head-center, .head-right {
+    display: flex;
+    align-items: center;
   }
 
-  .head_login {
-    right: 0.55rem;
-    @include sc($font-size-sm, #fff);
-    @include ct;
-
-    .login_span {
-      color: #fff;
-    }
-
-    .user_avatar {
-      fill: #fff;
-      @include wh(.8rem, .8rem);
-    }
+  .head-left {
+    flex: 1;
   }
 
-  .title_head {
-    @include center;
-    width: 100%;
-    color: #fff;
-    text-align: center;
-    display: flex; /* 使用 flex 布局 */
-    justify-content: space-between; /* 将标题和操作按钮分散对齐 */
-
+  .head-center {
+    flex: 2;
+    justify-content: center;
     .title_text {
-      @include sc(0.8rem, #fff);
-      text-align: center;
+      color: #fff;
       font-weight: bold;
-      margin: 0 auto; /* 居中显示 */
+      font-size: 0.8rem;
     }
+  }
 
-    .actions {
-      @include sc(0.8rem, #fff);
+  .head-right {
+    flex: 1;
+    justify-content: flex-end;
+    gap: 0.3rem; // 间距稍微小一点
+
+    .header-search-wrapper, .actions-wrapper {
       display: flex;
       align-items: center;
-      margin-right: .4rem; /* 将 actions 推到右侧 */
+      justify-content: center;
+      width: 1.2rem;  // 缩小按钮宽度
+      height: 1.2rem; // 缩小按钮高度
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15); // 背景透明度小一点
+      backdrop-filter: blur(2px);          // blur 减小
+      cursor: pointer;
+
+      &:active { background: rgba(255,255,255,0.25); }
+
+      :deep(.van-icon) {
+        font-size: 16px; // icon 小一点
+        color: #fff;
+      }
+    }
+
+    .head_login {
+      display: flex;
+      align-items: center;
+      color: #fff;
+
+      .user_avatar {
+        fill: #fff;
+        width: 0.7rem; // 缩小头像
+        height: 0.7rem;
+      }
+
+      .login_span {
+        color: #fff;
+        font-size: 0.65rem; // 缩小文字
+      }
+    }
+  }
+
+  .head_goback {
+    margin-right: 0.3rem;
+    van-icon {
+      font-size: 18px; // 缩小返回按钮
     }
   }
 }
-
-
 </style>
+

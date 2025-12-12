@@ -1,6 +1,9 @@
 <template>
   <div class="order-container">
     <HeaderTop go-back="true" :head-title="orderTitle" go-back-url="/member">
+      <template #search>
+        <van-icon name="search" />
+      </template>
       <!-- 其他插槽内容... -->
       <template #actions>
         <van-icon class="action-button" name="newspaper-o"/>
