@@ -1,24 +1,27 @@
 <template>
-  <header id='head_top'>
+  <header id="head_top" ref="headerRef">
+    <!-- 左侧：返回 + logo -->
     <section class="head-left">
       <section class="head_goback" v-if="goBack">
         <van-icon name="arrow-left" size="20px" color="#fff" @click="backHome"/>
       </section>
-      <slot name='logo'></slot>
+      <slot name="logo"></slot>
     </section>
 
+    <!-- 中间：标题 -->
     <section class="head-center">
       <span class="title_text" v-if="headTitle">{{ headTitle }}</span>
     </section>
 
+    <!-- 右侧：搜索 / 动作 / 登录 -->
     <section class="head-right">
       <div class="header-search-wrapper" v-if="$slots.search">
-        <slot name='search'></slot>
+        <slot name="search"></slot>
       </div>
       <div class="actions-wrapper" v-if="$slots.actions">
-        <slot name='actions'></slot>
+        <slot name="actions"></slot>
       </div>
-      <router-link :to="memberInfo?.id ? '/profile':'/login'" v-if='signinUp' class="head_login">
+      <router-link :to="memberInfo?.id ? '/profile':'/login'" v-if="signinUp" class="head_login">
         <svg class="user_avatar" v-if="memberInfo">
           <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#user"></use>
         </svg>
@@ -32,6 +35,7 @@
 import {useProfileStore} from "@/stores/member_store.ts";
 import {useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
+import {onMounted, ref} from "vue";
 
 const props = defineProps<{
   signinUp?: string;
@@ -39,8 +43,17 @@ const props = defineProps<{
   goBack?: string;
   goBackUrl?: string;
 }>();
+
 const {memberInfo} = storeToRefs(useProfileStore());
 const router = useRouter();
+const headerRef = ref<HTMLElement | null>(null);
+const headerHeight = ref(0);
+
+onMounted(() => {
+  if (headerRef.value) {
+    headerHeight.value = headerRef.value.offsetHeight;
+  }
+});
 
 function backHome() {
   if (props?.goBackUrl) {
@@ -51,6 +64,9 @@ function backHome() {
     router.push("/");
   }
 }
+
+// 暴露 headerHeight 供父组件 Tabs offset-top 使用
+defineExpose({ headerHeight });
 </script>
 
 <style lang="scss" scoped>
@@ -70,10 +86,7 @@ function backHome() {
     align-items: center;
   }
 
-  .head-left {
-    flex: 1;
-  }
-
+  .head-left { flex: 1; }
   .head-center {
     flex: 2;
     justify-content: center;
@@ -83,27 +96,26 @@ function backHome() {
       font-size: 0.8rem;
     }
   }
-
   .head-right {
     flex: 1;
     justify-content: flex-end;
-    gap: 0.3rem; // 间距稍微小一点
+    gap: 0.3rem;
 
     .header-search-wrapper, .actions-wrapper {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 1.2rem;  // 缩小按钮宽度
-      height: 1.2rem; // 缩小按钮高度
+      width: 1.2rem;
+      height: 1.2rem;
       border-radius: 50%;
-      background: rgba(255,255,255,0.15); // 背景透明度小一点
-      backdrop-filter: blur(2px);          // blur 减小
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(2px);
       cursor: pointer;
 
       &:active { background: rgba(255,255,255,0.25); }
 
       :deep(.van-icon) {
-        font-size: 16px; // icon 小一点
+        font-size: 16px;
         color: #fff;
       }
     }
@@ -115,13 +127,13 @@ function backHome() {
 
       .user_avatar {
         fill: #fff;
-        width: 0.7rem; // 缩小头像
+        width: 0.7rem;
         height: 0.7rem;
       }
 
       .login_span {
         color: #fff;
-        font-size: 0.65rem; // 缩小文字
+        font-size: 0.65rem;
       }
     }
   }
@@ -129,9 +141,8 @@ function backHome() {
   .head_goback {
     margin-right: 0.3rem;
     van-icon {
-      font-size: 18px; // 缩小返回按钮
+      font-size: 18px;
     }
   }
 }
 </style>
-
