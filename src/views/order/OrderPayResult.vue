@@ -1,14 +1,8 @@
 <template>
   <div class="pay-result-page">
     <!-- 顶部 NavBar -->
-    <van-nav-bar
-        title="支付结果"
-        left-arrow
-        fixed
-        placeholder
-        @click-left="onBack"
-    />
-
+    <HeaderTop go-back="true"  head-title="支付结果" go-back-url="/orderCenter/orders">
+    </HeaderTop>
     <div class="content">
       <!-- 顶部状态 -->
       <div class="status-area">
@@ -70,6 +64,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { usePayStore } from "@/stores/pay_store.ts";
 import { showToast } from "vant";
 import { PaymentRecord } from "@/models/pay_record.ts";
+import HeaderTop from "@/components/layout/header/HeaderTop.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -150,7 +145,6 @@ onMounted(() => {
   fetchPayment();
 });
 
-const onBack = () => router.push("/orderCenter/orders");
 const onGoMember = () => router.push('/member');
 const onRetry = () => router.replace('/order/pay' + window.location.search);
 </script>
