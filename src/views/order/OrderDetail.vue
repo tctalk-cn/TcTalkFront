@@ -1,6 +1,6 @@
 <template>
   <div v-if="vipOrder" class="order-detail-container">
-    <HeaderTop go-back="true" head-title="订单详情" />
+    <HeaderTop go-back="true" head-title="订单详情"/>
 
     <div class="scroll-content">
 
@@ -29,22 +29,22 @@
       />
 
       <!-- 基础信息 -->
-      <OrderBaseInfoCard :order="vipOrder" />
+      <OrderBaseInfoCard :order="vipOrder"/>
     </div>
 
     <!-- 底部操作 -->
     <OrderDetailActionBar
-        :show-pay="true"
-        :show-cancel="true"
-        @pay="onPay"
-        @cancel="onCancel"
+        :show-pay="showPay"
+        :show-cancel="showPay"
+        @pay="handlePay(vipOrder)"
+        @cancel="handleCancel(vipOrder)"
     />
   </div>
 </template>
 
 
 <script setup lang="ts">
-import {ref, onMounted, onUnmounted, type Ref} from 'vue';
+import {ref, onMounted, onUnmounted, type Ref, computed} from 'vue';
 
 // 导入抽象的子组件
 import OrderProductCard from '@/views/order/components/OrderProductCard.vue';
@@ -65,16 +65,17 @@ const {findVipOrderDetail} = useOrderStore();
 
 const showAutoRenew = ref(false);
 const vipOrder: Ref<VipOrderDTO | null> = ref(null);
-const agree = ref(false);
-const payMethod = ref<'WECHAT' | 'ALIPAY'>('ALIPAY');
 
 // 倒计时状态
 const remainingSeconds = ref(0);
 const countdownText = ref('');
 let timer: number | undefined;
 
-// --- 生命周期与数据获取 ---
+const showPay = computed(() => {
+  return vipOrder.value?.orderStatus === 0 || vipOrder.value?.orderStatus === 1
+});
 
+// --- 生命周期与数据获取 ---
 onMounted(async () => {
   const orderId = route.query.orderId as string;
   const orderNo = route.query.orderNo as string;
@@ -127,21 +128,26 @@ onUnmounted(() => {
 });
 
 // --- 事件与逻辑处理 ---
-
 function updateCountdown() {
   const minutes = Math.floor(remainingSeconds.value / 60);
   const seconds = remainingSeconds.value % 60;
   countdownText.value = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
-// 子组件 emit 更新
-const handlePayMethodChange = (method: 'WECHAT' | 'ALIPAY') => {
-  payMethod.value = method;
-};
-const handleAgreeChange = (value: boolean) => {
-  agree.value = value;
-};
+// 处理支付接口
+const handlePay = (order: VipOrderDTO) => {
+  router.push({
+    path: "/vipOrder/confirm",
+    query: {
+      orderId: order.id,
+      orderNo: order.orderNo,
+    },
+  });
+}
 
+// 处理支付取消
+const handleCancel = (order: VipOrderDTO) => {
+}
 
 </script>
 
@@ -180,7 +186,9 @@ const handleAgreeChange = (value: boolean) => {
   }
 
   @keyframes flash {
-    50% { opacity: 0.2; }
+    50% {
+      opacity: 0.2;
+    }
   }
 
   .sku-item {
@@ -197,9 +205,11 @@ const handleAgreeChange = (value: boolean) => {
 
     .sku-info {
       flex: 1;
+
       .sku-name {
         font-weight: 500;
       }
+
       .sku-meta {
         display: flex;
         justify-content: space-between;

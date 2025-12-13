@@ -10,9 +10,5 @@
 </template>
 
 <script setup lang="ts">
-import dayjs from 'dayjs'
 defineProps<{ order: any }>()
-
-const format = (t?: string) =>
-    t ? dayjs(t).format('YYYY-MM-DD HH:mm:ss') : ''
 </script>
