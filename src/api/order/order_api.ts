@@ -16,12 +16,12 @@ export async function useCreateVipOrder(params: CreateVipOrderParams) {
 /**
  * 查询订单明细
  */
-export async function useFindVipOrderDetail(orderId: string, orderNo: string) {
+export async function useFindPendingVipOrderDetail(orderId: string, orderNo: string) {
     return await http.post<{
         code: string,
         message: string,
         data: VipOrderDTO
-    }>("/oms_api/order/findVipOrderDetail/" + orderId + "/" + orderNo);
+    }>("/oms_api/order/findPendingVipOrderDetail/" + orderId + "/" + orderNo);
 }
 
 /**
@@ -36,13 +36,13 @@ export async function useLoadOrders(beginOrderId: string, pageSize: number){
 }
 
 /**
- * 查询订单基础信息
+ * 查询VIP订单信息
  */
-export async function useFindOrderBasic(orderId: string, orderNo: string) {
+export async function useFindVipOrderDetail(orderId: string, orderNo: string) {
     return await http.post<{
         code: string,
         message: string,
-        data: OrderDTO
-    }>("/oms_api/order/findOrderBasic/" + orderId + "/" + orderNo);
+        data: VipOrderDTO
+    }>("/oms_api/order/findVipOrderDetail/" + orderId + "/" + orderNo);
 }
 

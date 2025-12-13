@@ -52,7 +52,7 @@ import HeaderTop from "@/components/layout/header/HeaderTop.vue";
 
 const route = useRoute();
 const router = useRouter();
-const {findVipOrderDetail} = useOrderStore();
+const {findPendingVipOrderDetail} = useOrderStore();
 const {generateRequestId, createAndPay} = usePayStore();
 
 const showAutoRenew = ref(false);
@@ -74,7 +74,7 @@ onMounted(async () => {
 
   if (timer) clearInterval(timer);
 
-  const res = await findVipOrderDetail(orderId, orderNo);
+  const res = await findPendingVipOrderDetail(orderId, orderNo);
 
   if (!res?.code || res?.code !== "200" || !res.data) {
     showToast(res?.message || "获取订单明细失败，请重试");
