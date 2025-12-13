@@ -4,8 +4,15 @@
 
     <div class="scroll-content">
 
+      <OrderStatusHero
+          :order-status="vipOrder.orderStatus"
+          :payment-status="vipOrder.paymentStatus"
+          :countdown-text="countdownText"
+      />
+
       <!-- 商品信息（复用确认订单） -->
       <OrderProductCard
+          orderType="vip"
           :productName="vipOrder.productName"
           :skuImgUrl="vipOrder.orderItemDTO?.skuImgUrl"
           :promotionAmount="vipOrder.orderItemDTO?.promotionAmount"
@@ -58,6 +65,7 @@ import BenefitList from "@/views/order/components/BenefitList.vue";
 import AutoRenewNotice from "@/views/order/components/AutoRenewNotice.vue";
 import OrderBaseInfoCard from "@/views/order/components/OrderBaseInfoCard.vue";
 import OrderDetailActionBar from "@/views/order/components/OrderDetailActionBar.vue";
+import OrderStatusHero from "@/views/order/components/OrderStatusHero.vue";
 
 const route = useRoute();
 const router = useRouter();

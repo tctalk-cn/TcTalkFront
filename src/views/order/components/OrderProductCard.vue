@@ -9,10 +9,7 @@
     </div>
 
     <div class="product-cover-wrapper">
-      <img
-          :src="skuImgUrl || defaultCover" alt="商品封面"
-          class="product-cover"
-      />
+      <img :src="skuImgUrl || defaultCover" alt="商品封面" class="product-cover"/>
     </div>
 
     <div class="product-info">
@@ -32,6 +29,7 @@
 import defaultCover from '@/assets/images/goods_default.png'; // 确保路径正确
 
 interface Props {
+  mode?: 'confirm' | 'detail';
   productName: string;
   skuImgUrl?: string;
   promotionAmount?: string;
