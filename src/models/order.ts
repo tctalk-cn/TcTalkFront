@@ -326,6 +326,11 @@ export class VipOrderDTO {
     createTime: string;
 
     /**
+     * 更新时间
+     */
+    updateTime:string;
+
+    /**
      * 未支付订单过期时间（如15分钟）
      */
     expireTime: string;

@@ -312,6 +312,12 @@ const router = createRouter({
                     },
                 ],
             },
+            // 订单列表
+            {
+                path: '/orderCenter/orderDetail',
+                name: Pages.orderDetail,
+                component: () => import("@/views/order/OrderDetail.vue"),
+            },
         ]
     }
 )

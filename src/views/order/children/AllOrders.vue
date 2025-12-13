@@ -12,7 +12,7 @@
           :order="order"
           @pay="handlePay(order)"
           @comment="handleComment"
-          @detail="handleDetail"
+          @detail="handleDetail(order)"
           @update-status=""
       />
       <van-empty v-if="orderList.length === 0" description="暂无订单"/>
@@ -102,8 +102,15 @@ const handleComment = () => {
 }
 
 // 处理明细
-const handleDetail = () => {
-
+const handleDetail = (order: OrderDTO) => {
+  // 跳转到订单明细页面
+  router.push({
+    path: "/orderCenter/orderDetail",
+    query: {
+      orderId: order.id,
+      orderNo: order.orderNo,
+    },
+  });
 }
 
 

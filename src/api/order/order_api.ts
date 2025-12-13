@@ -35,4 +35,14 @@ export async function useLoadOrders(beginOrderId: string, pageSize: number){
     }>("/oms_api/order/loadOrders", {beginOrderId: beginOrderId, pageSize: pageSize});
 }
 
+/**
+ * 查询订单基础信息
+ */
+export async function useFindOrderBasic(orderId: string, orderNo: string) {
+    return await http.post<{
+        code: string,
+        message: string,
+        data: OrderDTO
+    }>("/oms_api/order/findOrderBasic/" + orderId + "/" + orderNo);
+}
 
