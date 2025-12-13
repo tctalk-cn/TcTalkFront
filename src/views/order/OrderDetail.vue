@@ -1,44 +1,35 @@
 <template>
-  <div v-if="orderBasic" class="order-detail-container">
+  <div v-if="vipOrder" class="order-detail-container">
     <HeaderTop go-back="true" head-title="订单详情" />
 
     <div class="scroll-content">
-      <!-- 订单状态 -->
-<!--      <OrderStatusCard-->
-<!--          :status-text="test"-->
-<!--          :countdown-text="countdownText"-->
-<!--          :warning="true"-->
-<!--      />-->
 
       <!-- 商品信息（复用确认订单） -->
       <OrderProductCard
-          :productName="orderBasic.productName"
-          :skuImgUrl="orderBasic.orderItemDTO?.skuImgUrl"
-          :promotionAmount="orderBasic.orderItemDTO?.promotionAmount"
-          :originalPrice="orderBasic.orderItemDTO?.originalPrice"
-          :promotionLabelDesc="orderBasic.orderVipExtDTO?.promotionLabelDesc"
-          :productDesc="orderBasic.productDesc"
+          :productName="vipOrder.productName"
+          :skuImgUrl="vipOrder.orderItemDTO?.skuImgUrl"
+          :promotionAmount="vipOrder.orderItemDTO?.promotionAmount"
+          :originalPrice="vipOrder.orderItemDTO?.originalPrice"
+          :promotionLabelDesc="vipOrder.orderVipExtDTO?.promotionLabelDesc"
+          :productDesc="vipOrder.productDesc"
+          :countdownText="countdownText"
       />
 
-      <!-- VIP 才有 -->
-      <OrderDurationCard
-          v-if="orderBasic.orderVipExtDTO"
-          :duration="orderBasic.orderVipExtDTO.duration"
-      />
+      <OrderDurationCard :duration="vipOrder.orderVipExtDTO.duration"/>
 
       <BenefitList
-          v-if="orderBasic.orderVipExtDTO"
-          :benefits="orderBasic.orderVipExtDTO.benefits"
+          v-if="vipOrder.orderVipExtDTO"
+          :benefits="vipOrder.orderVipExtDTO.benefits"
           class="card"
       />
 
       <AutoRenewNotice
-          v-if="orderBasic.orderVipExtDTO?.billingMode === 'RECURRING'"
-          :renewPrice="orderBasic.orderVipExtDTO.renewPrice"
+          v-if="vipOrder.orderVipExtDTO?.billingMode === 'RECURRING'"
+          :renewPrice="vipOrder.orderVipExtDTO.renewPrice"
       />
 
       <!-- 基础信息 -->
-      <OrderBaseInfoCard :order="orderBasic" />
+      <OrderBaseInfoCard :order="vipOrder" />
     </div>
 
     <!-- 底部操作 -->
@@ -73,7 +64,7 @@ const router = useRouter();
 const {findVipOrderDetail} = useOrderStore();
 
 const showAutoRenew = ref(false);
-const orderBasic: Ref<VipOrderDTO | null> = ref(null);
+const vipOrder: Ref<VipOrderDTO | null> = ref(null);
 const agree = ref(false);
 const payMethod = ref<'WECHAT' | 'ALIPAY'>('ALIPAY');
 
@@ -98,16 +89,16 @@ onMounted(async () => {
     return;
   }
 
-  orderBasic.value = res.data;
+  vipOrder.value = res.data;
 
   // 自动续费显示
-  if (orderBasic.value.orderVipExtDTO?.billingMode === 'RECURRING') {
+  if (vipOrder.value.orderVipExtDTO?.billingMode === 'RECURRING') {
     showAutoRenew.value = true;
   }
 
   // 支付倒计时
-  if (orderBasic.value.expireTime) {
-    const expireTimestamp = new Date(orderBasic.value.expireTime).getTime();
+  if (vipOrder.value.expireTime) {
+    const expireTimestamp = new Date(vipOrder.value.expireTime).getTime();
     const now = Date.now();
     // 确保剩余秒数不为负
     remainingSeconds.value = Math.max(Math.floor((expireTimestamp - now) / 1000), 0);
