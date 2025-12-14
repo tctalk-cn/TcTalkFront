@@ -46,3 +46,14 @@ export async function useFindVipOrderDetail(orderId: string, orderNo: string) {
     }>("/oms_api/order/findVipOrderDetail/" + orderId + "/" + orderNo);
 }
 
+/**
+ * 关闭订单信息
+ */
+export async function useCloseOrderBy(orderId: string, orderNo: string) {
+    return await http.post<{
+        code: string,
+        message: string,
+        data: Boolean
+    }>("/oms_api/order/closeOrderBy/" + orderId + "/" + orderNo);
+}
+

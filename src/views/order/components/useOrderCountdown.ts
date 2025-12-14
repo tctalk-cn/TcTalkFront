@@ -1,51 +1,78 @@
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
 import type { OrderDTO } from "@/models/order.ts";
 
-export function useOrderCountdown(order: OrderDTO, emit: any) {
+export function useOrderCountdown(order: OrderDTO) {
     const countdownText = ref("");
     const flashing = ref(false);
     const isWarning = ref(false);
 
-    let timer: any;
+    let timer: number | undefined;
+
+    // 是否允许倒计时（⚠️ 核心保护）
+    const canCountdown = computed(() => {
+        return (
+            [0, 1].includes(order.orderStatus) &&        // 仅创建 / 待支付
+            !!order.expireTime
+        );
+    });
+
+    const stop = () => {
+        if (timer) {
+            clearInterval(timer);
+            timer = undefined;
+        }
+        flashing.value = false;
+        isWarning.value = false;
+    };
 
     const updateCountdown = () => {
-        const now = new Date().getTime();
-        const expire = new Date(order.expireTime).getTime();
+        if (!canCountdown.value) {
+            stop();
+            countdownText.value = "";
+            return;
+        }
+
+        const now = Date.now();
+        const expire = new Date(order.expireTime!).getTime();
         const diff = expire - now;
 
+        // 已过期（❌ 不改 order）
         if (diff <= 0) {
             countdownText.value = "已过期";
-            flashing.value = false;
-            isWarning.value = false;
-
-            // 模拟自动关闭
-            order.orderStatus = 6;
-            emit("update-status", order);
-            clearInterval(timer);
+            stop();
             return;
         }
 
         const totalSeconds = Math.floor(diff / 1000);
         const min = Math.floor(totalSeconds / 60);
         const sec = totalSeconds % 60;
-        countdownText.value = `剩余 ${min}分${sec}秒`;
 
-        // 倒数 1 分钟开始闪烁红色
+        countdownText.value = `${min.toString().padStart(2, "0")}:${sec
+            .toString()
+            .padStart(2, "0")}`;
+
+        // 状态提示
         if (totalSeconds <= 60) {
             flashing.value = true;
             isWarning.value = false;
         } else {
             flashing.value = false;
-            isWarning.value = true; // 提前提示
+            isWarning.value = true;
         }
     };
 
     onMounted(() => {
         updateCountdown();
-        timer = setInterval(updateCountdown, 1000);
+        if (canCountdown.value) {
+            timer = window.setInterval(updateCountdown, 1000);
+        }
     });
 
-    onUnmounted(() => clearInterval(timer));
+    onUnmounted(() => stop());
 
-    return { countdownText, flashing, isWarning };
+    return {
+        countdownText,
+        flashing,
+        isWarning,
+    };
 }

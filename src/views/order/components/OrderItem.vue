@@ -63,12 +63,12 @@
 
 <script setup lang="ts">
 import defaultCover from "@/assets/images/vip.png";
-import type {OrderDTO} from "@/models/order.ts";
-import {computed} from "vue";
-import {useOrderCountdown} from "@/views/order/components/useOrderCountdown.ts";
+import type { OrderDTO } from "@/models/order.ts";
+import { computed } from "vue";
+import { useOrderCountdown } from "@/views/order/components/useOrderCountdown.ts";
 
 const props = defineProps<{ order: OrderDTO }>();
-const emit = defineEmits(["pay", "comment", "detail", "update-status"]);
+const emit = defineEmits(["pay", "comment", "detail"]);
 
 // ================== 状态文案 ===================
 const OrderStatusMap: Record<number, string> = {
@@ -94,63 +94,73 @@ const PaymentStatusMap: Record<number, string> = {
   50: "手动处理流程",
 };
 
-// composable → 只负责倒计时
-const {countdownText, flashing, isWarning} = useOrderCountdown(props.order, emit);
+// ================== 倒计时（纯 UI） ===================
+const { countdownText, flashing, isWarning } =
+    useOrderCountdown(props.order);
 
+// ================== 订单完成态 ===================
 const isOrderCompleted = computed(() => {
-  // 订单完成条件：支付成功 / 交易完结
   const { orderStatus, paymentStatus } = props.order;
   return paymentStatus === 2 || orderStatus === 3 || orderStatus === 8;
-})
+});
 
 // ================== 状态文本 ===================
 const statusText = computed(() => {
-  if ([10, 11, 20, 50].includes(props.order.paymentStatus)) {
-    return PaymentStatusMap[props.order.paymentStatus];
+  const { paymentStatus, orderStatus } = props.order;
+
+  if ([10, 11, 20, 50].includes(paymentStatus)) {
+    return PaymentStatusMap[paymentStatus];
   }
-  return OrderStatusMap[props.order.orderStatus] || "未知状态";
+
+  return OrderStatusMap[orderStatus] || "未知状态";
 });
 
-// ================== 时间文本逻辑（唯一版本） ===================
+// ================== 时间文案（唯一出口） ===================
 const statusTimeText = computed(() => {
-  const {orderStatus, paymentStatus, paymentTime, updateTime, expireTime} = props.order;
+  const { orderStatus, paymentStatus, paymentTime, updateTime, expireTime } =
+      props.order;
   const now = new Date();
 
   // 支付成功
   if (paymentStatus === 2 || orderStatus === 3) {
-    return paymentTime ? `支付时间：${new Date(paymentTime).toLocaleString()}` : "";
+    return paymentTime
+        ? `支付时间：${new Date(paymentTime).toLocaleString()}`
+        : "";
+  }
+
+  // 交易完结
+  if (orderStatus === 8) {
+    return "交易已完成";
   }
 
   // 取消 / 关闭
-  if (orderStatus === 5 || orderStatus === 6) {
-    return updateTime ? `取消时间：${new Date(updateTime).toLocaleString()}` : "";
+  if ([5, 6].includes(orderStatus)) {
+    return updateTime
+        ? `关闭时间：${new Date(updateTime).toLocaleString()}`
+        : "";
   }
 
-  // 创建 / 待支付 → composable 倒计时
+  // 倒计时
   if ([0, 1].includes(orderStatus) && expireTime && new Date(expireTime) > now) {
-    return countdownText.value;
+    return `剩余支付时间 ${countdownText.value}`;
   }
 
   // 已过期
   if (orderStatus === 1 && expireTime && new Date(expireTime) < now) {
-    return `已过期（截止：${new Date(expireTime).toLocaleString()}）`;
+    return "订单已过期";
   }
 
   return "";
 });
 
-
 // ================== 按钮逻辑 ===================
 const showPayBtn = computed(() => {
-  const {orderStatus, paymentStatus, expireTime} = props.order;
-
+  const { orderStatus, paymentStatus, expireTime } = props.order;
   const notExpired = expireTime && new Date(expireTime) > new Date();
-  const orderStatusCanPay = [0, 1, 4];
-  const paymentStatusCanPay = [0, 3];
 
   return (
-      orderStatusCanPay.includes(orderStatus) &&
-      paymentStatusCanPay.includes(paymentStatus) &&
+      [0, 1, 4].includes(orderStatus) &&
+      [0, 3].includes(paymentStatus) &&
       notExpired
   );
 });
@@ -158,6 +168,7 @@ const showPayBtn = computed(() => {
 const showCommentBtn = computed(() => props.order.orderStatus === 8);
 const showDetailBtn = computed(() => true);
 </script>
+
 
 <style scoped lang="scss">
 .order-item {

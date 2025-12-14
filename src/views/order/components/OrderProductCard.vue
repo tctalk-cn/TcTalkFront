@@ -2,10 +2,12 @@
   <div class="card product-card">
     <div class="product-header">
       <div class="product-title">{{ productName }}</div>
-      <div v-if="countdownText && countdownText !== '已过期'" class="expire-countdown">
+      <div v-if="displayStatus === 'WAIT_PAY'" class="expire-countdown">
         {{ countdownText }}
       </div>
-      <div v-else-if="countdownText === '已过期'" class="expired-text">已过期</div>
+      <div v-else class="status-text">
+        {{ displayStatusText }}
+      </div>
     </div>
 
     <div class="product-cover-wrapper">
@@ -26,10 +28,10 @@
 </template>
 
 <script setup lang="ts">
-import defaultCover from '@/assets/images/goods_default.png'; // 确保路径正确
+import defaultCover from '@/assets/images/goods_default.png';
+import {computed} from "vue";
 
 interface Props {
-  mode?: 'confirm' | 'detail';
   productName: string;
   skuImgUrl?: string;
   promotionAmount?: string;
@@ -37,21 +39,30 @@ interface Props {
   promotionLabelDesc?: string;
   productDesc?: string;
   countdownText?: string;
+  displayStatus?: 'WAIT_PAY' | 'PAYING' | 'SUCCESS' | 'FAILED' | 'CLOSED';
 }
 
-defineProps<Props>();
+const props =defineProps<Props>();
+
+const displayStatusText = computed(() => {
+  switch (props.displayStatus) {
+    case 'SUCCESS': return '交易完成';
+    case 'PAYING': return '支付中';
+    case 'FAILED': return '支付失败';
+    case 'CLOSED': return '已关闭';
+    default: return '';
+  }
+})
 </script>
 
 <style scoped lang="scss">
-.card {
+.product-card {
   background: #fff;
   margin: 12px;
   padding: 16px;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
 
-.product-card {
   .product-header {
     display: flex;
     justify-content: space-between;
@@ -69,7 +80,7 @@ defineProps<Props>();
       font-weight: bold;
     }
 
-    .expired-text {
+    .status-text {
       font-size: 14px;
       color: #999;
     }
@@ -77,13 +88,13 @@ defineProps<Props>();
 
   .product-cover-wrapper {
     margin: 8px 0;
-  }
 
-  .product-cover {
-    width: 100%;
-    max-height: 180px;
-    object-fit: cover;
-    border-radius: 12px;
+    .product-cover {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
   }
 
   .product-info {
@@ -119,3 +130,4 @@ defineProps<Props>();
   }
 }
 </style>
+

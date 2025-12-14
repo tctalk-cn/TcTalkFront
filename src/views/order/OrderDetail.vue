@@ -4,13 +4,14 @@
 
     <div class="scroll-content">
 
+      <!-- 顶部状态 -->
       <OrderStatusHero
           :order-status="vipOrder.orderStatus"
           :payment-status="vipOrder.paymentStatus"
-          :countdown-text="countdownText"
+          :countdown-text="displayStatus === 'WAIT_PAY' ? countdownText : ''"
       />
 
-      <!-- 商品信息（复用确认订单） -->
+      <!-- 商品卡片 -->
       <OrderProductCard
           orderType="vip"
           :productName="vipOrder.productName"
@@ -19,10 +20,14 @@
           :originalPrice="vipOrder.orderItemDTO?.originalPrice"
           :promotionLabelDesc="vipOrder.orderVipExtDTO?.promotionLabelDesc"
           :productDesc="vipOrder.productDesc"
+          :display-status="displayStatus"
           :countdownText="countdownText"
       />
 
-      <OrderDurationCard :duration="vipOrder.orderVipExtDTO.duration"/>
+      <OrderDurationCard
+          v-if="vipOrder.orderVipExtDTO"
+          :duration="vipOrder.orderVipExtDTO.duration"
+      />
 
       <BenefitList
           v-if="vipOrder.orderVipExtDTO"
@@ -35,7 +40,6 @@
           :renewPrice="vipOrder.orderVipExtDTO.renewPrice"
       />
 
-      <!-- 基础信息 -->
       <OrderBaseInfoCard :order="vipOrder"/>
     </div>
 
@@ -49,114 +53,154 @@
   </div>
 </template>
 
-
 <script setup lang="ts">
-import {ref, onMounted, onUnmounted, type Ref, computed} from 'vue';
+import { ref, computed, onMounted, onUnmounted, type Ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { showToast } from 'vant'
 
-// 导入抽象的子组件
-import OrderProductCard from '@/views/order/components/OrderProductCard.vue';
-import OrderDurationCard from '@/views/order/components/OrderDurationCard.vue';
-import HeaderTop from "@/components/layout/header/HeaderTop.vue";
-import {useRoute, useRouter} from "vue-router";
-import {useOrderStore} from "@/stores/order_store.ts";
-import {VipOrderDTO} from "@/models/order.ts";
-import {showToast} from "vant";
-import BenefitList from "@/views/order/components/BenefitList.vue";
-import AutoRenewNotice from "@/views/order/components/AutoRenewNotice.vue";
-import OrderBaseInfoCard from "@/views/order/components/OrderBaseInfoCard.vue";
-import OrderDetailActionBar from "@/views/order/components/OrderDetailActionBar.vue";
-import OrderStatusHero from "@/views/order/components/OrderStatusHero.vue";
+import HeaderTop from '@/components/layout/header/HeaderTop.vue'
+import OrderStatusHero from '@/views/order/components/OrderStatusHero.vue'
+import OrderProductCard from '@/views/order/components/OrderProductCard.vue'
+import OrderDurationCard from '@/views/order/components/OrderDurationCard.vue'
+import BenefitList from '@/views/order/components/BenefitList.vue'
+import AutoRenewNotice from '@/views/order/components/AutoRenewNotice.vue'
+import OrderBaseInfoCard from '@/views/order/components/OrderBaseInfoCard.vue'
+import OrderDetailActionBar from '@/views/order/components/OrderDetailActionBar.vue'
 
-const route = useRoute();
-const router = useRouter();
-const {findVipOrderDetail} = useOrderStore();
+import { useOrderStore } from '@/stores/order_store'
+import { VipOrderDTO } from '@/models/order'
 
-const showAutoRenew = ref(false);
-const vipOrder: Ref<VipOrderDTO | null> = ref(null);
+// ================== 页面状态 ===================
+type DisplayStatus =
+    | 'WAIT_PAY'
+    | 'PAYING'
+    | 'SUCCESS'
+    | 'FAILED'
+    | 'CLOSED'
 
-// 倒计时状态
-const remainingSeconds = ref(0);
-const countdownText = ref('');
-let timer: number | undefined;
+const route = useRoute()
+const router = useRouter()
+const { findVipOrderDetail } = useOrderStore()
 
-const showPay = computed(() => {
-  return vipOrder.value?.orderStatus === 0 || vipOrder.value?.orderStatus === 1
-});
+const vipOrder: Ref<VipOrderDTO | null> = ref(null)
 
-// --- 生命周期与数据获取 ---
-onMounted(async () => {
-  const orderId = route.query.orderId as string;
-  const orderNo = route.query.orderNo as string;
+// ================== 前端展示态 ===================
+const displayStatus = computed<DisplayStatus>(() => {
+  if (!vipOrder.value) return 'WAIT_PAY'
 
-  if (timer) clearInterval(timer);
+  const { orderStatus, paymentStatus } = vipOrder.value
 
-  const res = await findVipOrderDetail(orderId, orderNo);
+  if (orderStatus === 3 || orderStatus === 8) return 'SUCCESS'
+  if (orderStatus === 4 || orderStatus === 7) return 'FAILED'
+  if (orderStatus === 5 || orderStatus === 6) return 'CLOSED'
 
-  if (!res?.code || res?.code !== "200" || !res.data) {
-    showToast(res?.message || "获取订单明细失败，请重试");
-    await router.replace("/orderCenter/orders");
-    return;
+  if (
+      paymentStatus === 10 ||
+      paymentStatus === 11 ||
+      paymentStatus === 20
+  ) {
+    return 'PAYING'
   }
 
-  vipOrder.value = res.data;
+  return 'WAIT_PAY'
+})
 
-  // 自动续费显示
-  if (vipOrder.value.orderVipExtDTO?.billingMode === 'RECURRING') {
-    showAutoRenew.value = true;
+// ================== 支付按钮 ===================
+const showPay = computed(() => displayStatus.value === 'WAIT_PAY')
+
+// ================== 倒计时 ===================
+const remainingSeconds = ref(0)
+const countdownText = ref('')
+let timer: number | undefined
+
+function initCountdown() {
+  if (!vipOrder.value) return
+
+  // ❗ 非待支付状态，不显示倒计时
+  if (displayStatus.value !== 'WAIT_PAY') {
+    countdownText.value = ''
+    remainingSeconds.value = 0
+    return
   }
 
-  // 支付倒计时
-  if (vipOrder.value.expireTime) {
-    const expireTimestamp = new Date(vipOrder.value.expireTime).getTime();
-    const now = Date.now();
-    // 确保剩余秒数不为负
-    remainingSeconds.value = Math.max(Math.floor((expireTimestamp - now) / 1000), 0);
+  if (!vipOrder.value.expireTime) return
 
-    updateCountdown();
+  const expireTimestamp = new Date(vipOrder.value.expireTime).getTime()
+  const now = Date.now()
+  remainingSeconds.value = Math.max(
+      Math.floor((expireTimestamp - now) / 1000),
+      0
+  )
 
-    if (remainingSeconds.value > 0) {
-      timer = window.setInterval(() => {
-        if (remainingSeconds.value > 0) {
-          remainingSeconds.value--;
-          updateCountdown();
-        } else {
-          countdownText.value = '已过期';
-          clearInterval(timer);
-          // 订单过期后，可以考虑禁用按钮或弹出提示
-        }
-      }, 1000);
-    } else {
-      countdownText.value = '已过期';
-    }
+  updateCountdown()
+
+  if (remainingSeconds.value > 0) {
+    timer = window.setInterval(() => {
+      remainingSeconds.value--
+      updateCountdown()
+
+      if (remainingSeconds.value <= 0 && timer) {
+        clearInterval(timer)
+      }
+    }, 1000)
   }
-});
-
-onUnmounted(() => {
-  if (timer) clearInterval(timer);
-});
-
-// --- 事件与逻辑处理 ---
-function updateCountdown() {
-  const minutes = Math.floor(remainingSeconds.value / 60);
-  const seconds = remainingSeconds.value % 60;
-  countdownText.value = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
-// 处理支付接口
+function updateCountdown() {
+  if (displayStatus.value !== 'WAIT_PAY') {
+    countdownText.value = ''
+    return
+  }
+
+  if (remainingSeconds.value <= 0) {
+    countdownText.value = '已过期'
+    return
+  }
+
+  const minutes = Math.floor(remainingSeconds.value / 60)
+  const seconds = remainingSeconds.value % 60
+  countdownText.value = `${minutes.toString().padStart(2, '0')}:${seconds
+      .toString()
+      .padStart(2, '0')}`
+}
+
+// ================== 生命周期 ===================
+onMounted(async () => {
+  const orderId = route.query.orderId as string
+  const orderNo = route.query.orderNo as string
+
+  if (timer) clearInterval(timer)
+
+  const res = await findVipOrderDetail(orderId, orderNo)
+
+  if (res?.code !== '200' || !res.data) {
+    showToast(res?.message || '获取订单失败')
+    await router.replace('/orderCenter/orders')
+    return
+  }
+
+  vipOrder.value = res.data
+  initCountdown()
+})
+
+onUnmounted(() => {
+  if (timer) clearInterval(timer)
+})
+
+// ================== 操作 ===================
 const handlePay = (order: VipOrderDTO) => {
   router.push({
-    path: "/vipOrder/confirm",
+    path: '/vipOrder/confirm',
     query: {
       orderId: order.id,
       orderNo: order.orderNo,
     },
-  });
+  })
 }
 
-// 处理支付取消
 const handleCancel = (order: VipOrderDTO) => {
+  // TODO
 }
-
 </script>
 
 <style scoped lang="scss">
@@ -179,66 +223,6 @@ const handleCancel = (order: VipOrderDTO) => {
     padding: 16px;
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  }
-
-  .order-status-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .flashing {
-      color: red;
-      font-weight: bold;
-      animation: flash 1s infinite;
-    }
-  }
-
-  @keyframes flash {
-    50% {
-      opacity: 0.2;
-    }
-  }
-
-  .sku-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 12px;
-
-    img {
-      width: 60px;
-      height: 60px;
-      border-radius: 8px;
-      margin-right: 12px;
-    }
-
-    .sku-info {
-      flex: 1;
-
-      .sku-name {
-        font-weight: 500;
-      }
-
-      .sku-meta {
-        display: flex;
-        justify-content: space-between;
-      }
-    }
-  }
-
-  .bottom-bar {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    padding: 12px;
-    background: #fff;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .countdown-text {
-    color: #f44336;
-    font-weight: bold;
   }
 }
 </style>
