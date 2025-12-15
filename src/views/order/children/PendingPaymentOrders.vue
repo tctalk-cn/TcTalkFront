@@ -1,31 +1,116 @@
 <template>
-  <div class="order-list">
-    <OrderItem
-        v-for="order in orders"
-        :key="order.id"
-        :order="order"
-        @pay="handlePay"
-    />
-    <van-empty v-if="orders.length === 0" description="暂无订单"/>
-  </div>
+  <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+    <van-list
+        v-model:loading="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="loadOrderData('load')"
+    >
+      <OrderItem
+          v-for="order in orderList"
+          :key="order.id"
+          :order="order"
+          @pay="handlePay(order)"
+          @comment=""
+          @detail="handleDetail(order)"
+          @update-status=""
+      />
+      <van-empty v-if="orderList.length === 0" description="暂无订单"/>
+    </van-list>
+  </van-pull-refresh>
 </template>
-
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import {ref} from "vue";
+import {useRouter} from "vue-router";
+import {useOrderStore} from "@/stores/order_store.ts";
+import {OrderDTO} from "@/models/order.ts";
+import {showToast} from "vant";
 import OrderItem from "@/views/order/components/OrderItem.vue";
 
-const orders = ref<any[]>([]);
+const router = useRouter();
+const {loadOrders} = useOrderStore();
 
-onMounted(async () => {
-  // 调用接口加载待付款订单
-  // orders.value = await fetchPendingPaymentOrders();
-});
-
-const handlePay = (order: any) => {
-  console.log("去支付", order);
+const refreshing = ref(false);
+const loading = ref(false);
+const finished = ref(false);
+const searchParam = {
+  beginOrderId: "0",
+  pageSize: 6,
 };
+const orderList = ref<OrderDTO[]>([]);
+// 加载专辑数据
+const loadOrderData = async (type = 'refresh') => {
+  if (type === 'refresh') {
+    searchParam.beginOrderId = "0";
+    refreshing.value = false;
+    finished.value = false;
+  }
+  const res = await loadOrders(searchParam.beginOrderId, searchParam.pageSize,[0,1,2]);
+  if (!res?.code || res?.code !== "200") {
+    showToast(res?.message || "获取订单列表失败");
+    return;
+  }
+
+  if (!res.data || res.data.length === 0) {
+    // 确保没有数据时停止加载
+    finished.value = true;
+    loading.value = false;
+    return;
+  }
+
+  if (type === 'refresh') {
+    orderList.value = res.data;
+  } else {
+    orderList.value = orderList.value.concat(res.data);
+  }
+
+  searchParam.beginOrderId = res.data[res.data.length - 1].id;
+  if (res.data.length < searchParam.pageSize) {
+    finished.value = true;
+  }
+  loading.value = false;
+}
+
+// 刷新
+const onRefresh = () => {
+  // 清空数据
+  finished.value = false;
+  // 重新加载
+  loading.value = false;
+  // 刷新
+  refreshing.value = true;
+  loadOrderData();
+}
+
+// 处理支付接口
+const handlePay = (order: OrderDTO) => {
+  if (order.orderType === 'VIP') {
+    // 跳转到订单确认/支付页
+    router.push({
+      path: "/vipOrder/confirm",
+      query: {
+        orderId: order.id,
+        orderNo: order.orderNo,
+      },
+    });
+  }
+}
+
+
+// 处理明细
+const handleDetail = (order: OrderDTO) => {
+  // 跳转到订单明细页面
+  router.push({
+    path: "/orderCenter/orderDetail",
+    query: {
+      orderId: order.id,
+      orderNo: order.orderNo,
+    },
+  });
+}
+
+
 </script>
 
-<style scoped lang="scss">
-.order-list { padding: 0.5rem; }
+<style lang="scss" scoped>
 </style>

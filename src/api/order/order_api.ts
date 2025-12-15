@@ -32,7 +32,7 @@ export async function useLoadOrders(beginOrderId: string, pageSize: number,order
         code: string,
         message: string,
         data: OrderDTO[],
-    }>("/oms_api/order/loadOrders", {beginOrderId: beginOrderId, pageSize: pageSize,orderStatuses});
+    }>("/oms_api/order/loadOrders", {beginOrderId, pageSize,orderStatuses});
 }
 
 /**

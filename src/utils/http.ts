@@ -1,9 +1,18 @@
 import axios, {type AxiosRequestConfig} from "axios";
+import qs from "qs";
 
 axios.defaults.timeout = 20 * 1000;
 axios.defaults.maxBodyLength = 5 * 1024 * 1024;
 axios.defaults.withCredentials = true
 axios.defaults.baseURL = "http://127.0.0.1:8000";
+
+/**  关键：全局数组参数序列化 */
+axios.defaults.paramsSerializer = (params) => {
+    return qs.stringify(params, {
+        arrayFormat: "repeat",
+        skipNulls: true
+    });
+};
 
 axios.interceptors.request.use(
     (config: AxiosRequestConfig | any) => {
