@@ -45,7 +45,7 @@ const loadOrderData = async (type = 'refresh') => {
     refreshing.value = false;
     finished.value = false;
   }
-  const res = await loadOrders(searchParam.beginOrderId, searchParam.pageSize);
+  const res = await loadOrders(searchParam.beginOrderId, searchParam.pageSize,null);
   if (!res?.code || res?.code !== "200") {
     showToast(res?.message || "获取订单列表失败");
     return;

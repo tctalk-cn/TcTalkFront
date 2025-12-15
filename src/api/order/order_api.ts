@@ -27,12 +27,12 @@ export async function useFindPendingVipOrderDetail(orderId: string, orderNo: str
 /**
  * 查询用户订单
  */
-export async function useLoadOrders(beginOrderId: string, pageSize: number){
+export async function useLoadOrders(beginOrderId: string, pageSize: number,orderStatuses:number[]){
     return await http.get<{
         code: string,
         message: string,
         data: OrderDTO[],
-    }>("/oms_api/order/loadOrders", {beginOrderId: beginOrderId, pageSize: pageSize});
+    }>("/oms_api/order/loadOrders", {beginOrderId: beginOrderId, pageSize: pageSize,orderStatuses});
 }
 
 /**

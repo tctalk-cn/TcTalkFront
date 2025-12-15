@@ -26,8 +26,8 @@ export const useOrderStore = defineStore(
             },
 
             // 分页查询用户订单
-            async loadOrders(beginOrderId: string, pageSize: number) {
-                return await useLoadOrders(beginOrderId, pageSize);
+            async loadOrders(beginOrderId: string, pageSize: number, orderStatuses: number[]) {
+                return await useLoadOrders(beginOrderId, pageSize, orderStatuses);
             },
 
             // 查询用户订单基础信息
