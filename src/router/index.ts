@@ -310,6 +310,12 @@ const router = createRouter({
                         component: () => import("@/views/order/children/PendingPaymentOrders.vue"),
                         meta: {menu: Pages.orderCenter},
                     },
+                    {
+                        path: 'remarkOrders',
+                        name: Pages.remarkOrders,
+                        component: () => import("@/views/order/children/RemarkOrders.vue"),
+                        meta: {menu: Pages.orderCenter},
+                    },
                 ],
             },
             // 订单列表
