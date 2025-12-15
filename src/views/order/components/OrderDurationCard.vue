@@ -1,6 +1,6 @@
 <template>
   <div class="card duration-card">
-    <div class="duration-text">有效期：{{ duration }} 月</div>
+    <div class="duration-text">有效期：{{ duration }} 天</div>
     <div class="duration-text">生效时间：支付后立即生效</div>
   </div>
 </template>
