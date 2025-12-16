@@ -34,7 +34,7 @@
 
       <div class="actions">
         <van-button
-            v-if="showPayBtn"
+            v-if="showPayBtn && showPay!==false"
             size="small"
             type="primary"
             @click="$emit('pay', order)"
@@ -50,7 +50,7 @@
         </van-button>
 
         <van-button
-            v-if="showDetailBtn"
+            v-if="showDetailBtn && showDetail !== false"
             size="small"
             type="default"
             @click="$emit('detail', order)"
@@ -63,11 +63,15 @@
 
 <script setup lang="ts">
 import defaultCover from "@/assets/images/vip.png";
-import type { OrderDTO } from "@/models/order.ts";
-import { computed } from "vue";
-import { useOrderCountdown } from "@/views/order/components/useOrderCountdown.ts";
+import type {OrderDTO} from "@/models/order.ts";
+import {computed} from "vue";
+import {useOrderCountdown} from "@/views/order/components/useOrderCountdown.ts";
 
-const props = defineProps<{ order: OrderDTO }>();
+const props = defineProps<{
+  order: OrderDTO;
+  showPay?: boolean;
+  showDetail?: boolean;
+}>();
 const emit = defineEmits(["pay", "comment", "detail"]);
 
 // ================== 状态文案 ===================
@@ -95,18 +99,18 @@ const PaymentStatusMap: Record<number, string> = {
 };
 
 // ================== 倒计时（纯 UI） ===================
-const { countdownText, flashing, isWarning } =
+const {countdownText, flashing, isWarning} =
     useOrderCountdown(props.order);
 
 // ================== 订单完成态 ===================
 const isOrderCompleted = computed(() => {
-  const { orderStatus, paymentStatus } = props.order;
+  const {orderStatus, paymentStatus} = props.order;
   return paymentStatus === 2 || orderStatus === 3 || orderStatus === 8;
 });
 
 // ================== 状态文本 ===================
 const statusText = computed(() => {
-  const { paymentStatus, orderStatus } = props.order;
+  const {paymentStatus, orderStatus} = props.order;
 
   if ([10, 11, 20, 50].includes(paymentStatus)) {
     return PaymentStatusMap[paymentStatus];
@@ -117,7 +121,7 @@ const statusText = computed(() => {
 
 // ================== 时间文案（唯一出口） ===================
 const statusTimeText = computed(() => {
-  const { orderStatus, paymentStatus, paymentTime, updateTime, expireTime } =
+  const {orderStatus, paymentStatus, paymentTime, updateTime, expireTime} =
       props.order;
   const now = new Date();
 
@@ -155,7 +159,7 @@ const statusTimeText = computed(() => {
 
 // ================== 按钮逻辑 ===================
 const showPayBtn = computed(() => {
-  const { orderStatus, paymentStatus, expireTime } = props.order;
+  const {orderStatus, paymentStatus, expireTime} = props.order;
   const notExpired = expireTime && new Date(expireTime) > new Date();
 
   return (
@@ -165,7 +169,46 @@ const showPayBtn = computed(() => {
   );
 });
 
-const showCommentBtn = computed(() => props.order.orderStatus === 8);
+const showCommentBtn = computed(() => {
+  const {
+    orderStatus,
+    paymentStatus,
+    commentStatus,
+    commentCount,
+    maxCommentCount,
+    commentDeadline,
+    refundBlock
+  } = props.order;
+
+  // 1 订单必须交易完结
+  if (orderStatus !== 8 || paymentStatus !== 2) {
+    return false;
+  }
+
+  // 2 状态已终结
+  if (commentStatus === 2) {
+    return false;
+  }
+
+  // 3 超过最大评论次数
+  if (
+      maxCommentCount !== undefined &&
+      commentCount >= maxCommentCount
+  ) {
+    return false;
+  }
+
+  // 4 超过评论截止时间
+  if (
+      commentDeadline &&
+      new Date(commentDeadline) < new Date()
+  ) {
+    return false;
+  }
+
+  return true;
+});
+
 const showDetailBtn = computed(() => true);
 </script>
 

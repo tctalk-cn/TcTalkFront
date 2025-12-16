@@ -64,6 +64,6 @@ export const Pages = {
     orderCenter:'orderCenter',
     allOrders:'allOrders',
     pendingPaymentOrders:'pendingPaymentOrders',
-    remarkOrders:'remarkOrders',
+    commentOrders:'commentOrders',
     orderDetail:'orderDetail',
 }

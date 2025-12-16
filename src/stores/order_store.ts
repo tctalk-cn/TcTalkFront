@@ -5,7 +5,8 @@ import {
     useFindPendingVipOrderDetail,
     useLoadOrders,
     useFindVipOrderDetail,
-    useCloseOrderBy
+    useCloseOrderBy,
+    useLoadCommentOrders
 } from "@/api/order/order_api.ts";
 
 export const useOrderStore = defineStore(
@@ -28,6 +29,11 @@ export const useOrderStore = defineStore(
             // 分页查询用户订单
             async loadOrders(beginOrderId: string, pageSize: number, orderStatuses: number[]) {
                 return await useLoadOrders(beginOrderId, pageSize, orderStatuses);
+            },
+
+            // 分页查询用户订单
+            async loadCommentOrders(beginOrderId: string, pageSize: number) {
+                return await useLoadCommentOrders(beginOrderId, pageSize);
             },
 
             // 查询用户订单基础信息

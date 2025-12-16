@@ -10,6 +10,7 @@
           v-for="order in orderList"
           :key="order.id"
           :order="order"
+          :show-detail="true"
           @pay="handlePay(order)"
           @comment="handleComment"
           @detail="handleDetail(order)"
@@ -115,6 +116,3 @@ const handleDetail = (order: OrderDTO) => {
 
 
 </script>
-
-<style lang="scss" scoped>
-</style>

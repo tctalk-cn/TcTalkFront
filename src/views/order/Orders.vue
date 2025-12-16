@@ -47,7 +47,7 @@ interface OrderTab {
 const orderTabs: OrderTab[] = [
   { id: 1, label: '全部', name: 'allOrders' },
   { id: 2, label: '待付款', name: 'pendingPaymentOrders' },
-  { id: 3, label: '评价', name: 'remarkOrders' },
+  { id: 3, label: '评价', name: 'commentOrders' },
 ];
 
 // 初始化当前 Tab，兜底为 'allOrders'

@@ -114,6 +114,36 @@ export class OrderDTO {
     version: string;
 
     /**
+     * 订单评论状态：0=未评论, 1=已评论（可追评）, 2=追评完成或超时不可评论
+     */
+     commentStatus:number;
+
+    /**
+     * 订单累计评论次数（含追评）
+     */
+     commentCount:number;
+
+    /**
+     * 订单最后一次评论时间
+     */
+    lastCommentTime:string;
+
+    /**
+     * 评论截止时间（支付后或首次评论后计算）
+     */
+    commentDeadline:string;
+
+    /**
+     * 订单允许的最大评论次数（含追评）
+     */
+     maxCommentCount:number;
+
+    /**
+     * 退款是否禁止评论
+     */
+     refundBlock:boolean;
+
+    /**
      * sku
      */
     items: Array<OrderItemDTO>;

@@ -57,3 +57,16 @@ export async function useCloseOrderBy(orderId: string, orderNo: string) {
     }>("/oms_api/order/closeOrderBy/" + orderId + "/" + orderNo);
 }
 
+/**
+ * 加载待评论订单
+ */
+export async function useLoadCommentOrders(beginOrderId: string, pageSize: number) {
+    return await http.get<{
+        code: string,
+        message: string,
+        data: OrderDTO[],
+    }>("/oms_api/order/loadCommentOrders", {beginOrderId, pageSize});
+}
+
+
+

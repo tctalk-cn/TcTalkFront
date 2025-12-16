@@ -311,9 +311,9 @@ const router = createRouter({
                         meta: {menu: Pages.orderCenter},
                     },
                     {
-                        path: 'remarkOrders',
-                        name: Pages.remarkOrders,
-                        component: () => import("@/views/order/children/RemarkOrders.vue"),
+                        path: 'commentOrders',
+                        name: Pages.commentOrders,
+                        component: () => import("@/views/order/children/CommentOrders.vue"),
                         meta: {menu: Pages.orderCenter},
                     },
                 ],
