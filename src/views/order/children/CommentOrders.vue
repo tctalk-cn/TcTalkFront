@@ -12,6 +12,7 @@
           :order="order"
           :show-pay="false"
           :show-detail="true"
+          :show-comment="true"
           @comment="handleComment"
           @detail="handleDetail"
       />

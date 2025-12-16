@@ -38,26 +38,31 @@
             size="small"
             type="primary"
             @click="$emit('pay', order)"
-        >去支付</van-button>
-
-        <van-button
-            v-if="showCommentBtn"
-            size="small"
-            type="default"
-            @click="$emit('comment', order)"
-        >{{ order.commentStatus === 0 ? '去评价' : '追加评价' }}</van-button>
-
+        >去支付
+        </van-button>
         <van-button
             v-if="showDetailBtn && showDetail !== false"
             size="small"
             type="default"
+            square
             @click="$emit('detail', order)"
-        >查看详情</van-button>
+        >查看详情
+        </van-button>
+
+        <van-button
+            v-if="showCommentBtn"
+            size="small"
+            square
+            color="linear-gradient(to right, #ff6034, #ee0a24)"
+            @click="$emit('comment', order)"
+        >{{ order.commentStatus === 0 ? '立即评价' : '追加评价' }}
+        </van-button>
+
       </div>
     </div>
 
     <!-- 评论星级区域 -->
-    <div class="comment-preview">
+    <div class="comment-preview" v-if="showCommentStar">
       <!-- 已评价 -->
       <template v-if="order.commentStatus === 1 || order.commentStatus === 2">
         <div class="comment-stars">
@@ -97,14 +102,15 @@
 
 <script setup lang="ts">
 import defaultCover from "@/assets/images/vip.png";
-import type { OrderDTO } from "@/models/order.ts";
-import { computed } from "vue";
-import { useOrderCountdown } from "@/views/order/components/useOrderCountdown.ts";
+import type {OrderDTO} from "@/models/order.ts";
+import {computed} from "vue";
+import {useOrderCountdown} from "@/views/order/components/useOrderCountdown.ts";
 
 const props = defineProps<{
   order: OrderDTO;
   showPay?: boolean;
   showDetail?: boolean;
+  showComment?: boolean;
 }>();
 const emit = defineEmits(["pay", "comment", "detail"]);
 
@@ -133,24 +139,24 @@ const PaymentStatusMap: Record<number, string> = {
 };
 
 // ================== 倒计时 ===================
-const { countdownText, flashing, isWarning } = useOrderCountdown(props.order);
+const {countdownText, flashing, isWarning} = useOrderCountdown(props.order);
 
 // ================== 订单完成态 ===================
 const isOrderCompleted = computed(() => {
-  const { orderStatus, paymentStatus } = props.order;
+  const {orderStatus, paymentStatus} = props.order;
   return paymentStatus === 2 || orderStatus === 3 || orderStatus === 8;
 });
 
 // ================== 状态文本 ===================
 const statusText = computed(() => {
-  const { paymentStatus, orderStatus } = props.order;
+  const {paymentStatus, orderStatus} = props.order;
   if ([10, 11, 20, 50].includes(paymentStatus)) return PaymentStatusMap[paymentStatus];
   return OrderStatusMap[orderStatus] || "未知状态";
 });
 
 // ================== 时间文案 ===================
 const statusTimeText = computed(() => {
-  const { orderStatus, paymentStatus, paymentTime, updateTime, expireTime } = props.order;
+  const {orderStatus, paymentStatus, paymentTime, updateTime, expireTime} = props.order;
   const now = new Date();
 
   if (paymentStatus === 2 || orderStatus === 3) {
@@ -176,13 +182,13 @@ const statusTimeText = computed(() => {
 
 // ================== 按钮逻辑 ===================
 const showPayBtn = computed(() => {
-  const { orderStatus, paymentStatus, expireTime } = props.order;
+  const {orderStatus, paymentStatus, expireTime} = props.order;
   const notExpired = expireTime && new Date(expireTime) > new Date();
   return [0, 1, 4].includes(orderStatus) && [0, 3].includes(paymentStatus) && notExpired;
 });
 
 const showCommentBtn = computed(() => {
-  const { orderStatus, paymentStatus, commentStatus, commentCount, maxCommentCount, commentDeadline } = props.order;
+  const {orderStatus, paymentStatus, commentStatus, commentCount, maxCommentCount, commentDeadline} = props.order;
 
   if (orderStatus !== 3 || paymentStatus !== 2) return false;
   if (commentStatus === 2) return false;
@@ -196,8 +202,8 @@ const showDetailBtn = computed(() => true);
 
 // ================== 评论星级显示 ===================
 const showCommentStar = computed(() => {
-  const { commentStatus, commentCount } = props.order;
-  return commentCount > 0 || commentStatus === 0;
+  const {commentStatus} = props.order;
+  return (commentStatus === 0 || commentStatus == 1 )&& props.showComment;
 });
 </script>
 
@@ -249,7 +255,9 @@ const showCommentStar = computed(() => {
     }
 
     @keyframes flash {
-      50% { opacity: 0.2; }
+      50% {
+        opacity: 0.2;
+      }
     }
   }
 
@@ -263,7 +271,9 @@ const showCommentStar = computed(() => {
       padding: 0.4rem 0;
       border-bottom: 1px solid #f2f2f2;
 
-      &:last-child { border-bottom: none; }
+      &:last-child {
+        border-bottom: none;
+      }
 
       img {
         width: 2.6rem;
@@ -289,7 +299,10 @@ const showCommentStar = computed(() => {
           margin-top: 0.2rem;
           font-size: 0.75rem;
 
-          .sku-price { color: #333; font-weight: 600; }
+          .sku-price {
+            color: #333;
+            font-weight: 600;
+          }
         }
       }
     }
@@ -314,7 +327,6 @@ const showCommentStar = computed(() => {
       .van-button {
         padding: 0 0.7rem;
         font-size: 0.78rem;
-        border-radius: 20px;
       }
     }
   }
