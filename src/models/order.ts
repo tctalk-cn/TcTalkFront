@@ -146,7 +146,7 @@ export class OrderDTO {
     /**
      * 星数
      */
-    userRating: number;
+    userScore: number;
     /**
      * sku
      */

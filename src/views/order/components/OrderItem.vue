@@ -67,7 +67,7 @@
       <template v-if="order.commentStatus === 1 || order.commentStatus === 2">
         <div class="comment-stars">
           <van-rate
-              v-model="order.userRating"
+              v-model="order.userScore"
               :readonly="true"
               :count="5"
               void-icon="star-o"
@@ -85,7 +85,7 @@
         <div class="comment-stars placeholder" @click="$emit('comment', order)">
           <span class="comment-placeholder-text">商品好不好，评价一下吧</span>
           <van-rate
-              v-model="order.userRating"
+              v-model="order.userScore"
               :readonly="false"
               :count="5"
               void-icon="star-o"
