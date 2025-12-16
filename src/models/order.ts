@@ -25,22 +25,22 @@ export class OrderDTO {
     /**
      * 图片链接
      */
-   orderImgUrl:string;
+    orderImgUrl: string;
 
     /**
      * SKU数量
      */
-   skuCount:number;
+    skuCount: number;
 
     /**
      * 产品名称
      */
-   productName:string;
+    productName: string;
 
     /**
      * 产品描述
      */
-    productDesc:string;
+    productDesc: string;
 
     /**
      * 用户ID
@@ -85,7 +85,7 @@ export class OrderDTO {
     /**
      * 更新时间
      */
-    updateTime:string;
+    updateTime: string;
 
     /**
      * 支付状态：0未支付，1已支付，2已退款
@@ -116,33 +116,37 @@ export class OrderDTO {
     /**
      * 订单评论状态：0=未评论, 1=已评论（可追评）, 2=追评完成或超时不可评论
      */
-     commentStatus:number;
+    commentStatus: number;
 
     /**
      * 订单累计评论次数（含追评）
      */
-     commentCount:number;
+    commentCount: number;
 
     /**
      * 订单最后一次评论时间
      */
-    lastCommentTime:string;
+    lastCommentTime: string;
 
     /**
      * 评论截止时间（支付后或首次评论后计算）
      */
-    commentDeadline:string;
+    commentDeadline: string;
 
     /**
      * 订单允许的最大评论次数（含追评）
      */
-     maxCommentCount:number;
+    maxCommentCount: number;
 
     /**
      * 退款是否禁止评论
      */
-     refundBlock:boolean;
+    refundBlock: boolean;
 
+    /**
+     * 星数
+     */
+    userRating: number;
     /**
      * sku
      */
@@ -358,7 +362,7 @@ export class VipOrderDTO {
     /**
      * 更新时间
      */
-    updateTime:string;
+    updateTime: string;
 
     /**
      * 未支付订单过期时间（如15分钟）

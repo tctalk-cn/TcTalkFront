@@ -46,7 +46,8 @@ import {
     DropdownMenu,
     DropdownItem,
     Slider, Switch, Progress, Picker,
-    Empty
+    Empty,
+    Rate
 } from 'vant';
 
 import 'vant/lib/index.css';
@@ -169,5 +170,7 @@ app.use(Switch);
 app.use(Progress);
 // 选择框
 app.use(Picker);
+// 评分组件
+app.use(Rate);
 
 app.mount('#app');

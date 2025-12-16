@@ -9,7 +9,7 @@
 
       <!-- 倒计时 / 时间展示 -->
       <span v-if="statusTimeText" class="order-time"
-            :class="{warning: isWarning&& !isOrderCompleted,flashing: flashing&& !isOrderCompleted,}">
+            :class="{warning: isWarning && !isOrderCompleted, flashing: flashing && !isOrderCompleted}">
         {{ statusTimeText }}
       </span>
     </div>
@@ -34,38 +34,72 @@
 
       <div class="actions">
         <van-button
-            v-if="showPayBtn && showPay!==false"
+            v-if="showPayBtn && showPay !== false"
             size="small"
             type="primary"
             @click="$emit('pay', order)"
-        >去支付
-        </van-button>
+        >去支付</van-button>
 
         <van-button
             v-if="showCommentBtn"
             size="small"
             type="default"
             @click="$emit('comment', order)"
-        >评价
-        </van-button>
+        >{{ order.commentStatus === 0 ? '去评价' : '追加评价' }}</van-button>
 
         <van-button
             v-if="showDetailBtn && showDetail !== false"
             size="small"
             type="default"
             @click="$emit('detail', order)"
-        >查看详情
-        </van-button>
+        >查看详情</van-button>
       </div>
+    </div>
+
+    <!-- 评论星级区域 -->
+    <div class="comment-preview">
+      <!-- 已评价 -->
+      <template v-if="order.commentStatus === 1 || order.commentStatus === 2">
+        <div class="comment-stars">
+          <van-rate
+              v-model="order.userRating"
+              :readonly="true"
+              :count="5"
+              void-icon="star-o"
+              icon="star"
+              color="#FFB800"
+              void-color="#CCC"
+              :size="20"
+          />
+          <span class="commented-text">已评价</span>
+        </div>
+      </template>
+
+      <!-- 未评价 -->
+      <template v-else>
+        <div class="comment-stars placeholder" @click="$emit('comment', order)">
+          <span class="comment-placeholder-text">商品好不好，评价一下吧</span>
+          <van-rate
+              v-model="order.userRating"
+              :readonly="false"
+              :count="5"
+              void-icon="star-o"
+              icon="star"
+              color="#FFB800"
+              void-color="#CCC"
+              :size="20"
+          />
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import defaultCover from "@/assets/images/vip.png";
-import type {OrderDTO} from "@/models/order.ts";
-import {computed} from "vue";
-import {useOrderCountdown} from "@/views/order/components/useOrderCountdown.ts";
+import type { OrderDTO } from "@/models/order.ts";
+import { computed } from "vue";
+import { useOrderCountdown } from "@/views/order/components/useOrderCountdown.ts";
 
 const props = defineProps<{
   order: OrderDTO;
@@ -98,58 +132,41 @@ const PaymentStatusMap: Record<number, string> = {
   50: "手动处理流程",
 };
 
-// ================== 倒计时（纯 UI） ===================
-const {countdownText, flashing, isWarning} =
-    useOrderCountdown(props.order);
+// ================== 倒计时 ===================
+const { countdownText, flashing, isWarning } = useOrderCountdown(props.order);
 
 // ================== 订单完成态 ===================
 const isOrderCompleted = computed(() => {
-  const {orderStatus, paymentStatus} = props.order;
+  const { orderStatus, paymentStatus } = props.order;
   return paymentStatus === 2 || orderStatus === 3 || orderStatus === 8;
 });
 
 // ================== 状态文本 ===================
 const statusText = computed(() => {
-  const {paymentStatus, orderStatus} = props.order;
-
-  if ([10, 11, 20, 50].includes(paymentStatus)) {
-    return PaymentStatusMap[paymentStatus];
-  }
-
+  const { paymentStatus, orderStatus } = props.order;
+  if ([10, 11, 20, 50].includes(paymentStatus)) return PaymentStatusMap[paymentStatus];
   return OrderStatusMap[orderStatus] || "未知状态";
 });
 
-// ================== 时间文案（唯一出口） ===================
+// ================== 时间文案 ===================
 const statusTimeText = computed(() => {
-  const {orderStatus, paymentStatus, paymentTime, updateTime, expireTime} =
-      props.order;
+  const { orderStatus, paymentStatus, paymentTime, updateTime, expireTime } = props.order;
   const now = new Date();
 
-  // 支付成功
   if (paymentStatus === 2 || orderStatus === 3) {
-    return paymentTime
-        ? `支付时间：${new Date(paymentTime).toLocaleString()}`
-        : "";
+    return paymentTime ? `支付时间：${new Date(paymentTime).toLocaleString()}` : "";
   }
 
-  // 交易完结
-  if (orderStatus === 8) {
-    return "交易已完成";
-  }
+  if (orderStatus === 8) return "交易已完成";
 
-  // 取消 / 关闭
   if ([5, 6].includes(orderStatus)) {
-    return updateTime
-        ? `关闭时间：${new Date(updateTime).toLocaleString()}`
-        : "";
+    return updateTime ? `关闭时间：${new Date(updateTime).toLocaleString()}` : "";
   }
 
-  // 倒计时
   if ([0, 1].includes(orderStatus) && expireTime && new Date(expireTime) > now) {
     return `剩余支付时间 ${countdownText.value}`;
   }
 
-  // 已过期
   if (orderStatus === 1 && expireTime && new Date(expireTime) < now) {
     return "订单已过期";
   }
@@ -159,59 +176,30 @@ const statusTimeText = computed(() => {
 
 // ================== 按钮逻辑 ===================
 const showPayBtn = computed(() => {
-  const {orderStatus, paymentStatus, expireTime} = props.order;
+  const { orderStatus, paymentStatus, expireTime } = props.order;
   const notExpired = expireTime && new Date(expireTime) > new Date();
-
-  return (
-      [0, 1, 4].includes(orderStatus) &&
-      [0, 3].includes(paymentStatus) &&
-      notExpired
-  );
+  return [0, 1, 4].includes(orderStatus) && [0, 3].includes(paymentStatus) && notExpired;
 });
 
 const showCommentBtn = computed(() => {
-  const {
-    orderStatus,
-    paymentStatus,
-    commentStatus,
-    commentCount,
-    maxCommentCount,
-    commentDeadline,
-    refundBlock
-  } = props.order;
+  const { orderStatus, paymentStatus, commentStatus, commentCount, maxCommentCount, commentDeadline } = props.order;
 
-  // 1 订单必须交易完结
-  if (orderStatus !== 8 || paymentStatus !== 2) {
-    return false;
-  }
-
-  // 2 状态已终结
-  if (commentStatus === 2) {
-    return false;
-  }
-
-  // 3 超过最大评论次数
-  if (
-      maxCommentCount !== undefined &&
-      commentCount >= maxCommentCount
-  ) {
-    return false;
-  }
-
-  // 4 超过评论截止时间
-  if (
-      commentDeadline &&
-      new Date(commentDeadline) < new Date()
-  ) {
-    return false;
-  }
+  if (orderStatus !== 3 || paymentStatus !== 2) return false;
+  if (commentStatus === 2) return false;
+  if (maxCommentCount !== undefined && commentCount >= maxCommentCount) return false;
+  if (commentDeadline && new Date(commentDeadline) < new Date()) return false;
 
   return true;
 });
 
 const showDetailBtn = computed(() => true);
-</script>
 
+// ================== 评论星级显示 ===================
+const showCommentStar = computed(() => {
+  const { commentStatus, commentCount } = props.order;
+  return commentCount > 0 || commentStatus === 0;
+});
+</script>
 
 <style scoped lang="scss">
 .order-item {
@@ -245,11 +233,11 @@ const showDetailBtn = computed(() => true);
 
     .order-time {
       font-size: 0.7rem;
-      color: #666; // 默认颜色
+      color: #666;
       white-space: nowrap;
 
       &.warning {
-        color: #ff9800; // 黄色 / 亮眼
+        color: #ff9800;
         font-weight: 600;
       }
 
@@ -261,16 +249,7 @@ const showDetailBtn = computed(() => true);
     }
 
     @keyframes flash {
-      50% {
-        opacity: 0.2;
-      }
-    }
-
-  }
-
-  @keyframes flash {
-    50% {
-      opacity: 0.2;
+      50% { opacity: 0.2; }
     }
   }
 
@@ -284,9 +263,7 @@ const showDetailBtn = computed(() => true);
       padding: 0.4rem 0;
       border-bottom: 1px solid #f2f2f2;
 
-      &:last-child {
-        border-bottom: none;
-      }
+      &:last-child { border-bottom: none; }
 
       img {
         width: 2.6rem;
@@ -312,10 +289,7 @@ const showDetailBtn = computed(() => true);
           margin-top: 0.2rem;
           font-size: 0.75rem;
 
-          .sku-price {
-            color: #333;
-            font-weight: 600;
-          }
+          .sku-price { color: #333; font-weight: 600; }
         }
       }
     }
@@ -344,5 +318,42 @@ const showDetailBtn = computed(() => true);
       }
     }
   }
+
+  .comment-preview {
+    margin-top: 0.8rem;
+    padding: 0.6rem 0.8rem;
+    background: #fdf7f0;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    .comment-stars {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &.placeholder {
+        cursor: pointer;
+        transition: background 0.2s;
+
+        &:hover {
+          background: rgba(255, 215, 30, 0.1);
+          border-radius: 8px;
+        }
+
+        .comment-placeholder-text {
+          font-size: 0.82rem;
+          color: #ff9800;
+        }
+      }
+
+      .commented-text {
+        font-size: 0.78rem;
+        color: #999;
+      }
+    }
+  }
+
 }
 </style>

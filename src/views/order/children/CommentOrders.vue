@@ -10,7 +10,10 @@
           v-for="order in orderList"
           :key="order.id"
           :order="order"
+          :show-pay="false"
+          :show-detail="true"
           @comment="handleComment"
+          @detail="handleDetail"
       />
 
       <van-empty
@@ -96,6 +99,19 @@ const onRefresh = () => {
 const handleComment = (order: OrderDTO) => {
   router.push({
     path: "/orderComment/write",
+    query: {
+      orderId: order.id,
+      orderNo: order.orderNo,
+    },
+  });
+};
+
+/**
+ * 查看详情
+ */
+const handleDetail = (order: OrderDTO) => {
+  router.push({
+    path: "/orderCenter/orderDetail",
     query: {
       orderId: order.id,
       orderNo: order.orderNo,
