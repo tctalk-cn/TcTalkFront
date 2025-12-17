@@ -1,6 +1,6 @@
 import http from "@/utils/http.ts";
 import {UmsMember} from "@/models/member.ts";
-import {MemberStatisticsInfo} from "@/models/member_statistics_info.ts";
+import {MemberStatisticsInfo,MemberTransactionStatistics} from "@/models/member_statistics_info.ts";
 import {MemberTag} from "@/models/member_tag.ts";
 
 export async function useMemberInfo() {
@@ -17,6 +17,14 @@ export async function useMemberStatisticsInfo() {
         message: string,
         data: MemberStatisticsInfo,
     }>("/member_api/member/getMemberStatistics");
+}
+
+export async function useQueryTransactionStatistics() {
+    return await http.get<{
+        code: string,
+        message: string,
+        data: MemberTransactionStatistics,
+    }>("/member_api/member/statistics/queryTransactionStatistics");
 }
 
 export async function useUploadAvatar(formData: FormData) {

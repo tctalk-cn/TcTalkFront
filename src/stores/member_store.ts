@@ -6,11 +6,12 @@ import {
     useResetGender, useResetNickname,
     useResetSignature, useResetUsername, useUploadAvatar,
     useMemberById, useMemberStatisticsInfoById,
-    useAddMemberFollowed, useIsMemberFollowed
+    useAddMemberFollowed, useIsMemberFollowed,
+    useQueryTransactionStatistics
 }
     from "@/api/member/member_api.ts";
 import {useAddSearchLog} from "@/api/member/search_history_api.ts";
-import {useListEnabledPlanCategory,useListEnabledPlans} from "@/api/member/member_plan_api.ts";
+import {useListEnabledPlanCategory, useListEnabledPlans} from "@/api/member/member_plan_api.ts";
 
 export const useProfileStore = defineStore(
     "userProfile", {
@@ -267,6 +268,9 @@ export const useProfileStore = defineStore(
                 const {data} = await useMemberStatisticsInfoById(memberId);
                 return data;
             },
+            async queryTransactionStatistics() {
+                return useQueryTransactionStatistics();
+            },
             // 判断是否已经关注
             async isFollowed(followedMemberId: string) {
                 if (followedMemberId === this.mId) {
@@ -295,7 +299,7 @@ export const useProfileStore = defineStore(
                 return data;
             },
             // 按照分类码查询会员付费方案
-            async listEnabledPlans(categoryCode:string) {
+            async listEnabledPlans(categoryCode: string) {
                 const {data} = await useListEnabledPlans(categoryCode);
                 return data;
             },

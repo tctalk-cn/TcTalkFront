@@ -1,4 +1,8 @@
 <template>
+
+  <!-- 顶部评价统计 -->
+  <CommentSummary :memberTransactionStatistics="memberTransactionStatistics" :avatar-url="memberInfo?.avatarUrl"/>
+
   <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
     <van-list
         v-model:loading="loading"
@@ -26,16 +30,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { showToast } from "vant";
+import {onMounted, ref} from "vue";
+import {useRouter} from "vue-router";
+import {showToast} from "vant";
 import OrderItem from "@/views/order/components/OrderItem.vue";
-import { useOrderStore } from "@/stores/order_store";
-import { OrderDTO } from "@/models/order";
+import {useOrderStore} from "@/stores/order_store";
+import {OrderDTO} from "@/models/order";
+import CommentSummary from "@/views/order/components/CommentSummary.vue";
+import {storeToRefs} from "pinia";
+import {useProfileStore} from "@/stores/member_store.ts";
+import {MemberTransactionStatistics} from "@/models/member_statistics_info.ts";
+
+const {memberInfo} = storeToRefs(useProfileStore());
 
 const router = useRouter();
-const { loadCommentOrders } = useOrderStore();
-
+const {loadCommentOrders} = useOrderStore();
+const {queryTransactionStatistics} = useProfileStore();
 const refreshing = ref(false);
 const loading = ref(false);
 const finished = ref(false);
@@ -46,6 +56,8 @@ const searchParam = {
 };
 
 const orderList = ref<OrderDTO[]>([]);
+// 会员交易统计信息
+const memberTransactionStatistics = ref<MemberTransactionStatistics>({} as MemberTransactionStatistics);
 
 /**
  * 加载可评论订单
@@ -86,6 +98,15 @@ const loadCommentOrderData = async (type: "refresh" | "load" = "refresh") => {
   refreshing.value = false;
 };
 
+const loadSummary = async () => {
+  const res = await queryTransactionStatistics();
+  if (!res || res.code !== "200") {
+    showToast(res?.message || "获取会员交易统计数据失败");
+    return;
+  }
+  memberTransactionStatistics.value = res.data;
+};
+
 /**
  * 下拉刷新
  */
@@ -93,6 +114,10 @@ const onRefresh = () => {
   refreshing.value = true;
   loadCommentOrderData("refresh");
 };
+
+onMounted(() => {
+  loadSummary();
+})
 
 /**
  * 处理评价 / 追评

@@ -2,7 +2,7 @@ export interface MemberStatisticsInfo {
     /**
      * 会员ID
      */
-    memberId: number;
+    memberId: string;
     /**
      * 累计消费金额
      */
@@ -55,4 +55,111 @@ export interface MemberStatisticsInfo {
      * 收藏作品数
      */
     collectWorksCount: number;
+}
+
+/**
+ * 会员交易统计数据
+ */
+export interface MemberTransactionStatistics {
+    id: string;
+
+    /**
+     * 会员ID
+     */
+    memberId: string;
+
+    /**
+     * 累计消费金额
+     */
+    consumeAmount: string;
+
+    /**
+     * 订单数量
+     */
+    orderCount: number;
+
+    /**
+     * 支付成功订单数
+     */
+    successfulPaymentCount: number;
+
+    /**
+     * 待支付订单数
+     */
+    pendingPaymentCount: number;
+
+    /**
+     * 支付失败订单数
+     */
+    failedPaymentCount: number;
+
+    /**
+     * 优惠券数量
+     */
+    couponCount: number;
+
+    /**
+     * 交易评论数
+     */
+    commentCount: number;
+
+    /**
+     * 交易评论获赞数
+     */
+    commentLikeCount: number;
+
+    /**
+     * 交易评论获评论数
+     */
+    commentReplyCount: number;
+
+    /**
+     * 交易评论被浏览数
+     */
+    commentViewCount: number;
+
+    /**
+     * 退货数量
+     */
+    returnOrderCount: number;
+
+    /**
+     * 总退款金额
+     */
+    totalRefundAmount: string;
+
+    /**
+     * 总支付金额，用于计算平均订单金额
+     */
+    totalPaymentAmount: string;
+
+    /**
+     * 平均订单金额
+     */
+    averageOrderAmount: string;
+
+    /**
+     * 首次下单时间
+     */
+    firstOrderTime: string;
+
+    /**
+     * 最近下单时间
+     */
+    recentOrderTime: string;
+
+    /**
+     * 最近一次交易评论时间
+     */
+    lastCommentTime: string;
+
+    /**
+     * 注册时间
+     */
+    createTime: string;
+
+    /**
+     * 更新时间
+     */
+    updateTime: string;
 }
