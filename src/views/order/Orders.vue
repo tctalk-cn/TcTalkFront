@@ -10,14 +10,17 @@
     </HeaderTop>
 
     <van-tabs
-        v-model="currentTab"
+        v-model:active="currentTab"
         lazy-render
-        @clickTab="onTabClick"
+        @click-tab="onTabClick"
         animated
-        scrollspy
         sticky
     >
-      <van-tab v-for="tab in orderTabs" :key="tab.name" :name="tab.name">
+      <van-tab
+          v-for="tab in orderTabs"
+          :key="tab.name"
+          :name="tab.name"
+      >
         <template #title>{{ tab.label }}</template>
       </van-tab>
     </van-tabs>
@@ -53,16 +56,19 @@ const orderTabs: OrderTab[] = [
 // 初始化当前 Tab，兜底为 'allOrders'
 const currentTab = ref<string>(route.meta.menu as string || 'allOrders');
 
-// 监听路由变化（如通过浏览器前进/后退）
-watch(() => route.meta.menu, (menu) => {
-  if (menu) {
-    currentTab.value = menu as string;
-  }
-});
+watch(
+    () => route.name,
+    (name) => {
+      if (name) {
+        currentTab.value = name as string;
+      }
+    },
+    { immediate: true }
+);
+
 
 // 点击 Tab 切换路由
 const onTabClick = (tab: { name: string }) => {
-  currentTab.value = tab.name;
   router.push({ name: tab.name }).catch(() => {}); // 避免重复导航警告
 };
 </script>
