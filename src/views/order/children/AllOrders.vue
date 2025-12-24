@@ -12,7 +12,7 @@
           :order="order"
           :show-detail="true"
           @pay="handlePay(order)"
-          @comment="handleComment"
+          @comment="handleComment(order)"
           @detail="handleDetail(order)"
           @update-status=""
       />
@@ -98,9 +98,15 @@ const handlePay = (order: OrderDTO) => {
 }
 
 // 处理评价
-const handleComment = () => {
-
-}
+const handleComment = (order: OrderDTO) => {
+  router.push({
+    path: "/orderComment/write",
+    query: {
+      orderId: order.id,
+      ownerMemberId: order.memberId,
+    },
+  });
+};
 
 // 处理明细
 const handleDetail = (order: OrderDTO) => {

@@ -17,8 +17,8 @@
           :show-pay="false"
           :show-detail="true"
           :show-comment="true"
-          @comment="handleComment"
-          @detail="handleDetail"
+          @comment="handleComment(order)"
+          @detail="handleDetail(order)"
       />
 
       <van-empty
@@ -127,7 +127,7 @@ const handleComment = (order: OrderDTO) => {
     path: "/orderComment/write",
     query: {
       orderId: order.id,
-      orderNo: order.orderNo,
+      ownerMemberId: order.memberId,
     },
   });
 };

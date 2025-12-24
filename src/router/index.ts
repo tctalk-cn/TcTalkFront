@@ -324,6 +324,17 @@ const router = createRouter({
                 name: Pages.orderDetail,
                 component: () => import("@/views/order/OrderDetail.vue"),
             },
+            // 订单评论
+            {
+                path: '/orderComment/write',
+                name: Pages.orderCommentWrite,
+                component: () => import('@/views/order/OrderCommentWrite.vue'),
+                props: (route) => ({
+                    orderId: route.query.orderId,
+                    ownerMemberId: route.query.ownerMemberId,
+                }),
+            }
+
         ]
     }
 )
