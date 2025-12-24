@@ -12,7 +12,8 @@ import {
 export const useOrderStore = defineStore(
     "orderStore",
     {
-        state: () => ({}),
+        state: () => ({
+        }),
         getters: {},
         actions: {
 
@@ -44,7 +45,7 @@ export const useOrderStore = defineStore(
             // 关闭订单
             async closeOrderBy(orderId: string, orderNo: string) {
                 return await useCloseOrderBy(orderId, orderNo);
-            }
+            },
         },
     }
 );

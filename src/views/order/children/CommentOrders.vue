@@ -42,7 +42,6 @@ import {useProfileStore} from "@/stores/member_store.ts";
 import {MemberTransactionStatistics} from "@/models/member_statistics_info.ts";
 
 const {memberInfo} = storeToRefs(useProfileStore());
-
 const router = useRouter();
 const {loadCommentOrders} = useOrderStore();
 const {queryTransactionStatistics} = useProfileStore();

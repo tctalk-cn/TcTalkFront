@@ -33,8 +33,10 @@ import {useRouter, useRoute} from 'vue-router';
 import {showToast} from 'vant';
 import {useCommentStore} from "@/stores/comment_store.ts";
 import HeaderTop from "@/components/layout/header/HeaderTop.vue";
+import {useOrderStore} from "@/stores/order_store.ts";
 
 const {addTransactionComment} = useCommentStore();
+const {markLocalOrderCommented} = useOrderStore();
 
 const router = useRouter();
 const route = useRoute();
@@ -62,10 +64,17 @@ const submitComment = async () => {
   });
 
   if (res?.code === '200') {
-    showToast('评论成功');
-    router.back();
+
+    // 1. 提示用户
+    showToast({ message: '评论成功', duration: 1000 });
+
+    // 2. 延迟跳转，保证 toast 可见
+    setTimeout(() => {
+      router.push({ name: "commentOrders" });
+    }, 1000); // 1000ms 延迟
+
   } else {
-    showToast(res?.message || '评论失败');
+    showToast({ message: res?.message || '评论失败', duration: 1000});
   }
 };
 </script>
