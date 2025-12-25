@@ -116,7 +116,7 @@ let timer: number | undefined
 function initCountdown() {
   if (!vipOrder.value) return
 
-  // ❗ 非待支付状态，不显示倒计时
+  //非待支付状态，不显示倒计时
   if (displayStatus.value !== 'WAIT_PAY') {
     countdownText.value = ''
     remainingSeconds.value = 0

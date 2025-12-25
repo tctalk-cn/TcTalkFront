@@ -12,25 +12,30 @@ export class AddTransactionCommentParams {
     /**
      * 评分
      */
-    commentScore:number;
+    commentScore: number;
 
     /**
      * 评论来源
      */
-    commentSource:string;
+    commentSource: string;
 
     /**
      * 定位
      */
-    commentLocation:string;
+    commentLocation: string;
 
     /**
      * 城市
      */
-    commentCity:string;
+    commentCity: string;
 
     /**
      * 评论内容
      */
-    commentContent:string;
+    commentContent: string;
+
+    /**
+     * 设备ID
+     */
+    deviceId: string;
 }

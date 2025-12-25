@@ -61,6 +61,7 @@ const submitComment = async () => {
     commentCity: "深圳",
     commentSource: "H5",
     commentScore: rating.value,
+    deviceId:'device_123456',
   });
 
   if (res?.code === '200') {
